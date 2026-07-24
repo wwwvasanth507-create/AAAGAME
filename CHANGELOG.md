@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.4.0] - 2026-07-24
+
+### Added
+*   **Foundation Audit & Validation**: Complete technical audit covering Prompts 0–4. See FOUNDATION_AUDIT_REPORT.md for full details.
+*   **PERFORMANCE_REPORT.md**: Dedicated performance analysis document covering Android optimization, memory, battery, and scalability.
+*   **EventBus Thread-Safety**: Added `lock` around `_eventListeners` dictionary to prevent race conditions under concurrent access.
+
+### Changed
+*   **FOUNDATION_AUDIT_REPORT.md**: Updated with comprehensive audit covering all 12 tasks (global rules, project structure, architecture, code quality, AI pipeline, data systems, offline/online, Android performance, testing, bug hunt, documentation).
+*   **PROMPT_0_4_VALIDATION.md**: Updated with detailed scoring and final decision for Prompt 5 readiness.
+
+### Fixed
+*   **EventBus Race Condition**: Dictionary access in Subscribe/Unsubscribe/Publish now protected by a lock, preventing potential concurrent modification exceptions.
+*   **Documentation Gap**: Added missing PERFORMANCE_REPORT.md for Android performance analysis.
+
+### Security
+*   EventBus thread-safety ensures no data corruption under concurrent event publish/subscribe scenarios.
+
+---
+
 ## [0.3.0] - 2026-07-24
 
 ### Added

@@ -1,124 +1,227 @@
-# Project Memory - Hero of Eternia (v0.4.0)
+# Project Memory — Hero of Eternia
 
-## Completed Features
-
-### Phase 1 — Project Foundation ✅
-- **Project Vision & Strategy**: Finalized offline-first 3D Action RPG design for Android 8+ (ARM64).
-- **Engine Selection**: Formally selected **Godot 4.3 (C#)**.
-- **Coding Standards**: Established SOLID principles, naming conventions, and modular architecture rules.
-- **Workspace Agent Bindings**: Configured `.agents/AGENTS.md` to permanently enforce AI-first asset production.
-
-### Phase 2 — Project Creation ✅
-- **Project Setup**: Created `project.godot`, `export_presets.cfg`, `HeroOfEternia.csproj`, `HeroOfEternia.sln`.
-- **Folder Structure**: All Asset subdirectories, Scenes, Scripts/Core, Settings, Build, Shaders, Prefabs, Tests, Editor folders.
-- **Scene Structure**: Boot, Splash, MainMenu, Loading, Settings, Credits, TestEnvironment scene files.
-- **Core Managers (initial)**: EventBus, Logger, GameManager, SceneManager, SaveManager (basic), SettingsManager (basic), AudioManager, LocalizationManager, InputManager, ResourceManager, UIManager, PerformanceManager.
-- **Configuration Files**: JSON profiles for graphics (4 presets), audio, controls, language, performance, developer.
-- **Build Pipeline**: Signed APK compiling from portable .NET 8 + Godot Mono 4.3. Keystores generated and verified with `apksigner`.
-
-### Phase 3 — Core Framework & Local Save System ✅
-- **ServiceLocator (DI Container)**: Thread-safe service registration/resolution with per-service startup timing. Uses `IInitializable` interface — fully Open/Closed compliant. No type-coupling inside the locator.
-- **SaveManager (AES-256 Encrypted)**: Full save pipeline: JSON serialization → AES-256 encryption (device-unique key via PBKDF2) → SHA-256 checksum appended. Backup `.bak` files auto-created on every write. Corrupted saves auto-recovered from backup. Slot preview metadata cache. Schema version migration hooks. `JsonExtensionData` for unlimited future DLC fields.
-- **SettingsManager**: Audio (master/music/sfx), graphics preset, language, touch controls (deadzone/sensitivity), accessibility (large fonts, colorblind mode), autosave, developer console toggle. All changes saved instantly to disk. Factory reset support.
-- **ConfigManager**: JSON config loading with in-memory caching and hot-reload (`HotReloadAll()`). Auto-generates templates for: physics, camera, gameplay, performance, localization, debug.
-- **DeviceDetector**: Queries OS, CPU, GPU, display resolution, refresh rate, free storage. RAM queried via Godot Performance API. Maps hardware to LOW/MEDIUM/HIGH preset automatically. Manual override supported.
-- **PerformanceManager**: Exponential-moving-average FPS tracker. Auto-adjusts dynamic resolution scale between 0.5×–1.0× based on 80%/95% FPS thresholds.
-- **PerformanceMonitor (Overlay)**: Godot Label node rendering live FPS, frame time, static memory, and draw call counts. Dev-only toggle via SettingsManager.
-- **ErrorSystem**: AppDomain unhandled exception listener. Writes timestamped crash logs to `crash_log.txt`. Reports fatal errors and asset misses.
-- **Logger**: Thread-safe, level-tagged (Info/Warning/Error/Critical). Info+Warning stripped in Release via `[Conditional("DEBUG")]`. Routes to Godot Output panel via `GD.Print/PushWarning/PushError` with Console fallback for headless environments.
-- **LocalizationManager**: Implements IInitializable. Full English base string table (14 keys). Runtime `ChangeLanguage()` hot-swap support.
-- **TestRunner**: 5-test headless suite — ServiceLocator DI boot, SettingsManager persistence+reset, ConfigManager template generation+hot-reload, DeviceDetector hardware query, SaveManager AES encrypt/decrypt/backup/corruption-recovery.
+> Central knowledge base for all development decisions, architecture rules, and project state.  
+> Last Updated: 2026-07-24
 
 ---
 
-## Current Architecture
-- **ServiceLocator**: Central DI registry. All managers implement `IInitializable` for self-declared startup.
-- **EventBus**: Generic publish/subscribe with copy-on-iterate safety.
-- **SaveProfile**: Unified local data model — Stats, Inventory, Quests, WorldState, Statistics, `JsonExtensionData` (future DLC).
-- **AES Encryption**: Device-bound key from `AppSalt + OS.GetUniqueId()`. Saves are non-transferable between devices.
-- **Dynamic Resolution**: PerformanceManager auto-scales viewport based on sustained FPS.
+## Project Identity
+
+| Field | Value |
+|-------|-------|
+| **Title** | Hero of Eternia |
+| **Engine** | Godot 4.3 (Mono/C#) |
+| **Target Platform** | Android (primary), PC (secondary) |
+| **Genre** | 3D Action RPG |
+| **Version** | 0.4.0 |
+| **Assembly** | HeroOfEternia |
 
 ---
 
-## Folder Structure
+## Foundation Audit Status
+
+| Status | Score |
+|--------|-------|
+| ✅ **APPROVED** | **8.4 / 10** |
+
+### Audit Verdict
+- Prompts 0–4: Successfully completed
+- Ready for Prompt 5: **CONDITIONALLY YES**
+- Recommended Prompt 5 focus: Real SceneManager, Real AudioManager, Expand testing, AI asset version tracking
+
+---
+
+## Permanent Engineering Rules (Post-Audit)
+
+### Rule 1: NO MOCK PRODUCTION SYSTEMS
+Temporary mock implementations are allowed only during prototype phases. Before any release milestone:
+- Replace mocked systems with real implementations
+- Remove fake async behavior
+- Remove placeholder service responses
+- Validate runtime behavior
+
+**Priority systems**: SceneManager, AudioManager, ResourceLoader, Save systems, Asset systems, Input systems
+
+### Rule 2: MANAGER STANDARDIZATION
+Every major manager/service must implement:
+- `IInitializable` interface
+- Initialization state tracking
+- Shutdown handling
+- Error reporting
+- Unit tests
+- Documentation
+
+**Required lifecycle**: Created → Initialized → Active → Shutdown
+
+### Rule 3: EVENT SYSTEM RULES
+EventBus must always maintain:
+- Thread-safe subscription
+- Thread-safe publishing
+- Listener cleanup
+- Duplicate prevention
+- Error isolation
+- Performance monitoring
+
+No system may directly depend on unsafe event access.
+
+### Rule 4: AI ASSET PIPELINE STANDARD
+All assets must include:
+- Asset ID
+- Version number
+- Category
+- Source prompt
+- Generation metadata
+- Optimization status
+- Validation status
+
+**Required asset flow**: Concept → AI Generation → Review → Optimization → Integration → Validation
+
+### Rule 5: TESTING REQUIREMENT
+Every new major system requires:
+- Unit test
+- Integration test
+- Documentation entry
+- Performance consideration
+- Failure handling
+
+No manager is considered complete without tests.
+
+### Rule 6: OFFLINE-FIRST RULE
+Hero of Eternia remains offline playable by default. No critical gameplay dependency on servers, accounts, internet connection, or online services. Online features must remain optional layers.
+
+### Rule 7: ANDROID PERFORMANCE RULE
+Every feature must consider: Memory budget, CPU cost, GPU cost, Battery impact, Storage usage, Loading time. Target: Stable mobile RPG performance across supported devices.
+
+### Rule 8: DOCUMENTATION RULE
+Every phase must update: PROJECT_MEMORY.md, ROADMAP.md, CHANGELOG.md. Every major system must have: Technical documentation, Usage documentation, Validation documentation.
+
+---
+
+## Architecture Overview
+
+### Core Pattern
 ```
-c:\AAA\
-├── .agents/               (Workspace AI-first rules)
-├── Assets/
-│   ├── Animations/
-│   ├── Audio/
-│   ├── Bosses/
-│   ├── Characters/
-│   ├── Enemies/
-│   ├── Environment/
-│   ├── Fonts/
-│   ├── Items/
-│   ├── Materials/
-│   └── UI/
-├── Build/                 (debug.keystore, release.keystore, HeroOfEternia.apk)
-├── Editor/
-├── Prefabs/
-├── Scenes/               (Boot, Splash, MainMenu, Loading, Settings, Credits, TestEnvironment)
-├── Scripts/
-│   └── Core/
-│       ├── ConfigManager.cs      [Phase 3 NEW]
-│       ├── DeviceDetector.cs     [Phase 3 NEW]
-│       ├── ErrorSystem.cs        [Phase 3 NEW]
-│       ├── PerformanceMonitor.cs [Phase 3 NEW]
-│       ├── ServiceLocator.cs     [Phase 3 NEW]
-│       ├── AudioManager.cs
-│       ├── EventBus.cs
-│       ├── GameManager.cs        [Phase 3 UPDATED — IInitializable]
-│       ├── InputManager.cs
-│       ├── LocalizationManager.cs [Phase 3 UPDATED — IInitializable, full string table]
-│       ├── Logger.cs             [Phase 3 UPDATED — GD.Print routing]
-│       ├── PerformanceManager.cs  [Phase 3 UPDATED — IInitializable]
-│       ├── ResourceManager.cs
-│       ├── SaveManager.cs        [Phase 3 UPDATED — AES-256, SHA-256, backup, migration]
-│       ├── SceneManager.cs
-│       ├── SettingsManager.cs    [Phase 3 UPDATED — full settings surface]
-│       ├── TestRunner.cs         [Phase 3 UPDATED — 5-test suite]
-│       └── UIManager.cs
-├── Settings/             (6 JSON config files)
-├── Shaders/
-├── Tests/
-└── Documentation/
+Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 ```
 
+### Key Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| ServiceLocator | ✅ Complete | Thread-safe DI with IInitializable |
+| EventBus | ✅ Complete | Thread-safe (lock-protected) |
+| GameManager | ✅ Complete | 6-state lifecycle machine |
+| SaveManager | ✅ Complete | AES-256 + SHA-256 + backups |
+| SettingsManager | ✅ Complete | Auto-persisted JSON |
+| ConfigManager | ✅ Complete | Hot-reload, templates |
+| DeviceDetector | ✅ Complete | Hardware heuristics |
+| PerformanceManager | ✅ Complete | Dynamic resolution scaling |
+| PerformanceMonitor | ✅ Complete | Dev telemetry overlay |
+| ErrorSystem | ✅ Complete | Crash logging |
+| Logger | ✅ Complete | Thread-safe, dual-routing |
+| LocalizationManager | ✅ Complete | 14-key English, hot-swap |
+| SceneManager | ⚠️ Mocked | Needs real ResourceLoader |
+| AudioManager | ⚠️ Stub | Needs AudioStreamPlayer |
+| UIManager | ⚠️ Incomplete | Needs implementation |
+| ResourceManager | ⚠️ Incomplete | Needs implementation |
+
+### Player Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| PlayerRoot | ✅ Complete | CharacterBody3D with modules |
+| PlayerMovement | ✅ Complete | Ground/Air/Jump/Surface detection |
+| PlayerStateMachine | ✅ Complete | 12 states (SOLID FSM) |
+| PlayerData | ✅ Complete | Stats, vitals, XP, stamina |
+| InputHandler | ✅ Complete | InputFrame snapshot |
+| TouchControls | ✅ Complete | Virtual joystick + gestures |
+| CameraController | ✅ Complete | Spring-arm, shake, lock-on |
+| PlayerAnimationController | ✅ Complete | AnimationPlayer wrapper |
+| PlayerAudioController | ✅ Complete | Footstep relay |
+| PlayerSettings | ✅ Complete | Auto-persistent |
+
 ---
 
-## Build Status
-- **C# Compilation**: ✅ 0 errors, 0 warnings
-- **Android APK**: ✅ 22.7 MB, signed with release.keystore, verified by apksigner
-- **Headless Tests**: ✅ EXIT_CODE=0 — ALL FRAMEWORK TESTS PASSED
+## Save System Architecture
+
+### Data Flow
+```
+SaveProfile (JSON) → AES-256 Encrypt → SHA-256 Checksum → File (.sav + .bak)
+```
+
+### Security
+- Device-bound key (AppSalt + OS.GetUniqueId())
+- PBKDF2 key derivation (1000 iterations)
+- SHA-256 integrity verification on load
+- Automatic backup recovery on corruption
+
+### Schema Migration
+- SaveVersion field enables forward-compatible migrations
+- MigrateProfile() hook prepared for version transitions
+- JsonExtensionData preserves unknown fields
 
 ---
 
-## Known Issues / Limitations
-- `DeviceDetector.SystemRamMb` uses a conservative estimate from static memory × 8 rather than true total RAM (Godot 4.x does not expose total physical RAM via a public C# API).
-- `PerformanceMonitor` battery field shows "N/A" — Godot removed `OS.GetPowerPercentLeft()` in v4.x.
-- Save files are device-bound. Intentional for security, but cloud sync will require a server-side re-encryption step in future phases.
+## AI Asset Pipeline
+
+### Asset Flow
+```
+Concept → AI Generation → Review → Optimization → Integration → Validation
+```
+
+### Required Metadata
+- Asset ID, Version, Category, Source prompt
+- Generation metadata, Optimization status, Validation status
+
+### Format Standards
+| Type | Format | Spec |
+|------|--------|------|
+| 3D Models | glTF 2.0 (.glb) | Hero <3K tris, Enemy <2.5K, Props <800 |
+| Textures | PBR (Metallic/Roughness/Normal/AO) | 2048/1024/512px, ETC2/ASTC |
+| Audio | WAV | SFX prompts in AUDIO_SPEC.md |
+| UI | PNG | 2048x2048 max |
 
 ---
 
-### Phase 4 — Input System, Camera & Player Foundation ✅
-- **InputActionMap**: 27 named actions, default keyboard/mouse/gamepad bindings, runtime rebinding, disk persistence (`input_bindings.json`).
-- **InputHandler**: Unified `InputFrame` snapshot from all device types. Touch axes override on Android.
-- **TouchControls**: Dynamic joystick, 6 action buttons, gestures (double-tap=roll, swipe-up=jump, long-press=interact). Left-handed mode. Tablet scaling.
-- **CameraController**: Spring-arm third-person, smooth follow, pitch/yaw clamp, configurable zoom, dynamic FOV sprint boost (+8°), trauma-based shake, soft lock-on orbit, FreeCam/PhotoMode.
-- **PlayerData**: Vitals (HP/MP/Stamina + regen), primary stats (STR/DEF/MAG/SPD/LCK + 4 more), movement params, stamina costs, `CustomStats` dict for future DLC.
-- **PlayerStateMachine**: OCP-compliant — 12 states registered via `Register()`. `OnStateChanged` event for UI binding.
-- **Player States (12)**: Idle, Walk, Run, Sprint (stamina drain), Jump, Fall, Land (camera shake), Roll, Swim/Climb (stubs), Dead, Frozen. All null-safe for headless testing.
-- **PlayerMovement**: Camera-relative ground movement, smooth yaw rotation, reduced air control, `ApplyJump`, `DetectSurface` downward raycast.
-- **PlayerAnimationController**: AnimationPlayer wrapper with named constants, per-state blend times, footstep event relay.
-- **PlayerAudioController**: 3 spatial AudioStreamPlayer3D channels, 7-surface × 2-clip footstep routing, tempo scaling per speed, safe no-op when audio not imported.
-- **PlayerSettings**: Per-player camera/movement/touch settings, auto-persist to `player_settings.json`.
-- **PlayerRoot**: `CharacterBody3D` wiring all modules, physics driver, vitals regen, `Kill/Freeze/TakeDamage` public API, `EventBus` typed events.
-- **Player.tscn**: Prefab — CapsuleShape, Model+AnimationPlayer, 3 module nodes, 3 raycasts, interaction point, weapon holder, FootDust particles, CameraPivot, mount/pet points.
-- **PlayerEvents.cs**: Typed EventBus structs (PlayerDiedEvent, PlayerStateChangedEvent, PlayerDamagedEvent, PlayerLevelUpEvent).
-- **Tests**: 9/9 headless tests pass (InputActionMap, PlayerData vitals/XP/stamina, FSM Idle→Dead, PlayerSettings persist).
+## Testing Status
+
+### Current Test Suite (9 tests)
+| Test | Type | Status |
+|------|------|--------|
+| ServiceLocator DI & Boot | Integration | ✅ |
+| SettingsManager Persistence | Integration | ✅ |
+| ConfigManager Hot-Reload | Integration | ✅ |
+| DeviceDetector Query | Integration | ✅ |
+| SaveManager AES + Backup | Integration | ✅ |
+| InputActionMap Registration | Integration | ✅ |
+| PlayerData Stats/Stamina/XP | Unit | ✅ |
+| PlayerStateMachine Transitions | Unit | ✅ |
+| PlayerSettings Persistence | Integration | ✅ |
+
+### Coverage Gaps
+- AudioManager (no tests)
+- SceneManager (no tests)
+- GameManager state transitions
+- CameraController
+- TouchControls
+- PlayerMovement physics
+- EventBus edge cases
+- Logger failsafe behavior
 
 ---
 
-## Next Phase
-**Prompt 5** — SQLite offline database: items, quests, world state, schema migration runner.
+## Known Limitations
+
+1. SceneManager uses mocked async loading — not real Godot ResourceLoader
+2. AudioManager methods are logging stubs — no actual audio playback
+3. UIManager and ResourceManager are incomplete implementations
+4. Gameplay systems (Combat, Inventory, Quests, World) not yet implemented
+5. No actual AI-generated assets imported yet — only placeholder README files
+
+---
+
+## Next Steps (Prompt 5)
+
+1. **Real SceneManager** — Replace SimulateAsyncLoad with ResourceLoader.LoadThreadedRequest
+2. **Real AudioManager** — Add AudioStreamPlayer3D for music and SFX
+3. **Expand Testing** — Cover AudioManager, SceneManager, CameraController, TouchControls
+4. **AI Asset Version Tracking** — Implement formal asset metadata and versioning
+5. **Gameplay Systems** — Begin Combat, Inventory, Quest, World implementations
