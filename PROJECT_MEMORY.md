@@ -1,4 +1,4 @@
-# Project Memory - Hero of Eternia (v0.3.0)
+# Project Memory - Hero of Eternia (v0.4.0)
 
 ## Completed Features
 
@@ -101,5 +101,24 @@ c:\AAA\
 
 ---
 
+### Phase 4 — Input System, Camera & Player Foundation ✅
+- **InputActionMap**: 27 named actions, default keyboard/mouse/gamepad bindings, runtime rebinding, disk persistence (`input_bindings.json`).
+- **InputHandler**: Unified `InputFrame` snapshot from all device types. Touch axes override on Android.
+- **TouchControls**: Dynamic joystick, 6 action buttons, gestures (double-tap=roll, swipe-up=jump, long-press=interact). Left-handed mode. Tablet scaling.
+- **CameraController**: Spring-arm third-person, smooth follow, pitch/yaw clamp, configurable zoom, dynamic FOV sprint boost (+8°), trauma-based shake, soft lock-on orbit, FreeCam/PhotoMode.
+- **PlayerData**: Vitals (HP/MP/Stamina + regen), primary stats (STR/DEF/MAG/SPD/LCK + 4 more), movement params, stamina costs, `CustomStats` dict for future DLC.
+- **PlayerStateMachine**: OCP-compliant — 12 states registered via `Register()`. `OnStateChanged` event for UI binding.
+- **Player States (12)**: Idle, Walk, Run, Sprint (stamina drain), Jump, Fall, Land (camera shake), Roll, Swim/Climb (stubs), Dead, Frozen. All null-safe for headless testing.
+- **PlayerMovement**: Camera-relative ground movement, smooth yaw rotation, reduced air control, `ApplyJump`, `DetectSurface` downward raycast.
+- **PlayerAnimationController**: AnimationPlayer wrapper with named constants, per-state blend times, footstep event relay.
+- **PlayerAudioController**: 3 spatial AudioStreamPlayer3D channels, 7-surface × 2-clip footstep routing, tempo scaling per speed, safe no-op when audio not imported.
+- **PlayerSettings**: Per-player camera/movement/touch settings, auto-persist to `player_settings.json`.
+- **PlayerRoot**: `CharacterBody3D` wiring all modules, physics driver, vitals regen, `Kill/Freeze/TakeDamage` public API, `EventBus` typed events.
+- **Player.tscn**: Prefab — CapsuleShape, Model+AnimationPlayer, 3 module nodes, 3 raycasts, interaction point, weapon holder, FootDust particles, CameraPivot, mount/pet points.
+- **PlayerEvents.cs**: Typed EventBus structs (PlayerDiedEvent, PlayerStateChangedEvent, PlayerDamagedEvent, PlayerLevelUpEvent).
+- **Tests**: 9/9 headless tests pass (InputActionMap, PlayerData vitals/XP/stamina, FSM Idle→Dead, PlayerSettings persist).
+
+---
+
 ## Next Phase
-**Prompt 4** — expected topic: Player Controller, Touch Input, Virtual Joystick.
+**Prompt 5** — SQLite offline database: items, quests, world state, schema migration runner.
