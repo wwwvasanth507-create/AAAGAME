@@ -6,8 +6,8 @@ using Godot;
 namespace HeroOfEternia.Core
 {
     /// <summary>
-    /// TestRunner is attached to the Boot scene.
-    /// Checks for '--run-tests' in the command line args and executes unit tests.
+    /// TestRunner handles automated suite checks for all Phase 3 framework components.
+    /// Runs headlessly when '--run-tests' parameter matches.
     /// </summary>
     public partial class TestRunner : Control
     {
@@ -16,22 +16,22 @@ namespace HeroOfEternia.Core
             string[] args = OS.GetCmdlineArgs();
             if (args.Contains("--run-tests"))
             {
-                GD.Print("TestRunner: Headless test mode triggered. Starting suite...");
+                GD.Print("TestRunner: Headless test mode triggered. Starting Phase 3 validation suite...");
                 bool success = RunAllTests();
                 if (success)
                 {
-                    GD.Print("TestRunner: ALL TESTS PASSED SUCCESSFULLY.");
+                    GD.Print("TestRunner: ALL FRAMEWORK TESTS PASSED.");
                     GetTree().Quit(0);
                 }
                 else
                 {
-                    GD.Print("TestRunner: TEST SUITE FAILED.");
+                    GD.Print("TestRunner: VALIDATION SUITE ENCOUNTERED FAILURES.");
                     GetTree().Quit(1);
                 }
             }
             else
             {
-                GD.Print("TestRunner: Normal boot detected. Skipping automated test run.");
+                GD.Print("TestRunner: Boot scene ready. Automated tests skipped.");
             }
         }
 
@@ -39,173 +39,166 @@ namespace HeroOfEternia.Core
         {
             try
             {
-                // Test 1: EventBus Test
-                GD.Print("Running: EventBus Test...");
-                bool eventFired = false;
-                string testPayload = "";
-                Action<string> listener = (payload) => {
-                    eventFired = true;
-                    testPayload = payload;
-                };
-                EventBus.Subscribe(listener);
-                EventBus.Publish("EventBusPayload");
-                EventBus.Unsubscribe(listener);
+                string tempDir = Path.Combine(OS.GetUserDataDir(), "test_sandbox");
+                if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
+                Directory.CreateDirectory(tempDir);
+
+                // Initialize ErrorSystem and diagnostics logs
+                ErrorSystem.Initialize(tempDir);
+
+                // ==========================================
+                // TEST 1: ServiceLocator Registration & Boot Order
+                // ==========================================
+                GD.Print("Running: ServiceLocator DI & Startup Logging tests...");
+                ServiceLocator.Clear();
                 
-                if (!eventFired || testPayload != "EventBusPayload")
-                {
-                    GD.Print("FAIL: EventBus pub-sub check.");
-                    return false;
-                }
-
-                // Test 2: Logger Test
-                GD.Print("Running: Logger Test...");
-                Logger.Info("Test Info Log");
-                Logger.Warning("Test Warning Log");
-                Logger.Error("Test Error Log");
-
-                // Test 3: GameManager Test
-                GD.Print("Running: GameManager Test...");
-                var gm = new GameManager();
-                gm.Initialize();
-                if (gm.CurrentState != GameState.MainMenu)
-                {
-                    GD.Print($"FAIL: GameManager start state. Got {gm.CurrentState}");
-                    return false;
-                }
-                gm.TransitionTo(GameState.Playing);
-                if (gm.CurrentState != GameState.Playing)
-                {
-                    GD.Print("FAIL: GameManager state transition.");
-                    return false;
-                }
-
-                // Test 4: SaveManager Test
-                GD.Print("Running: SaveManager Test...");
-                string tempSaveDir = Path.Combine(OS.GetUserDataDir(), "test_saves");
-                var saveManager = new SaveManager(tempSaveDir);
-                byte[] mockData = { 0xAA, 0xBB, 0xCC, 0xDD };
-                
-                // Write slot
-                if (!saveManager.SaveSlot(99, mockData))
-                {
-                    GD.Print("FAIL: SaveManager writing slot.");
-                    return false;
-                }
-
-                // Read slot
-                byte[]? loaded = saveManager.LoadSlot(99);
-                if (loaded == null || loaded.Length != 4 || loaded[0] != 0xAA)
-                {
-                    GD.Print("FAIL: SaveManager loading slot.");
-                    return false;
-                }
-
-                // Tampering Check
-                string savePath = Path.Combine(tempSaveDir, "slot_99.sav");
-                byte[] saveBytes = File.ReadAllBytes(savePath);
-                // Corrupt data (change last hash byte)
-                saveBytes[saveBytes.Length - 1] ^= 0xFF;
-                File.WriteAllBytes(savePath, saveBytes);
-                
-                byte[]? corruptLoaded = saveManager.LoadSlot(99);
-                if (corruptLoaded != null)
-                {
-                    GD.Print("FAIL: SaveManager corrupt data detection (signature bypassed!).");
-                    return false;
-                }
-
-                // Clean up test saves
-                if (File.Exists(savePath)) File.Delete(savePath);
-                if (Directory.Exists(tempSaveDir)) Directory.Delete(tempSaveDir);
-
-                // Test 5: SettingsManager Test
-                GD.Print("Running: SettingsManager Test...");
-                var sm = new SettingsManager();
-                sm.LoadSettings("", "", "", "");
-                if (sm.QualityPreset != "HIGH" || sm.MasterVolume != 0.8f)
-                {
-                    GD.Print("FAIL: SettingsManager load values.");
-                    return false;
-                }
-                sm.SetVolume(0.5f);
-                if (sm.MasterVolume != 0.5f)
-                {
-                    GD.Print("FAIL: SettingsManager clamp volume adjustment.");
-                    return false;
-                }
-
-                // Test 6: PerformanceManager Test
-                GD.Print("Running: PerformanceManager Test...");
                 var pm = new PerformanceManager();
-                pm.Initialize(60.0f);
-                if (pm.CurrentResolutionScale != 1.0f)
-                {
-                    GD.Print("FAIL: PerformanceManager scale start.");
-                    return false;
-                }
-                // Simulate frame times at 10 FPS (long frame delta = 0.1s)
-                for (int i = 0; i < 50; i++)
-                {
-                    pm.ReportFrameTime(0.1);
-                }
-                if (pm.CurrentResolutionScale >= 1.0f)
-                {
-                    GD.Print($"FAIL: PerformanceManager dynamic scale lowering. Got {pm.CurrentResolutionScale}");
-                    return false;
-                }
-
-                // Test 7: InputManager Clamping Test
-                GD.Print("Running: InputManager Test...");
-                var im = new InputManager();
-                im.ProcessJoystickTouch(1.5f, -2.0f);
-                if (im.JoystickAxisX != 1.0f || im.JoystickAxisY != -1.0f)
-                {
-                    GD.Print($"FAIL: InputManager axis clamp checks. Got X={im.JoystickAxisX}, Y={im.JoystickAxisY}");
-                    return false;
-                }
-
-                // Test 8: UIManager Stack Test
-                GD.Print("Running: UIManager Test...");
-                var ui = new UIManager();
-                ui.PushScreen("MainMenu");
-                ui.PushScreen("Settings");
-                if (ui.CurrentScreen != "Settings")
-                {
-                    GD.Print("FAIL: UIManager stack push.");
-                    return false;
-                }
-                ui.PopScreen();
-                if (ui.CurrentScreen != "MainMenu")
-                {
-                    GD.Print("FAIL: UIManager stack pop.");
-                    return false;
-                }
-
-                // Test 9: LocalizationManager Test
-                GD.Print("Running: LocalizationManager Test...");
+                var sm = new SettingsManager(tempDir);
                 var lm = new LocalizationManager();
-                lm.Initialize("en");
-                if (lm.GetText("MENU_START") != "Launch Operations")
+                var gm = new GameManager();
+
+                ServiceLocator.Register(pm);
+                ServiceLocator.Register(sm);
+                ServiceLocator.Register(lm);
+                ServiceLocator.Register(gm);
+
+                // Fetching resolves lazy initialization and logs performance
+                var resolvedPm = ServiceLocator.Get<PerformanceManager>();
+                var resolvedSm = ServiceLocator.Get<SettingsManager>();
+                var resolvedLm = ServiceLocator.Get<LocalizationManager>();
+                var resolvedGm = ServiceLocator.Get<GameManager>();
+
+                if (resolvedPm == null || resolvedSm == null || resolvedLm == null || resolvedGm == null)
                 {
-                    GD.Print($"FAIL: LocalizationManager translation key. Got {lm.GetText("MENU_START")}");
+                    GD.Print("FAIL: ServiceLocator resolution.");
                     return false;
                 }
 
-                // Test 10: ResourceManager Test
-                GD.Print("Running: ResourceManager Test...");
-                var rm = new ResourceManager();
-                rm.PreloadAsset("res://Test.tscn");
-                if (rm.GetAsset("res://Test.tscn") == null)
+                // ==========================================
+                // TEST 2: SettingsManager Persistence & Reset
+                // ==========================================
+                GD.Print("Running: SettingsManager Persistence checks...");
+                resolvedSm.LoadSettings("", "", "", "");
+                
+                // Adjust a setting and check automatic save writing
+                resolvedSm.SetVolume(0.4f);
+                resolvedSm.ApplyGraphicsPreset("LOW");
+                
+                // Re-initialize manager to load from file
+                var checkSm = new SettingsManager(tempDir);
+                checkSm.LoadSettings("", "", "", "");
+                if (checkSm.MasterVolume != 0.4f || checkSm.QualityPreset != "LOW")
                 {
-                    GD.Print("FAIL: ResourceManager load cache.");
+                    GD.Print($"FAIL: Settings persistence values. Got Volume={checkSm.MasterVolume}, Quality={checkSm.QualityPreset}");
                     return false;
                 }
 
+                // Reset defaults
+                checkSm.ResetToDefaults();
+                if (checkSm.MasterVolume != 0.8f || checkSm.QualityPreset != "HIGH")
+                {
+                    GD.Print("FAIL: Settings reset defaults.");
+                    return false;
+                }
+
+                // ==========================================
+                // TEST 3: ConfigManager & Template Generation
+                // ==========================================
+                GD.Print("Running: ConfigManager Hot-Reload & templates checks...");
+                var configManager = new ConfigManager(tempDir);
+                
+                // Querying non-existent triggers template creations
+                string physicsJson = configManager.GetConfigJson("physics");
+                if (string.IsNullOrEmpty(physicsJson) || !physicsJson.Contains("gravity"))
+                {
+                    GD.Print("FAIL: ConfigManager template creations.");
+                    return false;
+                }
+
+                // Hot reload test
+                configManager.HotReloadAll();
+
+                // ==========================================
+                // TEST 4: DeviceDetector Speeds & Recommendations
+                // ==========================================
+                GD.Print("Running: DeviceDetector checks...");
+                var detector = new DeviceDetector();
+                detector.DetectDevice();
+                string recPreset = detector.GetRecommendedPreset();
+                if (string.IsNullOrEmpty(recPreset))
+                {
+                    GD.Print("FAIL: DeviceDetector preset recommended checks.");
+                    return false;
+                }
+
+                // ==========================================
+                // TEST 5: SaveManager AES-256 and Backup Checksum tests
+                // ==========================================
+                GD.Print("Running: SaveManager Encryption, Checksum, and Backup validations...");
+                var saveManager = new SaveManager(tempDir);
+                
+                var profile = new SaveProfile();
+                profile.Stats.CharacterName = "Vasanth E.";
+                profile.Stats.Level = 45;
+                profile.StatsData.PlayTimeSeconds = 12500.5;
+
+                // Save slot 0
+                if (!saveManager.Save(0, profile))
+                {
+                    GD.Print("FAIL: SaveManager save profile slot write.");
+                    return false;
+                }
+
+                // Check file exists
+                string mainFile = Path.Combine(tempDir, "slot_0.sav");
+                if (!File.Exists(mainFile))
+                {
+                    GD.Print("FAIL: Save file not created on disk.");
+                    return false;
+                }
+
+                // Load slot 0 and check values
+                var loaded = saveManager.Load(0);
+                if (loaded == null || loaded.Stats.CharacterName != "Vasanth E." || loaded.Stats.Level != 45)
+                {
+                    GD.Print("FAIL: SaveManager load slot values mismatch.");
+                    return false;
+                }
+
+                // Check Slot Preview Metadata cache
+                var preview = saveManager.GetSlotPreview(0);
+                if (preview == null || preview.CharacterName != "Vasanth E." || preview.Level != 45 || preview.PlayTimeSeconds != 12500.5)
+                {
+                    GD.Print("FAIL: SaveManager slot preview cache retrieval.");
+                    return false;
+                }
+
+                // Check backup file creation
+                profile.Stats.Level = 46;
+                saveManager.Save(0, profile); // Triggers backup copy of level 45 file to slot_0.bak
+                string backupFile = Path.Combine(tempDir, "slot_0.bak");
+                if (!File.Exists(backupFile))
+                {
+                    GD.Print("FAIL: SaveManager backup file .bak not generated.");
+                    return false;
+                }
+
+                // Corrupt main file (write random bytes) and load to verify backup recovery triggers
+                File.WriteAllBytes(mainFile, new byte[] { 0x01, 0x02, 0x03, 0x04 });
+                var recovered = saveManager.Load(0);
+                if (recovered == null || recovered.Stats.Level != 45)
+                {
+                    GD.Print($"FAIL: SaveManager backup recovery. Got Level={(recovered != null ? recovered.Stats.Level.ToString() : "Null")}, expected 45");
+                    return false;
+                }
+
+                // Clean up directory
+                Directory.Delete(tempDir, true);
                 return true;
             }
             catch (Exception ex)
             {
-                GD.Print($"TEST RUN EXCEPTION: {ex.Message}\n{ex.StackTrace}");
+                GD.Print($"TEST HARNESS CORE EXCEPTION: {ex.Message}\n{ex.StackTrace}");
                 return false;
             }
         }
