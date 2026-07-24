@@ -91,6 +91,15 @@ namespace HeroOfEternia.Core
                 case "camera":
                     defaultJson = "{\n  \"fov\": 75.0,\n  \"sensitivity\": 1.2,\n  \"invert_y\": false\n}";
                     break;
+                case "gameplay":
+                    defaultJson = "{\n  \"difficulty\": \"NORMAL\",\n  \"auto_save_interval_seconds\": 300,\n  \"tutorials_enabled\": true,\n  \"death_penalty\": \"XP_LOSS\"\n}";
+                    break;
+                case "performance":
+                    defaultJson = "{\n  \"target_fps\": 60,\n  \"dynamic_resolution_enabled\": true,\n  \"min_resolution_scale\": 0.5,\n  \"max_resolution_scale\": 1.0,\n  \"object_pool_size\": 64\n}";
+                    break;
+                case "localization":
+                    defaultJson = "{\n  \"default_language\": \"en\",\n  \"supported_languages\": [\"en\", \"fr\", \"de\", \"es\", \"ja\", \"zh\"],\n  \"fallback_language\": \"en\"\n}";
+                    break;
                 case "debug":
                     defaultJson = "{\n  \"enable_cheats\": false,\n  \"show_wireframe\": false,\n  \"perf_logs_interval_seconds\": 5.0\n}";
                     break;

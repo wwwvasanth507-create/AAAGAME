@@ -5,6 +5,16 @@ using System.Diagnostics;
 namespace HeroOfEternia.Core
 {
     /// <summary>
+    /// Any service that needs one-time initialization should implement this interface.
+    /// ServiceLocator calls Initialize() automatically on first Get<T>().
+    /// This eliminates type-coupling inside the locator.
+    /// </summary>
+    public interface IInitializable
+    {
+        void Initialize();
+    }
+
+    /// <summary>
     /// Thread-safe dependency injection and service lookup container.
     /// Handles manager initialization in a safe order and logs startup performance metrics.
     /// </summary>
@@ -63,23 +73,16 @@ namespace HeroOfEternia.Core
         {
             _initialized.Add(type);
             var sw = Stopwatch.StartNew();
-            
+
             Logger.Info($"ServiceLocator: Initializing service '{type.Name}'...");
-            
-            // Resolve dependencies based on type patterns
-            if (service is GameManager gm)
+
+            // Open/Closed: any manager implementing IInitializable is initialized automatically.
+            // No concrete type knowledge required inside the locator.
+            if (service is IInitializable initializable)
             {
-                gm.Initialize();
+                initializable.Initialize();
             }
-            else if (service is LocalizationManager lm)
-            {
-                lm.Initialize("en");
-            }
-            else if (service is PerformanceManager pm)
-            {
-                pm.Initialize(60.0f);
-            }
-            
+
             sw.Stop();
             Logger.Info($"ServiceLocator: Service '{type.Name}' initialized in {sw.ElapsedMilliseconds} ms.");
         }

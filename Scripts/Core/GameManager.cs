@@ -16,7 +16,7 @@ namespace HeroOfEternia.Core
     /// GameManager manages the main lifecycle state machine of Hero of Eternia.
     /// Coordinating system initializations and level transitions.
     /// </summary>
-    public class GameManager
+    public class GameManager : IInitializable
     {
         public GameState CurrentState { get; private set; } = GameState.None;
 

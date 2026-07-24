@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Godot;
 
 namespace HeroOfEternia.Core
 {
@@ -12,8 +13,9 @@ namespace HeroOfEternia.Core
     }
 
     /// <summary>
-    /// Thread-safe logger. Supports Info, Warning, Error, and Critical logs.
-    /// Strips debug output in Release builds for performance and security.
+    /// Thread-safe logger. Supports Info, Warning, Error, and Critical levels.
+    /// Strips Info/Warning in Release builds via conditional compilation.
+    /// Routes to Godot's Output panel when running inside the Godot engine.
     /// </summary>
     public static class Logger
     {
@@ -39,7 +41,6 @@ namespace HeroOfEternia.Core
         public static void Critical(string message)
         {
             Log(LogLevel.Critical, message);
-            // In a production build, Critical errors would trigger telemetry / crash dumps reporting hooks
         }
 
         private static void Log(LogLevel level, string message)
@@ -49,27 +50,36 @@ namespace HeroOfEternia.Core
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string logMessage = $"[{timestamp}] [{level.ToString().ToUpper()}] {message}";
 
-                switch (level)
+                // Route to Godot Output panel when available; fall back to Console in headless mode.
+                try
                 {
-                    case LogLevel.Info:
-                        Console.ForegroundColor = ConsoleColor.White;
-                        break;
-                    case LogLevel.Warning:
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        break;
-                    case LogLevel.Error:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
-                    case LogLevel.Critical:
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        break;
+                    switch (level)
+                    {
+                        case LogLevel.Info:
+                            GD.Print(logMessage);
+                            break;
+                        case LogLevel.Warning:
+                            GD.PushWarning(logMessage);
+                            break;
+                        case LogLevel.Error:
+                        case LogLevel.Critical:
+                            GD.PushError(logMessage);
+                            break;
+                    }
                 }
-
-                Console.WriteLine(logMessage);
-                Console.ResetColor();
-
-                // If running inside Godot editor, redirect to Godot engine prints
-                // GD.PrintT(logMessage);
+                catch
+                {
+                    // Godot engine not initialised (pure unit test context) — use Console fallback.
+                    Console.ForegroundColor = level switch
+                    {
+                        LogLevel.Warning  => ConsoleColor.Yellow,
+                        LogLevel.Error    => ConsoleColor.Red,
+                        LogLevel.Critical => ConsoleColor.DarkRed,
+                        _                 => ConsoleColor.White
+                    };
+                    Console.WriteLine(logMessage);
+                    Console.ResetColor();
+                }
             }
         }
     }

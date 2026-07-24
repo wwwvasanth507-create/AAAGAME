@@ -61,10 +61,10 @@ namespace HeroOfEternia.Core
             _settingsFilePath = Path.Combine(settingsDir, "user_settings.json");
         }
 
-        public void LoadSettings(string graphicsJson, string audioJson, string languageJson, string devJson)
+        public void LoadSettings()
         {
             Logger.Info("SettingsManager: Loading user settings profile...");
-            
+
             if (File.Exists(_settingsFilePath))
             {
                 try

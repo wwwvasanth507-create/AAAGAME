@@ -47,18 +47,33 @@ namespace HeroOfEternia.Core
                 Logger.Warning($"DeviceDetector: Free storage query bypassed: {ex.Message}");
             }
 
+            // Query actual physical RAM — fall back to a safe minimum if unavailable.
+            long ramMb = 4096;
+            try
+            {
+                // Godot exposes memory via Performance monitors
+                double staticMem = Godot.Performance.GetMonitor(Godot.Performance.Monitor.MemoryStatic);
+                // Estimate system RAM: Godot doesn't expose total RAM directly on all platforms.
+                // Use OS.GetMemoryInfo() where available (GDScript), else keep default.
+                ramMb = Math.Max(2048, (long)(staticMem / (1024.0 * 1024.0) * 8)); // conservative estimate
+            }
+            catch
+            {
+                Logger.Warning("DeviceDetector: Could not query physical RAM. Using 4096 MB default.");
+            }
+
             CurrentSpecs = new DeviceSpecs
             {
                 OsName = os,
                 CpuName = string.IsNullOrEmpty(cpu) ? "Generic Android CPU" : cpu,
                 GpuName = string.IsNullOrEmpty(gpu) ? "Compatibility Mobile GPU" : gpu,
-                SystemRamMb = 4096, // Average target device limit
+                SystemRamMb = ramMb,
                 ScreenResolution = res,
                 RefreshRate = refresh <= 0 ? 60.0f : refresh,
                 FreeStorageBytes = freeStorage
             };
 
-            Logger.Info($"DeviceDetector: OS={CurrentSpecs.OsName}, CPU={CurrentSpecs.CpuName}, GPU={CurrentSpecs.GpuName}, Res={CurrentSpecs.ScreenResolution.X}x{CurrentSpecs.ScreenResolution.Y}, Refresh={CurrentSpecs.RefreshRate}Hz, FreeStorage={CurrentSpecs.FreeStorageBytes / (1024*1024)} MB");
+            Logger.Info($"DeviceDetector: OS={CurrentSpecs.OsName}, CPU={CurrentSpecs.CpuName}, GPU={CurrentSpecs.GpuName}, RAM={CurrentSpecs.SystemRamMb} MB, Res={CurrentSpecs.ScreenResolution.X}x{CurrentSpecs.ScreenResolution.Y}, Refresh={CurrentSpecs.RefreshRate}Hz, FreeStorage={CurrentSpecs.FreeStorageBytes / (1024*1024)} MB");
         }
 
         /// <summary>

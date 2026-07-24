@@ -78,7 +78,7 @@ namespace HeroOfEternia.Core
                 // TEST 2: SettingsManager Persistence & Reset
                 // ==========================================
                 GD.Print("Running: SettingsManager Persistence checks...");
-                resolvedSm.LoadSettings("", "", "", "");
+                resolvedSm.LoadSettings();
                 
                 // Adjust a setting and check automatic save writing
                 resolvedSm.SetVolume(0.4f);
@@ -86,7 +86,7 @@ namespace HeroOfEternia.Core
                 
                 // Re-initialize manager to load from file
                 var checkSm = new SettingsManager(tempDir);
-                checkSm.LoadSettings("", "", "", "");
+                checkSm.LoadSettings();
                 if (checkSm.MasterVolume != 0.4f || checkSm.QualityPreset != "LOW")
                 {
                     GD.Print($"FAIL: Settings persistence values. Got Volume={checkSm.MasterVolume}, Quality={checkSm.QualityPreset}");

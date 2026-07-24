@@ -1,102 +1,105 @@
-# Project Memory - Hero of Eternia (v0.2.0)
+# Project Memory - Hero of Eternia (v0.3.0)
 
 ## Completed Features
-- **Project Vision & Strategy**: Finalized offline-first 3D Action RPG design for Android 8+ (ARM64) devices.
-- **Engine Selection**: Formally selected and configured **Godot 4.3 (C#)**.
-- **Project Setup (Phase 2)**: Created `project.godot`, `export_presets.cfg`, `HeroOfEternia.csproj`, and `HeroOfEternia.sln` matching assembly names.
-- **Folder Structure**: Created all Assets subdirectories, Scenes, Scripts/Core, Settings, Build, Shaders, Prefabs, Tests, and Editor folders.
-- **Scene Structure**: Built Boots, Splash, MainMenu, Loading, Settings, Credits, and TestEnvironment scene files (.tscn).
-- **Core Framework Managers (C#)**: Fully drafted EventBus, Logger, GameManager, SceneManager, SaveManager, SettingsManager, AudioManager, LocalizationManager, InputManager, ResourceManager, UIManager, and PerformanceManager classes.
-- **Logging Subsystem**: Thread-safe Logger supporting Info, Warning, Error, and Critical tags, using conditional compilation (`[Conditional("DEBUG")]`) to strip logs in production builds.
-- **Configuration Files**: Created JSON configuration profiles for graphics, audio, controls, language, performance, and developer tools.
-- **Successful Compilation & Android Build**:
-  - Portable .NET 8.0 SDK and Godot Mono 4.3 tools configured headlessly in the workspace.
-  - Successfully compiled the C# solution (0 warnings, 0 errors).
-  - Exported the release Android APK to `Build/HeroOfEternia.apk` (22.7MB base size).
-  - Generated `debug.keystore` and `release.keystore` using keytool.
-  - Signed and verified the exported APK using the Android SDK `apksigner`.
+
+### Phase 1 — Project Foundation ✅
+- **Project Vision & Strategy**: Finalized offline-first 3D Action RPG design for Android 8+ (ARM64).
+- **Engine Selection**: Formally selected **Godot 4.3 (C#)**.
+- **Coding Standards**: Established SOLID principles, naming conventions, and modular architecture rules.
+- **Workspace Agent Bindings**: Configured `.agents/AGENTS.md` to permanently enforce AI-first asset production.
+
+### Phase 2 — Project Creation ✅
+- **Project Setup**: Created `project.godot`, `export_presets.cfg`, `HeroOfEternia.csproj`, `HeroOfEternia.sln`.
+- **Folder Structure**: All Asset subdirectories, Scenes, Scripts/Core, Settings, Build, Shaders, Prefabs, Tests, Editor folders.
+- **Scene Structure**: Boot, Splash, MainMenu, Loading, Settings, Credits, TestEnvironment scene files.
+- **Core Managers (initial)**: EventBus, Logger, GameManager, SceneManager, SaveManager (basic), SettingsManager (basic), AudioManager, LocalizationManager, InputManager, ResourceManager, UIManager, PerformanceManager.
+- **Configuration Files**: JSON profiles for graphics (4 presets), audio, controls, language, performance, developer.
+- **Build Pipeline**: Signed APK compiling from portable .NET 8 + Godot Mono 4.3. Keystores generated and verified with `apksigner`.
+
+### Phase 3 — Core Framework & Local Save System ✅
+- **ServiceLocator (DI Container)**: Thread-safe service registration/resolution with per-service startup timing. Uses `IInitializable` interface — fully Open/Closed compliant. No type-coupling inside the locator.
+- **SaveManager (AES-256 Encrypted)**: Full save pipeline: JSON serialization → AES-256 encryption (device-unique key via PBKDF2) → SHA-256 checksum appended. Backup `.bak` files auto-created on every write. Corrupted saves auto-recovered from backup. Slot preview metadata cache. Schema version migration hooks. `JsonExtensionData` for unlimited future DLC fields.
+- **SettingsManager**: Audio (master/music/sfx), graphics preset, language, touch controls (deadzone/sensitivity), accessibility (large fonts, colorblind mode), autosave, developer console toggle. All changes saved instantly to disk. Factory reset support.
+- **ConfigManager**: JSON config loading with in-memory caching and hot-reload (`HotReloadAll()`). Auto-generates templates for: physics, camera, gameplay, performance, localization, debug.
+- **DeviceDetector**: Queries OS, CPU, GPU, display resolution, refresh rate, free storage. RAM queried via Godot Performance API. Maps hardware to LOW/MEDIUM/HIGH preset automatically. Manual override supported.
+- **PerformanceManager**: Exponential-moving-average FPS tracker. Auto-adjusts dynamic resolution scale between 0.5×–1.0× based on 80%/95% FPS thresholds.
+- **PerformanceMonitor (Overlay)**: Godot Label node rendering live FPS, frame time, static memory, and draw call counts. Dev-only toggle via SettingsManager.
+- **ErrorSystem**: AppDomain unhandled exception listener. Writes timestamped crash logs to `crash_log.txt`. Reports fatal errors and asset misses.
+- **Logger**: Thread-safe, level-tagged (Info/Warning/Error/Critical). Info+Warning stripped in Release via `[Conditional("DEBUG")]`. Routes to Godot Output panel via `GD.Print/PushWarning/PushError` with Console fallback for headless environments.
+- **LocalizationManager**: Implements IInitializable. Full English base string table (14 keys). Runtime `ChangeLanguage()` hot-swap support.
+- **TestRunner**: 5-test headless suite — ServiceLocator DI boot, SettingsManager persistence+reset, ConfigManager template generation+hot-reload, DeviceDetector hardware query, SaveManager AES encrypt/decrypt/backup/corruption-recovery.
 
 ---
 
 ## Current Architecture
-- **Central EventBus**: Decouples game controllers from UI overlays using action delegate publish/subscribe loops.
-- **System Managers**: Fully decoupled modular classes instantiated and resolved via the Service Locator pattern.
-- **Local Storage Model**: Binary-serialized save slot files (`slot_*.sav`) employing MD5 integrity signatures and database version migration schemas.
-- **Dynamic Resolution Scale**: Managed by the PerformanceManager, which tracks frame times and adjusts rendering viewport scaling automatically.
+- **ServiceLocator**: Central DI registry. All managers implement `IInitializable` for self-declared startup.
+- **EventBus**: Generic publish/subscribe with copy-on-iterate safety.
+- **SaveProfile**: Unified local data model — Stats, Inventory, Quests, WorldState, Statistics, `JsonExtensionData` (future DLC).
+- **AES Encryption**: Device-bound key from `AppSalt + OS.GetUniqueId()`. Saves are non-transferable between devices.
+- **Dynamic Resolution**: PerformanceManager auto-scales viewport based on sustained FPS.
 
 ---
 
 ## Folder Structure
 ```
 c:\AAA\
-├── .agents/ (Workspace custom rules)
+├── .agents/               (Workspace AI-first rules)
 ├── Assets/
 │   ├── Animations/
-│   ├── Audio/ (Music, SFX)
+│   ├── Audio/
+│   ├── Bosses/
 │   ├── Characters/
 │   ├── Enemies/
-│   ├── Bosses/
 │   ├── Environment/
+│   ├── Fonts/
 │   ├── Items/
 │   ├── Materials/
-│   ├── UI/
-│   └── Fonts/
-├── Prefabs/ (Saved scene node layouts)
-├── Scenes/ (Main level scenes and boot templates)
-├── Scripts/ (C# logic files)
-│   ├── Core/ (Managers, EventBus, Logger)
-│   ├── Entities/
-│   ├── UI/
-│   └── Database/
-├── Shaders/ (Custom materials)
-├── Settings/ (JSON configuration profiles)
-├── Documentation/
-├── Tests/ (Automated GUT unit tests)
-├── Editor/ (Editor inspectors)
-└── Build/ (Keystores and target APK output packages)
+│   └── UI/
+├── Build/                 (debug.keystore, release.keystore, HeroOfEternia.apk)
+├── Editor/
+├── Prefabs/
+├── Scenes/               (Boot, Splash, MainMenu, Loading, Settings, Credits, TestEnvironment)
+├── Scripts/
+│   └── Core/
+│       ├── ConfigManager.cs      [Phase 3 NEW]
+│       ├── DeviceDetector.cs     [Phase 3 NEW]
+│       ├── ErrorSystem.cs        [Phase 3 NEW]
+│       ├── PerformanceMonitor.cs [Phase 3 NEW]
+│       ├── ServiceLocator.cs     [Phase 3 NEW]
+│       ├── AudioManager.cs
+│       ├── EventBus.cs
+│       ├── GameManager.cs        [Phase 3 UPDATED — IInitializable]
+│       ├── InputManager.cs
+│       ├── LocalizationManager.cs [Phase 3 UPDATED — IInitializable, full string table]
+│       ├── Logger.cs             [Phase 3 UPDATED — GD.Print routing]
+│       ├── PerformanceManager.cs  [Phase 3 UPDATED — IInitializable]
+│       ├── ResourceManager.cs
+│       ├── SaveManager.cs        [Phase 3 UPDATED — AES-256, SHA-256, backup, migration]
+│       ├── SceneManager.cs
+│       ├── SettingsManager.cs    [Phase 3 UPDATED — full settings surface]
+│       ├── TestRunner.cs         [Phase 3 UPDATED — 5-test suite]
+│       └── UIManager.cs
+├── Settings/             (6 JSON config files)
+├── Shaders/
+├── Tests/
+└── Documentation/
 ```
 
 ---
 
-## Assets Created
-- Phase 2 focuses on project creation, folders, manager architectures, and configuration settings files. No visual sprites, textures, or 3D models were created in this phase.
+## Build Status
+- **C# Compilation**: ✅ 0 errors, 0 warnings
+- **Android APK**: ✅ 22.7 MB, signed with release.keystore, verified by apksigner
+- **Headless Tests**: ✅ EXIT_CODE=0 — ALL FRAMEWORK TESTS PASSED
 
 ---
 
-## Scripts Created
-- `Scripts/Core/Logger.cs`
-- `Scripts/Core/EventBus.cs`
-- `Scripts/Core/GameManager.cs`
-- `Scripts/Core/SceneManager.cs`
-- `Scripts/Core/SaveManager.cs`
-- `Scripts/Core/SettingsManager.cs`
-- `Scripts/Core/AudioManager.cs`
-- `Scripts/Core/LocalizationManager.cs`
-- `Scripts/Core/InputManager.cs`
-- `Scripts/Core/ResourceManager.cs`
-- `Scripts/Core/UIManager.cs`
-- `Scripts/Core/PerformanceManager.cs`
+## Known Issues / Limitations
+- `DeviceDetector.SystemRamMb` uses a conservative estimate from static memory × 8 rather than true total RAM (Godot 4.x does not expose total physical RAM via a public C# API).
+- `PerformanceMonitor` battery field shows "N/A" — Godot removed `OS.GetPowerPercentLeft()` in v4.x.
+- Save files are device-bound. Intentional for security, but cloud sync will require a server-side re-encryption step in future phases.
 
 ---
 
-## Known Bugs
-- None. C# codebase compiles successfully with 0 warnings/errors, and the Android APK is successfully exported, signed, and verified.
-
----
-
-## Technical Debt
-- **Archiving Old Native Code**: The native Kotlin Android files from Phase 1 remain in the root directory under `/app`. These files will be archived or deleted in the subsequent phase.
-
----
-
-## Future Improvements
-- Implement automated GLES3 profile overrides based on Android GPU checks.
-- Add support for game-controller maps.
-- Implement the GUT (Godot Unit Testing) C# wrappers.
-
----
-
-## Coding Conventions
-- Namespace naming follows PascalCase (e.g., `HeroOfEternia.Core`).
-- File classes match their names.
-- Public APIs use standard C# docstrings.
+## Next Phase
+**Prompt 4** — expected topic: Player Controller, Touch Input, Virtual Joystick.

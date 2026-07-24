@@ -5,13 +5,16 @@ namespace HeroOfEternia.Core
     /// <summary>
     /// Monitors framerates and dynamically lowers rendering parameters to keep thermals and batteries optimized.
     /// </summary>
-    public class PerformanceManager
+    public class PerformanceManager : IInitializable
     {
         private float _fpsAccumulator = 60.0f;
         public float TargetFps { get; private set; } = 60.0f;
         public float CurrentResolutionScale { get; private set; } = 1.0f;
 
         public event Action<float>? OnResolutionScaleChanged;
+
+        /// <summary>IInitializable contract — defaults to 60 FPS target.</summary>
+        public void Initialize() => Initialize(60.0f);
 
         public void Initialize(float targetFps)
         {

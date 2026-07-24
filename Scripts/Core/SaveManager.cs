@@ -87,8 +87,13 @@ namespace HeroOfEternia.Core
     {
         private const int CurrentSaveVersion = 1;
         private const string GameVersionStr = "1.0.0";
-        private const string DefaultPassword = "EterniaSuperSecretKey2026!";
+
+        // Application-level salt — combined with device unique ID at runtime.
+        // This means saves are device-bound and cannot be trivially copied between devices.
+        private const string AppSalt = "HoE_AppSalt_v1_Eternia2026";
+
         private readonly string _saveDirectory;
+        private readonly string _derivedKey;
 
         public SaveManager(string saveDirectory)
         {
@@ -96,6 +101,25 @@ namespace HeroOfEternia.Core
             if (!Directory.Exists(_saveDirectory))
             {
                 Directory.CreateDirectory(_saveDirectory);
+            }
+            _derivedKey = BuildDerivedKey();
+        }
+
+        /// <summary>
+        /// Derives an AES key from the application salt + device unique ID.
+        /// Falls back to a test-safe constant when OS.GetUniqueId() is unavailable.
+        /// </summary>
+        private static string BuildDerivedKey()
+        {
+            try
+            {
+                string uniqueId = Godot.OS.GetUniqueId();
+                return AppSalt + "::" + uniqueId;
+            }
+            catch
+            {
+                // Headless test environments do not expose a device unique ID.
+                return AppSalt + "::TEST_DEVICE";
             }
         }
 
@@ -116,7 +140,7 @@ namespace HeroOfEternia.Core
                 byte[] rawBytes = Encoding.UTF8.GetBytes(jsonString);
 
                 // 2. Encrypt bytes using AES-256
-                byte[] encryptedBytes = Encrypt(rawBytes, DefaultPassword);
+                byte[] encryptedBytes = Encrypt(rawBytes, _derivedKey);
 
                 // 3. Generate SHA-256 Checksum for integrity validation
                 byte[] checksum = GenerateChecksum(encryptedBytes);
@@ -204,7 +228,7 @@ namespace HeroOfEternia.Core
                 }
 
                 // Decrypt data
-                byte[] decryptedBytes = Decrypt(encryptedBytes, DefaultPassword);
+                byte[] decryptedBytes = Decrypt(encryptedBytes, _derivedKey);
                 string jsonString = Encoding.UTF8.GetString(decryptedBytes);
 
                 // Deserialize JSON back to profile model
