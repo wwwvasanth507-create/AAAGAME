@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.antigravity.voidodyssey.app-release-4:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.antigravity.voidodyssey.app-main-5:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.antigravity.voidodyssey.app-release-4:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.antigravity.voidodyssey.app-main-5:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.antigravity.voidodyssey.app-release-4:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.antigravity.voidodyssey.app-main-5:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.antigravity.voidodyssey.app-release-4:/layout_activity_main.xml.flat",
+        "source": "com.antigravity.voidodyssey.app-main-5:/layout/activity_main.xml"
+    }
+]

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.antigravity.voidodyssey.GameLogicUnitTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-24T11:36:06.564Z" hostname="VASANTH_PC" time="0.016">
+  <properties/>
+  <testcase name="testShipDamageResolution" classname="com.antigravity.voidodyssey.GameLogicUnitTest" time="0.005"/>
+  <testcase name="testLaserFiringCooldown" classname="com.antigravity.voidodyssey.GameLogicUnitTest" time="0.001"/>
+  <testcase name="testPlayerShipMovementAndSteering" classname="com.antigravity.voidodyssey.GameLogicUnitTest" time="0.0"/>
+  <testcase name="testSphereCollisionIntersection" classname="com.antigravity.voidodyssey.GameLogicUnitTest" time="0.001"/>
+  <testcase name="testPlayerShipInitialPosition" classname="com.antigravity.voidodyssey.GameLogicUnitTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

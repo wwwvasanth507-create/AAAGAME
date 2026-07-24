@@ -1,0 +1,34 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color ic_launcher_background
+color white
+drawable ic_launcher_foreground
+id btn_hud_menu
+id btn_open_saves
+id btn_open_settings
+id btn_preset_high
+id btn_preset_low
+id btn_preset_med
+id btn_preset_ultra
+id btn_saves_back
+id btn_settings_back
+id btn_slot_1
+id btn_slot_2
+id btn_slot_3
+id btn_start_game
+id gl_surface_view
+id hud_overlay
+id main_menu_overlay
+id pb_hull
+id pb_shield
+id root_layout
+id save_slots_overlay
+id settings_overlay
+id tv_ore
+id tv_quality_details
+id tv_score
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0b0d19">
+
+    <!-- The 3D Game Render View -->
+    <android.opengl.GLSurfaceView
+        android:id="@+id/gl_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Gameplay HUD Overlay (Visible during play) -->
+    <RelativeLayout
+        android:id="@+id/hud_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <!-- Top Stats Panel (Shield, Hull, Score, Credits) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#A6000000">
+
+            <!-- Hull Bar -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HULL COMPARTMENT"
+                    android:textColor="#FF5252"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+                <ProgressBar
+                    android:id="@+id/pb_hull"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="8dp"
+                    android:progress="100"
+                    android:progressDrawable="@android:drawable/progress_horizontal" />
+            </LinearLayout>
+
+            <!-- Shield Bar -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEFLECTOR SHIELDS"
+                    android:textColor="#00E5FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+                <ProgressBar
+                    android:id="@+id/pb_shield"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="150dp"
+                    android:layout_height="8dp"
+                    android:progress="50"
+                    android:progressDrawable="@android:drawable/progress_horizontal" />
+            </LinearLayout>
+
+            <!-- Score / Minerals -->
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="SCORE: 0000"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_ore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ORE: 0"
+                android:textColor="#FFEB3B"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Touch Steering instructions overlay (Virtual Joystick zone representation) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="32dp"
+            android:text="SWIPE TO STEER SHIELD &amp; STEER SHIP"
+            android:textColor="#80FFFFFF"
+            android:textSize="11sp" />
+
+        <!-- Throttle Slider Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="32dp"
+            android:text="THROTTLE SLIDER SECTION"
+            android:textColor="#80FFFFFF"
+            android:textSize="11sp" />
+
+        <!-- Menu button on HUD -->
+        <Button
+            android:id="@+id/btn_hud_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="PAUSE"
+            android:backgroundTint="#3F51B5"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <!-- Main Menu Overlay (Glassmorphism design panel) -->
+    <LinearLayout
+        android:id="@+id/main_menu_overlay"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#D90C0E1A"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="VOID ODYSSEY"
+            android:textColor="#00E5FF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btn_start_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="LAUNCH OPERATIONS"
+            android:backgroundTint="#00E5FF"
+            android:textColor="#0A0F24"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_open_saves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="SAVE PROFILE SLOTS"
+            android:backgroundTint="#2C3E50"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btn_open_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="SYSTEM SETTINGS"
+            android:backgroundTint="#2C3E50"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Settings Overlay -->
+    <LinearLayout
+        android:id="@+id/settings_overlay"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#D90C0E1A"
+        android:visibility="gone"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="SYSTEM CONFIG"
+            android:textColor="#00E5FF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GRAPHICS PRESETS"
+            android:textColor="#9E9E9E"
+            android:textSize="12sp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <Button
+                android:id="@+id/btn_preset_low"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="LOW"
+                android:backgroundTint="#2C3E50" />
+            <Button
+                android:id="@+id/btn_preset_med"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MED"
+                android:backgroundTint="#2C3E50" />
+            <Button
+                android:id="@+id/btn_preset_high"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="HIGH"
+                android:backgroundTint="#2C3E50" />
+            <Button
+                android:id="@+id/btn_preset_ultra"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ULTRA"
+                android:backgroundTint="#2C3E50" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_quality_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B0BEC5"
+            android:textSize="11sp"
+            android:layout_marginBottom="24dp"
+            android:text="Quality presets adjust resolution scale, particles, and filter buffers." />
+
+        <Button
+            android:id="@+id/btn_settings_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RETURN TO COMMAND"
+            android:backgroundTint="#00E5FF"
+            android:textColor="#0A0F24"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Save Slots Overlay -->
+    <LinearLayout
+        android:id="@+id/save_slots_overlay"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#D90C0E1A"
+        android:visibility="gone"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="SELECT SECTOR PROFILE"
+            android:textColor="#00E5FF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btn_slot_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="SAVE PROFILE SLOT 1"
+            android:backgroundTint="#2C3E50" />
+
+        <Button
+            android:id="@+id/btn_slot_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="SAVE PROFILE SLOT 2"
+            android:backgroundTint="#2C3E50" />
+
+        <Button
+            android:id="@+id/btn_slot_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="SAVE PROFILE SLOT 3"
+            android:backgroundTint="#2C3E50" />
+
+        <Button
+            android:id="@+id/btn_saves_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RETURN TO COMMAND"
+            android:backgroundTint="#00E5FF"
+            android:textColor="#0A0F24"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</FrameLayout>
