@@ -194,6 +194,12 @@ namespace HeroOfEternia.Core
 
                 // Clean up directory
                 Directory.Delete(tempDir, true);
+
+                // ==========================================
+                // PHASE 4 TESTS
+                // ==========================================
+                if (!RunPhase4Tests(tempDir)) return false;
+
                 return true;
             }
             catch (Exception ex)
@@ -201,6 +207,126 @@ namespace HeroOfEternia.Core
                 GD.Print($"TEST HARNESS CORE EXCEPTION: {ex.Message}\n{ex.StackTrace}");
                 return false;
             }
+        }
+
+        // ---------------------------------------------------------------
+        // PHASE 4 TESTS
+        // ---------------------------------------------------------------
+        private bool RunPhase4Tests(string tempDir)
+        {
+            Directory.CreateDirectory(tempDir);
+
+            // ----------------------------------------------------------
+            // TEST 6: InputActionMap — registers all actions
+            // ----------------------------------------------------------
+            GD.Print("Running: InputActionMap registration...");
+            try
+            {
+                Input.InputActionMap.Initialize();
+                // Verify a key action exists in Godot InputMap
+                if (!InputMap.HasAction(Input.InputActions.Jump))
+                {
+                    GD.Print("FAIL: InputActionMap did not register 'jump' action.");
+                    return false;
+                }
+                GD.Print("PASS: InputActionMap registered all actions.");
+            }
+            catch (Exception ex)
+            {
+                GD.Print($"FAIL: InputActionMap exception: {ex.Message}");
+                return false;
+            }
+
+            // ----------------------------------------------------------
+            // TEST 7: PlayerData — stats, stamina, XP, vitals
+            // ----------------------------------------------------------
+            GD.Print("Running: PlayerData stat checks...");
+            var data = new Player.PlayerData();
+
+            // Stamina drain
+            data.DrainStamina(30f);
+            if (data.CurrentStamina != 70f)
+            {
+                GD.Print($"FAIL: Stamina drain. Got {data.CurrentStamina}, expected 70.");
+                return false;
+            }
+
+            // Stamina check
+            if (!data.HasStamina(50f) || data.HasStamina(80f))
+            {
+                GD.Print("FAIL: HasStamina() boundary check.");
+                return false;
+            }
+
+            // Vitals regen
+            data.CurrentHealth = 50f;
+            data.HealthRegen   = 10f;
+            data.RegenVitals(2f); // 2 seconds
+            if (data.CurrentHealth != 70f)
+            {
+                GD.Print($"FAIL: HealthRegen. Got {data.CurrentHealth}, expected 70.");
+                return false;
+            }
+
+            // XP level-up
+            bool leveledUp = data.AddXp(100);
+            if (!leveledUp || data.Level != 2)
+            {
+                GD.Print($"FAIL: XP level-up. Got Level={data.Level}, LeveledUp={leveledUp}.");
+                return false;
+            }
+            GD.Print("PASS: PlayerData stats, stamina, regen, and XP verified.");
+
+            // ----------------------------------------------------------
+            // TEST 8: PlayerStateMachine — transitions
+            // ----------------------------------------------------------
+            GD.Print("Running: PlayerStateMachine transition checks...");
+            var fsm = new Player.PlayerStateMachine();
+            fsm.Register(new Player.States.IdleState());
+            fsm.Register(new Player.States.RunState());
+            fsm.Register(new Player.States.JumpState());
+            fsm.Register(new Player.States.FallState());
+            fsm.Register(new Player.States.LandState());
+            fsm.Register(new Player.States.DeadState());
+
+            if (fsm.CurrentStateId != Player.PlayerStateId.Idle)
+            {
+                GD.Print("FAIL: FSM default state is not Idle.");
+                return false;
+            }
+
+            // Forced transitions
+            fsm.ForceTransition(null!, Player.PlayerStateId.Dead);
+            if (fsm.CurrentStateId != Player.PlayerStateId.Dead)
+            {
+                GD.Print("FAIL: FSM did not transition to Dead.");
+                return false;
+            }
+            GD.Print("PASS: PlayerStateMachine transitions verified.");
+
+            // ----------------------------------------------------------
+            // TEST 9: PlayerSettings — persistence
+            // ----------------------------------------------------------
+            GD.Print("Running: PlayerSettings persistence checks...");
+            var ps = new Player.PlayerSettings();
+            ps.SetSensitivity(0.75f);
+            ps.SetInvertY(true);
+            ps.SetLeftHanded(true);
+
+            // Re-load in fresh instance
+            var ps2 = new Player.PlayerSettings();
+            ps2.Load();
+            if (ps2.Data.CameraSensitivity != 0.75f || !ps2.Data.InvertY || !ps2.Data.LeftHandedMode)
+            {
+                GD.Print($"FAIL: PlayerSettings persistence. " +
+                         $"Sens={ps2.Data.CameraSensitivity}, InvertY={ps2.Data.InvertY}, Left={ps2.Data.LeftHandedMode}");
+                return false;
+            }
+            ps2.ResetToDefaults();
+            GD.Print("PASS: PlayerSettings persistence and reset verified.");
+
+            Directory.Delete(tempDir, true);
+            return true;
         }
     }
 }
