@@ -1,0 +1,45 @@
+{
+  "presets": {
+    "LOW": {
+      "resolution_scale": 0.5,
+      "shadow_map_size": 0,
+      "directional_shadow_enabled": false,
+      "max_particles": 50,
+      "anisotropic_filtering_level": 0,
+      "msaa": "disabled",
+      "post_processing_enabled": false,
+      "draw_distance": 30.0
+    },
+    "MEDIUM": {
+      "resolution_scale": 0.75,
+      "shadow_map_size": 512,
+      "directional_shadow_enabled": true,
+      "max_particles": 150,
+      "anisotropic_filtering_level": 0,
+      "msaa": "disabled",
+      "post_processing_enabled": true,
+      "draw_distance": 50.0
+    },
+    "HIGH": {
+      "resolution_scale": 1.0,
+      "shadow_map_size": 1024,
+      "directional_shadow_enabled": true,
+      "max_particles": 300,
+      "anisotropic_filtering_level": 4,
+      "msaa": "msaa_2x",
+      "post_processing_enabled": true,
+      "draw_distance": 80.0
+    },
+    "ULTRA": {
+      "resolution_scale": 1.0,
+      "shadow_map_size": 2048,
+      "directional_shadow_enabled": true,
+      "max_particles": 600,
+      "anisotropic_filtering_level": 16,
+      "msaa": "msaa_4x",
+      "post_processing_enabled": true,
+      "draw_distance": 120.0
+    }
+  },
+  "default_preset": "AUTO_DETECT"
+}

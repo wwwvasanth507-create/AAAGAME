@@ -1,0 +1,7 @@
+{
+  "master_volume": 0.8,
+  "music_volume": 0.7,
+  "sfx_volume": 0.9,
+  "voice_volume": 0.8,
+  "mute_on_focus_loss": true
+}

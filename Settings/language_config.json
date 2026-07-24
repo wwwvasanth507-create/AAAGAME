@@ -1,0 +1,5 @@
+{
+  "active_language": "en",
+  "supported_languages": ["en", "es", "fr", "de", "zh"],
+  "fallback_language": "en"
+}

@@ -1,0 +1,32 @@
+# ==========================================
+# Hero of Eternia - Git Ignore Configuration
+# ==========================================
+
+# Godot Editor Caches and Imports
+.godot/
+*.translation
+
+# Portable Toolchains & Sandboxes
+.dotnet/
+.gradle/
+.kotlin/
+godot-templates-temp/
+
+# C# / Mono Build Artifacts
+[Bb]in/
+[Oo]bj/
+.vs/
+*.sln.docstates
+*.user
+*.suo
+*.userprefs
+
+# Android Builds and Keys
+[Bb]uild/
+local.properties
+/app/build/
+
+# Operating System Files
+Thumbs.db
+Desktop.ini
+.DS_Store

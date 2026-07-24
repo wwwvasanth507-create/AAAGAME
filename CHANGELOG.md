@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0] - 2026-07-24
+
+### Added
+*   **Godot Project Initialization**: Configured `project.godot`, `export_presets.cfg`, `HeroOfEternia.csproj`, and `HeroOfEternia.sln` solution files.
+*   **Scene Structure Templates**: Built Boot, Splash, MainMenu, Loading, Settings, Credits, and TestEnvironment scenes (.tscn).
+*   **Core Manager Implementations (C#)**: Fully drafted EventBus, thread-safe Logger, GameManager, SceneManager, SaveManager, SettingsManager, AudioManager, LocalizationManager, InputManager, ResourceManager, UIManager, and PerformanceManager classes.
+*   **Logging System**: Implemented conditional compilation logs (`[Conditional("DEBUG")]`) that strip debug logging in release builds.
+*   **Configuration Profiles**: Created JSON graphics, audio, controls, language, performance, and developer templates.
+*   **Headless Automated Test Harness**: Created `TestRunner.cs` validating manager operations, state switches, EventBus subscriptions, and MD5 file integrity signatures.
+*   **Signed APK Packaging**: Generated debug/release keystores, built C# code cleanly (0 warnings/errors), and manually signed/verified `Build/HeroOfEternia.apk` using `apksigner`.
+
+### Fixed
+*   **GameManager Initialize Guard**: Fixed transition blocks during Boot by adding a default `None` state.
+*   **Headless Editor Settings Resolution**: Updated JDK/SDK path properties inside Roaming Godot minor version settings (`editor_settings-4.3.tres`).
+*   **Assembly Mismatch**: Resolved Mono solution search errors by matching assembly names exactly to solutions.
+
 ## [0.1.0] - 2026-07-24
 
 ### Added

@@ -1,0 +1,8 @@
+{
+  "debug_mode": true,
+  "enable_console": true,
+  "draw_perf_overlay": true,
+  "cheat_codes_enabled": false,
+  "sandbox_level_override": "",
+  "save_profile_slot_override": 0
+}

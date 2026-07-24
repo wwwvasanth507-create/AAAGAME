@@ -1,0 +1,7 @@
+{
+  "joystick_deadzone": 0.15,
+  "joystick_sensitivity_x": 1.0,
+  "joystick_sensitivity_y": 1.0,
+  "vibration_enabled": true,
+  "touch_controls_layout": "DEFAULT"
+}
