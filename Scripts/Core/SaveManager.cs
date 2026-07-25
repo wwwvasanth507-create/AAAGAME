@@ -211,6 +211,10 @@ namespace HeroOfEternia.Core
         /// <summary>Dungeon room progress, checkpoints, boss phase, and Act I completion flag.</summary>
         public Content.Chapter3.Chapter3SaveData? Chapter3Data { get; set; }
 
+        // Act II — Eastern Ridgeline & Mirkwood Swamps (Save V26)
+        /// <summary>Act II region discoveries, companion join state, watchtower liberation, and recipe unlocks.</summary>
+        public Content.Chapter4.Act2SaveData? Act2Data { get; set; }
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();

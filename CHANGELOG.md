@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.31.0] - 2026-07-25
+
+### Added — Act II: Eastern Ridgeline & Mirkwood Swamps (Prompt 31)
+*   **Act2Manager**: Central `IInitializable` orchestrator registered in `ServiceLocator`. Coordinates Act II regions, companion registry, quest chain, enemy roster, NPC roster, and crafting expansion.
+*   **Act2RegionContent**: Two Act II region definitions — Eastern Ridgeline (levels 19–24, starts unlocked) and Mirkwood Swamps (levels 21–27, unlocked after Watchtower liberation). Includes `UnlockRegion()` event flow.
+*   **CompanionRegistry**: First major companion — Seraphine Vael (Arcane Scout), with 3 unique abilities (`ability_arcane_pulse`, `ability_shadow_sight`, `ability_barrier_weave`), join condition `q_act2_ridgeline_rescue`, and future companion stubs.
+*   **Act2QuestChain**: 4-quest Eastern Ridgeline arc (`q_act2_begins` → `q_act2_ridgeline_rescue` → `q_act2_watchtower` → `q_act2_mirkwood_intel`) registered into `QuestDatabase`.
+*   **Act2EnemyDefinitions**: 7 Act II enemy profiles — Shadow Cult Vanguard, Ridgeline Harpy, Storm Golem, Vanguard Captain Drael (mini-boss), Mirkwood Lurker, Bog Witch, Plague Shambler.
+*   **Act2NpcDefinitions**: 4 Act II NPCs — Commander Harek Stonewall, Elda the Swamp Warden (vendor), Emissary Null (Malakor agent), Forge-Master Brynn (vendor).
+*   **Act2CraftingContent**: 2 advanced crafting stations (Ridgeline War Forge, Swamp Alchemy Cauldron) and 4 recipes including first Tier 3 preview (Voidweave Cloak).
+*   **Act2SaveData & Save V26**: Region discoveries, companion join state, Watchtower liberation flag, and recipe unlocks persisted to SaveProfile Version 26.
+*   **Act2SystemTests**: 9-case unit test suite validating initialization, regions, unlock flow, companions, quests, enemies, NPCs, crafting, and Save V26.
+*   **Documentation**: Created `ACT_II_REGIONS.md`, `COMPANION_SYSTEM.md`, `ACT_II_CRAFTING.md`.
+
 ## [0.30.0] - 2026-07-25
 
 ### Added — Chapter 3, First Major Dungeon & Act I Finale (Prompt 30)

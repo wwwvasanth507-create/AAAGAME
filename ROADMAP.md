@@ -345,11 +345,20 @@ gantt
     *   **Save V25** — Chapter 3 dungeon progress, boss phase, and `IsActIComplete` persisted to SaveProfile Version 25.
     *   **Tests & Documentation** — Chapter3SystemTests (11 cases) + `CHAPTER_03.md`, `ACT_I.md`, `FIRST_DUNGEON.md`, `REGIONAL_BOSS.md`, `WORLD_EVOLUTION.md`.
 
-### 🔲 Phase 31: Act II — Eastern Ridgeline & Mirkwood Swamps (Prompt 31)
-*   **Planned Features:** Open Act II regions, Malakor's deeper agents, new faction dynamics, advanced crafting station unlocks, first major companion character introduction.
+### ✅ Phase 31: Act II — Eastern Ridgeline & Mirkwood Swamps (Completed — Prompt 31)
+*   **Features:**
+    *   **Act2Manager** — Central `IInitializable` orchestrator for all Act II content, registered in ServiceLocator.
+    *   **Act2RegionContent** — Eastern Ridgeline and Mirkwood Swamps region definitions with unlock event flow.
+    *   **CompanionRegistry** — Seraphine Vael (Arcane Scout) — first companion with 3 abilities and join condition.
+    *   **Act2QuestChain** — 4-quest Ridgeline opening arc registered into QuestDatabase.
+    *   **Act2EnemyDefinitions** — 7 enemies across both regions including Vanguard Captain Drael (mini-boss).
+    *   **Act2NpcDefinitions** — 4 NPCs including Commander Harek, Elda (vendor), Emissary Null, Forge-Master Brynn.
+    *   **Act2CraftingContent** — 2 crafting stations, 3 Tier 2 recipes, 1 Tier 3 preview recipe.
+    *   **Save V26** — Act II region discovery, companion join, liberation, and recipe states persisted.
+    *   **Tests & Documentation** — Act2SystemTests (9 cases) + `ACT_II_REGIONS.md`, `COMPANION_SYSTEM.md`, `ACT_II_CRAFTING.md`.
 
-### 🔲 Phase 32: Act II — Second Major Dungeon & Boss (Prompt 32)
-*   **Planned Features:** Second large dungeon, second regional boss encounter, mid-campaign world evolution consequences.
+### 🔲 Phase 32: Act II — Mirkwood Depths Dungeon & Shadow Commander Boss (Prompt 32)
+*   **Planned Features:** Second large dungeon (Sunken Ruin of Mirkwood), Shadow Commander boss encounter, mid-campaign faction realignment, Act II world evolution events.
 
 ### 🔲 Phase 33–70: Act II/III Expansion & Gameplay Deepening
 *   **Planned Features:** Companion system, advanced skill trees, crafting professions, world events, player housing, reputation rewards, Act III preview content.
