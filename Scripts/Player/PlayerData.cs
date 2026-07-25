@@ -16,14 +16,16 @@ namespace HeroOfEternia.Player
         public int    CurrentXp     { get; set; } = 0;
         public int    XpToNextLevel { get; set; } = 100;
 
+        public Stats.PlayerAttributeSet Attributes { get; } = new();
+
         // ---------------------------------------------------------------
         // VITALS
         // ---------------------------------------------------------------
-        public float MaxHealth      { get; set; } = 100f;
+        public float MaxHealth      { get => Attributes.GetValue(Stats.AttributeType.Health); set => Attributes.SetBaseValue(Stats.AttributeType.Health, value); }
         public float CurrentHealth  { get; set; } = 100f;
-        public float MaxMana        { get; set; } = 50f;
+        public float MaxMana        { get => Attributes.GetValue(Stats.AttributeType.Mana); set => Attributes.SetBaseValue(Stats.AttributeType.Mana, value); }
         public float CurrentMana    { get; set; } = 50f;
-        public float MaxStamina     { get; set; } = 100f;
+        public float MaxStamina     { get => Attributes.GetValue(Stats.AttributeType.Stamina); set => Attributes.SetBaseValue(Stats.AttributeType.Stamina, value); }
         public float CurrentStamina { get; set; } = 100f;
 
         // Regeneration rates (per second)
@@ -34,12 +36,12 @@ namespace HeroOfEternia.Player
         // ---------------------------------------------------------------
         // PRIMARY STATS
         // ---------------------------------------------------------------
-        public int Strength         { get; set; } = 10;
-        public int Defense          { get; set; } = 5;
-        public int Magic            { get; set; } = 5;
-        public int Speed            { get; set; } = 10;
-        public int Luck             { get; set; } = 5;
-        public int Dexterity        { get; set; } = 5;
+        public int Strength         { get => (int)Attributes.GetValue(Stats.AttributeType.Strength); set => Attributes.SetBaseValue(Stats.AttributeType.Strength, value); }
+        public int Defense          { get => (int)Attributes.GetValue(Stats.AttributeType.Defense); set => Attributes.SetBaseValue(Stats.AttributeType.Defense, value); }
+        public int Magic            { get => (int)Attributes.GetValue(Stats.AttributeType.Magic); set => Attributes.SetBaseValue(Stats.AttributeType.Magic, value); }
+        public int Speed            { get => (int)Attributes.GetValue(Stats.AttributeType.Speed); set => Attributes.SetBaseValue(Stats.AttributeType.Speed, value); }
+        public int Luck             { get => (int)Attributes.GetValue(Stats.AttributeType.Luck); set => Attributes.SetBaseValue(Stats.AttributeType.Luck, value); }
+        public int Dexterity        { get => (int)Attributes.GetValue(Stats.AttributeType.Dexterity); set => Attributes.SetBaseValue(Stats.AttributeType.Dexterity, value); }
         public int Endurance        { get; set; } = 5;
         public int Intelligence     { get; set; } = 5;
         public int Charisma         { get; set; } = 5;
@@ -47,9 +49,15 @@ namespace HeroOfEternia.Player
         // ---------------------------------------------------------------
         // MOVEMENT PARAMETERS (derived from stats but overrideable)
         // ---------------------------------------------------------------
-        public float WalkSpeed      { get; set; } = 3.5f;
-        public float RunSpeed       { get; set; } = 6.0f;
-        public float SprintSpeed    { get; set; } = 9.5f;
+        private float _baseWalkSpeed = 3.5f;
+        public float WalkSpeed      { get => _baseWalkSpeed * (1.0f + (Attributes.GetValue(Stats.AttributeType.Speed) - 10f) * 0.02f); set => _baseWalkSpeed = value; }
+        
+        private float _baseRunSpeed = 6.0f;
+        public float RunSpeed       { get => _baseRunSpeed * (1.0f + (Attributes.GetValue(Stats.AttributeType.Speed) - 10f) * 0.02f); set => _baseRunSpeed = value; }
+        
+        private float _baseSprintSpeed = 9.5f;
+        public float SprintSpeed    { get => _baseSprintSpeed * (1.0f + (Attributes.GetValue(Stats.AttributeType.Speed) - 10f) * 0.02f); set => _baseSprintSpeed = value; }
+        
         public float JumpVelocity   { get; set; } = 5.5f;
         public float CrouchSpeed    { get; set; } = 2.0f;
         public float RollSpeed      { get; set; } = 8.0f;

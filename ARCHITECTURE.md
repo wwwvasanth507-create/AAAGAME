@@ -28,6 +28,14 @@ graph TD
         E --> L[QuestManager]
         E --> M[WorldManager]
     end
+
+    subgraph Player Systems
+        E --> P[PlayerRoot]
+        P --> MC[PlayerModelController]
+        P --> ID[PlayerInteractionDetector]
+        P --> EC[PlayerEffectsController]
+        P --> AC[PlayerAnimationController]
+    end
 ```
 
 ---
@@ -53,3 +61,11 @@ System-to-system communications occur asynchronously via a centralized `EventBus
 ## 4. Diagnostics & Error Telemetry
 *   **ErrorSystem:** Intercepts unhandled app domain exceptions and fatal asset failures, generating structured reports inside `crash_log.txt`.
 *   **PerformanceMonitor:** Tracks FPS, draw calls, process times, and static memory, rendering a green neon text overlay for developer builds.
+
+---
+
+## 5. Player Character & Interaction Framework
+*   **PlayerModelController:** Handles dynamic loading and swapping of 11 bone-aligned visual mesh slots (Hair, Body, Armor, Weapon, etc.). Manages mobile performance via Level of Detail (LOD) toggles.
+*   **PlayerInteractionDetector:** Spherical Area3D sweep that detects Layer 4 (Interactables), resolving Single Tap, Hold, and Auto triggers, and highlighting targets.
+*   **PlayerAttributeSet:** Encapsulates RPG modifier calculations using dirty flags to avoid redundant frame calculations.
+*   **PlayerEffectsController:** Status visual effect framework managing particle and shader overlays.

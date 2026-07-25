@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] - 2026-07-25
+
+### Added
+*   **PlayerModelController** (`Scripts/Player/PlayerModelController.cs`): Modular mesh swapper supporting 11 slots. Features low-end shadow-casting LOD optimizations and customization colors.
+*   **PlayerInteractionDetector** (`Scripts/Player/PlayerInteractionDetector.cs`): Area3D scan node supporting tap, hold, and auto interact trigger modes with neon cyan shader highlights.
+*   **PlayerAttributeSet** (`Scripts/Player/Stats/PlayerAttributeSet.cs`): RPG attribute modifiers system supporting flat, percent additive, and percent multiplicative modifiers. Uses caching to prevent duplicate calculations.
+*   **PlayerEffectsController** (`Scripts/Player/PlayerEffectsController.cs`): Status effects timing framework for Shield, Aura, Glow, etc.
+*   **Interface definitions**: Universal `IInteractable` interface for world interactable nodes.
+*   **Automated tests**: Expanded TestRunner to 14 tests, verifying model part swaps, LOD controls, attribute math, timed expiration, closest targets, hold actions, effects, and slot data serialization/migrations.
+*   **Real Core Services Upgrades**: Replaced core manager stubs with real implementations: `SceneManager.cs` (dynamic node added to root, ResourceLoader background loading), `AudioManager.cs` (dynamic node added to root, bus decibel routing, BGM fade-out tweens, pre-allocated SFX pools), and `ResourceManager.cs` (real ResourceLoader cached preloading, typed retrieval).
+*   **Core Managers Tests**: Added tests covering asset cache hits, linear-to-db volume routing, and SceneManager boot states.
+
+### Changed
+*   **PlayerData** (`Scripts/Player/PlayerData.cs`): Re-engineered statistics, health/mana/stamina, and primary stats to pull dynamically from the internal PlayerAttributeSet. Locomotion speeds scale dynamically with the Speed attribute.
+*   **PlayerRoot** (`Scripts/Player/PlayerRoot.cs`): Registered and integrated the PlayerModelController, PlayerInteractionDetector, and PlayerEffectsController child modules.
+*   **PlayerAnimationController** (`Scripts/Player/PlayerAnimationController.cs`): Extended with AnimationTree state machine support, layer blending, and root motion velocity hooks.
+*   **IPlayerState & PlayerStates** (`Scripts/Player/States/PlayerStates.cs`): Expanded state machine from 12 to 24 states, including fully functional swim, climb, crouch (capsule height adjustments), static pivot turns, push/pull locomotion, sleep/sit, celebrate, respawn, and disabled states.
+*   **SaveManager & SaveProfile** (`Scripts/Core/SaveManager.cs`): Incremented SaveVersion to 2. SaveProfile now persists equipped items, base stats, and active effects with custom backward-compatible migration.
+*   **ConfigManager** (`Scripts/Core/ConfigManager.cs`): Added template support for data-driven `player_attributes_config.json`.
+*   **AI Asset Pipeline Report**: Merged duplicated pipeline documentations into a single canonical `AI_PIPELINE_REPORT.md` (Bug B7).
+
+### Fixed
+*   **C# Warnings & Errors**: Cleaned up all null-reference compiler warnings (CS8602), hidden member warnings (CS0108), and Godot 4 API compile errors inside PlayerAnimationController. Build has 0 errors and 0 warnings.
+*   **Production Mocks and Stubs Resolved**: Replaced stubs B3 (SceneManager), B4 (AudioManager), and B8 (ResourceManager) with production-ready systems.
+
+---
+
 ## [0.4.0] - 2026-07-24
 
 ### Added

@@ -103,6 +103,9 @@ namespace HeroOfEternia.Core
                 case "debug":
                     defaultJson = "{\n  \"enable_cheats\": false,\n  \"show_wireframe\": false,\n  \"perf_logs_interval_seconds\": 5.0\n}";
                     break;
+                case "player_attributes":
+                    defaultJson = "{\n  \"Health\": 100.0,\n  \"Mana\": 50.0,\n  \"Energy\": 100.0,\n  \"Stamina\": 100.0,\n  \"Strength\": 10.0,\n  \"Vitality\": 10.0,\n  \"Magic\": 5.0,\n  \"Dexterity\": 5.0,\n  \"Luck\": 5.0,\n  \"Attack\": 15.0,\n  \"Defense\": 5.0,\n  \"Speed\": 10.0,\n  \"CriticalRate\": 0.05,\n  \"CriticalDamage\": 1.5\n}";
+                    break;
             }
 
             try

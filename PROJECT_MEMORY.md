@@ -1,7 +1,7 @@
 # Project Memory — Hero of Eternia
 
 > Central knowledge base for all development decisions, architecture rules, and project state.  
-> Last Updated: 2026-07-24
+> Last Updated: 2026-07-25
 
 ---
 
@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.4.0 |
+| **Version** | 0.5.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -119,23 +119,27 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | ErrorSystem | ✅ Complete | Crash logging |
 | Logger | ✅ Complete | Thread-safe, dual-routing |
 | LocalizationManager | ✅ Complete | 14-key English, hot-swap |
-| SceneManager | ⚠️ Mocked | Needs real ResourceLoader |
-| AudioManager | ⚠️ Stub | Needs AudioStreamPlayer |
-| UIManager | ⚠️ Incomplete | Needs implementation |
-| ResourceManager | ⚠️ Incomplete | Needs implementation |
+| SceneManager | ✅ Complete | Real ResourceLoader async loading |
+| AudioManager | ✅ Complete | Node-based pooling and AudioServer routing |
+| UIManager | ⚠️ Incomplete | Needs layout screens |
+| ResourceManager | ✅ Complete | Real caching and preloading |
 
 ### Player Systems
 | System | Status | Notes |
 |--------|--------|-------|
 | PlayerRoot | ✅ Complete | CharacterBody3D with modules |
 | PlayerMovement | ✅ Complete | Ground/Air/Jump/Surface detection |
-| PlayerStateMachine | ✅ Complete | 12 states (SOLID FSM) |
-| PlayerData | ✅ Complete | Stats, vitals, XP, stamina |
+| PlayerStateMachine | ✅ Complete | 24 states (SOLID FSM) |
+| PlayerData | ✅ Complete | Stats, vitals, XP, stamina (bridges to attributes) |
 | InputHandler | ✅ Complete | InputFrame snapshot |
 | TouchControls | ✅ Complete | Virtual joystick + gestures |
 | CameraController | ✅ Complete | Spring-arm, shake, lock-on |
-| PlayerAnimationController | ✅ Complete | AnimationPlayer wrapper |
+| PlayerAnimationController | ✅ Complete | AnimationTree + fallback blending |
 | PlayerAudioController | ✅ Complete | Footstep relay |
+| PlayerModelController | ✅ Complete | Dynamic slot swapper, LOD, customize |
+| PlayerInteractionDetector | ✅ Complete | Area3D overlaps, Tap/Hold/Auto modes |
+| PlayerAttributeSet | ✅ Complete | Capped caching formula, modifiers |
+| PlayerEffectsController | ✅ Complete | Status VFX overlays |
 | PlayerSettings | ✅ Complete | Auto-persistent |
 
 ---
@@ -183,7 +187,7 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (9 tests)
+### Current Test Suite (14 tests)
 | Test | Type | Status |
 |------|------|--------|
 | ServiceLocator DI & Boot | Integration | ✅ |
@@ -195,10 +199,13 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 | PlayerData Stats/Stamina/XP | Unit | ✅ |
 | PlayerStateMachine Transitions | Unit | ✅ |
 | PlayerSettings Persistence | Integration | ✅ |
+| PlayerModel Slot Swap & LOD | Unit | ✅ |
+| Attributes & Modifiers | Unit | ✅ |
+| Interaction Detector Closest | Unit | ✅ |
+| Player VFX Status Effects | Unit | ✅ |
+| Save V2 Slot Write/Load & Migration | Integration | ✅ |
 
 ### Coverage Gaps
-- AudioManager (no tests)
-- SceneManager (no tests)
 - GameManager state transitions
 - CameraController
 - TouchControls
@@ -210,18 +217,15 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Known Limitations
 
-1. SceneManager uses mocked async loading — not real Godot ResourceLoader
-2. AudioManager methods are logging stubs — no actual audio playback
-3. UIManager and ResourceManager are incomplete implementations
-4. Gameplay systems (Combat, Inventory, Quests, World) not yet implemented
-5. No actual AI-generated assets imported yet — only placeholder README files
+1. UIManager is an incomplete stack tracker — needs actual layout screen control bindings
+2. Gameplay systems (Combat, Enemy, World) not yet implemented
+3. No actual AI-generated assets imported yet — only placeholder README files
 
 ---
 
-## Next Steps (Prompt 5)
+## Next Steps (Prompt 6)
 
-1. **Real SceneManager** — Replace SimulateAsyncLoad with ResourceLoader.LoadThreadedRequest
-2. **Real AudioManager** — Add AudioStreamPlayer3D for music and SFX
-3. **Expand Testing** — Cover AudioManager, SceneManager, CameraController, TouchControls
-4. **AI Asset Version Tracking** — Implement formal asset metadata and versioning
-5. **Gameplay Systems** — Begin Combat, Inventory, Quest, World implementations
+1. **Offline Database & Storage** — Establish SQLite tables for items, quests, and world configuration, linking back to the Save System.
+2. **3D Shaders & Presets** — Develop vertex and outline shading systems.
+3. **UIManager & HUD Overlays** — Interface overlays and menus.
+4. **Gameplay Systems** — Begin Combat, Enemy, and World implementations

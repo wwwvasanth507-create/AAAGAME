@@ -15,9 +15,19 @@ namespace HeroOfEternia.Player
         Landing,
         Rolling,
         Crouching,
-        Swimming,   // Framework stub
-        Climbing,   // Framework stub
+        Swimming,
+        Climbing,
+        TurnLeft,
+        TurnRight,
+        LookingAround,
+        Pushing,
+        Pulling,
+        Interacting,
+        Sleeping,
+        Sitting,
+        Celebrating,
         Dead,
+        Respawn,
         Frozen,
         Disabled,
     }

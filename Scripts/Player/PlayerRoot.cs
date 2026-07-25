@@ -31,7 +31,10 @@ namespace HeroOfEternia.Player
         public PlayerData                 Data      { get; private set; } = null!;
         public PlayerMovement             Movement  { get; private set; } = null!;
         public PlayerStateMachine         FSM       { get; private set; } = null!;
-        public PlayerAnimationController  Animation { get; private set; } = null!;
+        public PlayerModelController      Model               { get; private set; } = null!;
+        public PlayerInteractionDetector  InteractionDetector { get; private set; } = null!;
+        public PlayerAnimationController  Animation           { get; private set; } = null!;
+        public PlayerEffectsController    Effects             { get; private set; } = null!;
         public PlayerAudioController      Audio     { get; private set; } = null!;
         public PlayerSettings             Settings  { get; private set; } = null!;
         public InputHandler               Input     { get; private set; } = null!;
@@ -72,8 +75,17 @@ namespace HeroOfEternia.Player
             }
 
             // --- Initialise module child nodes ---
+            Model = GetNodeOrNull<PlayerModelController>("PlayerModelController")
+                 ?? CreateChildModule<PlayerModelController>("PlayerModelController");
+
+            InteractionDetector = GetNodeOrNull<PlayerInteractionDetector>("PlayerInteractionDetector")
+                               ?? CreateChildModule<PlayerInteractionDetector>("PlayerInteractionDetector");
+
             Animation = GetNodeOrNull<PlayerAnimationController>("PlayerAnimationController")
                      ?? CreateChildModule<PlayerAnimationController>("PlayerAnimationController");
+
+            Effects = GetNodeOrNull<PlayerEffectsController>("PlayerEffectsController")
+                   ?? CreateChildModule<PlayerEffectsController>("PlayerEffectsController");
 
             Audio     = GetNodeOrNull<PlayerAudioController>("PlayerAudioController")
                      ?? CreateChildModule<PlayerAudioController>("PlayerAudioController");
@@ -88,10 +100,22 @@ namespace HeroOfEternia.Player
             FSM.Register(new FallState());
             FSM.Register(new LandState());
             FSM.Register(new RollState());
+            FSM.Register(new CrouchingState());
             FSM.Register(new SwimState());
             FSM.Register(new ClimbState());
+            FSM.Register(new TurnLeftState());
+            FSM.Register(new TurnRightState());
+            FSM.Register(new LookingAroundState());
+            FSM.Register(new PushingState());
+            FSM.Register(new PullingState());
+            FSM.Register(new InteractingState());
+            FSM.Register(new SleepingState());
+            FSM.Register(new SittingState());
+            FSM.Register(new CelebratingState());
             FSM.Register(new DeadState());
+            FSM.Register(new RespawnState());
             FSM.Register(new FrozenState());
+            FSM.Register(new DisabledState());
 
             FSM.OnStateChanged += OnStateChanged;
             FSM.Start(this, PlayerStateId.Idle);
@@ -103,6 +127,7 @@ namespace HeroOfEternia.Player
         {
             // Regen vitals over time
             Data.RegenVitals((float)delta);
+            Data.Attributes.Update((float)delta);
 
             // Clamp fall speed to prevent tunnelling
             var vel = Velocity;

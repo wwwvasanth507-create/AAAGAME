@@ -14,9 +14,10 @@ gantt
     Phase 1: Project Foundation (P1)                :done,   p1,  2026-07-24, 1d
     Phase 2: Project Creation & Audit (P2)          :done,   p2,  2026-07-24, 1d
     Phase 3: Core Framework & Save System (P3)      :done,   p3,  2026-07-24, 1d
-    Phase 4: Player Controller & Input (P4)         :active, p4,  after p3,   2d
+    Phase 4: Player Controller & Input (P4)         :done,   p4,  after p3,   2d
+    Phase 5: Player Character Framework (P5)        :done,   p5,  after p4,   2d
     section Database & World
-    Phase 5: Offline Storage & Database (P5-P10)    :        p5,  after p4,   5d
+    Phase 6: Offline Storage & Database (P6-P10)    :active, p6,  after p5,   5d
     section Rendering
     Phase 6: 3D Shaders & Presets (P11-P30)         :        p6,  after p5,   10d
     section Mechanics
@@ -54,17 +55,26 @@ gantt
 *   **Audit Fixes Applied:** OCP violation in ServiceLocator, hardcoded AES password, hardcoded RAM, dead API parameters, missing config templates, Logger routing.
 *   **Build:** 0 errors, 0 warnings. APK 22.7 MB signed & verified.
 
-### 🔲 Phase 4: Player Controller & Touch Input (Next — Prompt 4)
-*   **Target:** Prompt 4.
-*   **Planned Features:** Virtual joystick (left), action buttons (right), gesture recognition (swipe, pinch), InputManager integration, player node with CharacterBody3D, camera follow rig.
+### ✅ Phase 4: Player Controller & Input (Completed — Prompt 4)
+*   **Features:** Virtual joystick (left), action buttons (right), gesture recognition (swipe, pinch), InputManager integration, player node with CharacterBody3D, camera follow rig. FSM with 12 states, movement physics, settings, audio footstep relays.
 
-### 🔲 Phase 5: Offline Database & Local Storage (Prompts 5–10)
+### ✅ Phase 5: Player Character Framework (Completed — Prompt 5)
+*   **Features:**
+    *   `PlayerModelController` — swappable mesh slots (Hair, Armor, Weapon, Helmet, etc.), LOD shadow optimizations, material overrides.
+    *   `PlayerAnimationController` — state extensions (24 states), AnimationTree blend tree & layer filters, root motion toggle.
+    *   `Universal Interaction` — IInteractable interface, Area3D detection sweep, Tap/Hold/Auto modes, neon cyan shader highlights.
+    *   `Stats & Attributes` — expandable modifier system (Flat, PercentAdd, PercentMult), cached dirty flags, JSON data-driven base configurations.
+    *   `Effects Controller` — timing and visualization overlays (Shield, Aura, Glow, etc.).
+    *   `Save Integration` — Equipped parts, base stats, and active effects written to SaveProfile V2 with backwards-compatible migration.
+    *   `Test Suite` — Expanded to 14 automated tests covering all Phase 5 modules.
+
+### 🔲 Phase 6: Offline Database & Local Storage (Next — Prompts 6–10)
 *   **Planned Features:** SQLite schema for items, quests, world states. Data access layer (DAL). Migration runner.
 
-### 🔲 Phase 6: 3D Rendering & Shaders (Prompts 11–30)
+### 🔲 Phase 7: 3D Rendering & Shaders (Prompts 11–30)
 *   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, scalable preset application from ConfigManager data.
 
-### 🔲 Phase 7: Gameplay Systems & Combat (Prompts 31–70)
+### 🔲 Phase 8: Gameplay Systems & Combat (Prompts 31–70)
 *   **Planned Features:** CharacterStats, health/mana/stamina, combat state machine, hitbox detection, damage math, skill tree foundation.
 
 ### 🔲 Phase 8: Dungeons, World & AI (Prompts 71–110)

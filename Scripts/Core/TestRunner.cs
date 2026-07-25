@@ -56,19 +56,32 @@ namespace HeroOfEternia.Core
                 var sm = new SettingsManager(tempDir);
                 var lm = new LocalizationManager();
                 var gm = new GameManager();
+                var am = new AudioManager();
+                var scm = new SceneManager();
+                var rm = new ResourceManager();
+                var um = new UIManager();
 
                 ServiceLocator.Register(pm);
                 ServiceLocator.Register(sm);
                 ServiceLocator.Register(lm);
                 ServiceLocator.Register(gm);
+                ServiceLocator.Register(am);
+                ServiceLocator.Register(scm);
+                ServiceLocator.Register(rm);
+                ServiceLocator.Register(um);
 
                 // Fetching resolves lazy initialization and logs performance
                 var resolvedPm = ServiceLocator.Get<PerformanceManager>();
                 var resolvedSm = ServiceLocator.Get<SettingsManager>();
                 var resolvedLm = ServiceLocator.Get<LocalizationManager>();
                 var resolvedGm = ServiceLocator.Get<GameManager>();
+                var resolvedAm = ServiceLocator.Get<AudioManager>();
+                var resolvedScm = ServiceLocator.Get<SceneManager>();
+                var resolvedRm = ServiceLocator.Get<ResourceManager>();
+                var resolvedUm = ServiceLocator.Get<UIManager>();
 
-                if (resolvedPm == null || resolvedSm == null || resolvedLm == null || resolvedGm == null)
+                if (resolvedPm == null || resolvedSm == null || resolvedLm == null || resolvedGm == null ||
+                    resolvedAm == null || resolvedScm == null || resolvedRm == null || resolvedUm == null)
                 {
                     GD.Print("FAIL: ServiceLocator resolution.");
                     return false;
@@ -325,7 +338,249 @@ namespace HeroOfEternia.Core
             ps2.ResetToDefaults();
             GD.Print("PASS: PlayerSettings persistence and reset verified.");
 
+            if (!RunPhase5Tests(tempDir)) return false;
+
             Directory.Delete(tempDir, true);
+            return true;
+        }
+
+        private class MockInteractable : Interaction.IInteractable
+        {
+            public string InteractionPrompt => "Mock Target";
+            public float InteractionDistance => 3.5f;
+            public Interaction.InteractionType Type { get; set; } = Interaction.InteractionType.Tap;
+            public float HoldDuration { get; set; } = 0f;
+            public bool Interacted { get; set; } = false;
+            public bool Highlighted { get; set; } = false;
+            public Vector3 Position { get; set; } = Vector3.Zero;
+
+            public void OnInteract(Player.PlayerRoot player) => Interacted = true;
+            public void OnInteractionStart(Player.PlayerRoot player) {}
+            public void OnInteractionEnd(Player.PlayerRoot player, bool completed) {}
+            public void SetHighlight(bool highlighted) => Highlighted = highlighted;
+            public Vector3 GetGlobalPosition() => Position;
+        }
+
+        private bool RunPhase5Tests(string tempDir)
+        {
+            GD.Print("Running Phase 5 player character framework tests...");
+
+            // 1. Model Swap & LOD test
+            GD.Print("Testing PlayerModelController...");
+            var modelNode = new Player.PlayerModelController();
+            AddChild(modelNode);
+            
+            // Check fallback mesh creation
+            modelNode.SwapPart(Player.PartCategory.Hair, "invalid_path");
+            if (string.IsNullOrEmpty(modelNode.GetPartPath(Player.PartCategory.Hair)))
+            {
+                GD.Print("FAIL: Model swap did not register slot path.");
+                modelNode.QueueFree();
+                return false;
+            }
+
+            modelNode.SetLOD(2);
+            if (modelNode.CurrentLOD != 2)
+            {
+                GD.Print("FAIL: Model LOD update.");
+                modelNode.QueueFree();
+                return false;
+            }
+            modelNode.QueueFree();
+            GD.Print("PASS: PlayerModelController tests.");
+
+            // 2. Attribute / Stats Modifier calculation test
+            GD.Print("Testing Stats & Attribute system...");
+            var attrSet = new Player.Stats.PlayerAttributeSet();
+            float baseHp = attrSet.GetValue(Player.Stats.AttributeType.Health);
+            if (baseHp != 100f)
+            {
+                GD.Print($"FAIL: Default HP value mismatch. Got {baseHp}, expected 100.");
+                return false;
+            }
+
+            // Flat boost
+            var modFlat = new Player.Stats.StatModifier("test_flat", 25f, Player.Stats.ModifierType.Flat, Player.Stats.ModifierSource.Equipment);
+            attrSet.AddModifier(Player.Stats.AttributeType.Health, modFlat);
+            float hpWithFlat = attrSet.GetValue(Player.Stats.AttributeType.Health);
+            if (hpWithFlat != 125f)
+            {
+                GD.Print($"FAIL: Flat attribute modification. Got {hpWithFlat}, expected 125.");
+                return false;
+            }
+
+            // Timed Percent modifier
+            var modPct = new Player.Stats.StatModifier("test_pct", 0.1f, Player.Stats.ModifierType.PercentAdd, Player.Stats.ModifierSource.Buff, 1.0);
+            attrSet.AddModifier(Player.Stats.AttributeType.Health, modPct);
+            float hpWithPct = attrSet.GetValue(Player.Stats.AttributeType.Health);
+            if (hpWithPct != 137.5f) // (100 + 25) * 1.1 = 137.5
+            {
+                GD.Print($"FAIL: Percent attribute modification. Got {hpWithPct}, expected 137.5.");
+                return false;
+            }
+
+            // Update timers
+            attrSet.Update(0.5f);
+            if (attrSet.GetValue(Player.Stats.AttributeType.Health) != 137.5f)
+            {
+                GD.Print("FAIL: Timed modifier expired too early.");
+                return false;
+            }
+            
+            attrSet.Update(0.6f); // Total 1.1s elapsed (exceeds 1.0s)
+            float hpAfterExpiry = attrSet.GetValue(Player.Stats.AttributeType.Health);
+            if (hpAfterExpiry != 125f)
+            {
+                GD.Print($"FAIL: Timed modifier failed to expire. Got {hpAfterExpiry}, expected 125.");
+                return false;
+            }
+            GD.Print("PASS: Stats & Attribute modification system.");
+
+            // 3. Universal Interaction Detection test
+            GD.Print("Testing Interaction system...");
+            var playerRoot = new Player.PlayerRoot();
+            AddChild(playerRoot);
+            
+            var detector = playerRoot.GetNodeOrNull<Player.PlayerInteractionDetector>("PlayerInteractionDetector");
+            if (detector == null)
+            {
+                GD.Print("FAIL: PlayerInteractionDetector not found on PlayerRoot.");
+                playerRoot.QueueFree();
+                return false;
+            }
+
+            var mockObj = new MockInteractable();
+            mockObj.Position = playerRoot.GlobalPosition + new Vector3(1f, 0f, 0f); // 1 meter away (well within 3.5m limit)
+            detector.RegisterManualInteractable(mockObj);
+
+            // Trigger physics process manually or trigger detection logic
+            detector._PhysicsProcess(0.016f);
+
+            if (detector.ClosestInteractable != mockObj)
+            {
+                GD.Print("FAIL: Detector did not select the mock interactable.");
+                playerRoot.QueueFree();
+                return false;
+            }
+
+            if (!mockObj.Highlighted)
+            {
+                GD.Print("FAIL: Target interactable was not highlighted.");
+                playerRoot.QueueFree();
+                return false;
+            }
+
+            detector.UnregisterManualInteractable(mockObj);
+            playerRoot.QueueFree();
+            GD.Print("PASS: Universal Interaction & Detection system.");
+
+            // 4. Effects Framework tests
+            GD.Print("Testing PlayerEffectsController...");
+            var player = new Player.PlayerRoot();
+            AddChild(player);
+            var effects = player.Effects;
+            if (effects == null)
+            {
+                GD.Print("FAIL: PlayerEffectsController not initialized on PlayerRoot.");
+                player.QueueFree();
+                return false;
+            }
+
+            effects.ApplyEffect(Player.PlayerEffectType.Shield, 1.0f);
+            if (!effects.HasEffect(Player.PlayerEffectType.Shield))
+            {
+                GD.Print("FAIL: Effects framework did not apply Shield effect.");
+                player.QueueFree();
+                return false;
+            }
+            
+            player.QueueFree();
+            GD.Print("PASS: PlayerEffectsController.");
+
+            // 5. Save Integration test
+            GD.Print("Testing SaveProfile slot save and load...");
+            var saveManager = new SaveManager(tempDir);
+            var profile = new SaveProfile();
+            profile.Stats.CharacterName = "Eternia Tester";
+            profile.EquippedParts["Hair"] = "res://Assets/Characters/Hair_01.tscn";
+            profile.BaseAttributes["Health"] = 120f;
+            profile.ActiveEffects.Add("Shield");
+
+            if (!saveManager.Save(1, profile))
+            {
+                GD.Print("FAIL: SaveManager did not save slot 1.");
+                return false;
+            }
+
+            var loaded = saveManager.Load(1);
+            if (loaded == null || loaded.Stats.CharacterName != "Eternia Tester" || 
+                !loaded.EquippedParts.ContainsKey("Hair") || 
+                loaded.BaseAttributes["Health"] != 120f || 
+                loaded.ActiveEffects[0] != "Shield")
+            {
+                GD.Print("FAIL: SaveProfile data mismatch after load.");
+                return false;
+            }
+
+            // Migration check
+            var oldProfile = new SaveProfile();
+            oldProfile.SaveVersion = 1;
+            oldProfile.Stats.CharacterName = "Old Version Save";
+            saveManager.Save(2, oldProfile); // Will save as version 2 but emulate legacy file migration
+            
+            var migrateTestProfile = new SaveProfile();
+            migrateTestProfile.SaveVersion = 1;
+            var method = typeof(SaveManager).GetMethod("MigrateProfile", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (method != null)
+            {
+                method.Invoke(saveManager, new object[] { migrateTestProfile });
+                if (migrateTestProfile.SaveVersion != 2 || migrateTestProfile.EquippedParts == null)
+                {
+                    GD.Print("FAIL: SaveManager MigrateProfile did not run correctly.");
+                    return false;
+                }
+            }
+            GD.Print("PASS: Save slot integration and migration.");
+
+            // 6. ResourceManager test
+            GD.Print("Testing ResourceManager preload...");
+            var resourceManager = ServiceLocator.Get<ResourceManager>();
+            resourceManager.PreloadAsset("res://Scenes/Boot.tscn");
+            var preloadedScene = resourceManager.GetAsset<PackedScene>("res://Scenes/Boot.tscn");
+            if (preloadedScene == null)
+            {
+                GD.Print("FAIL: ResourceManager did not preload and cache res://Scenes/Boot.tscn");
+                return false;
+            }
+            GD.Print("PASS: ResourceManager cache.");
+
+            // 7. AudioManager test
+            GD.Print("Testing AudioManager bus controls...");
+            var audioManager = ServiceLocator.Get<AudioManager>();
+            audioManager.SetBusVolume("Master", 0.5f);
+            int masterIndex = AudioServer.GetBusIndex("Master");
+            if (masterIndex != -1)
+            {
+                float expectedDb = Mathf.LinearToDb(0.5f);
+                float actualDb = AudioServer.GetBusVolumeDb(masterIndex);
+                if (Mathf.Abs(actualDb - expectedDb) > 0.1f)
+                {
+                    GD.Print($"FAIL: AudioManager Master volume DB mismatch. Got {actualDb}, expected {expectedDb}");
+                    return false;
+                }
+            }
+            GD.Print("PASS: AudioManager volume.");
+
+            // 8. SceneManager test
+            GD.Print("Testing SceneManager resolution...");
+            var sceneManager = ServiceLocator.Get<SceneManager>();
+            if (sceneManager == null || sceneManager.CurrentSceneName != "Boot")
+            {
+                GD.Print("FAIL: SceneManager not initialized correctly.");
+                return false;
+            }
+            GD.Print("PASS: SceneManager checks.");
+
             return true;
         }
     }

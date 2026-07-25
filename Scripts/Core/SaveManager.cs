@@ -56,7 +56,7 @@ namespace HeroOfEternia.Core
     /// </summary>
     public class SaveProfile
     {
-        public int SaveVersion { get; set; } = 1;
+        public int SaveVersion { get; set; } = 2;
         public string GameVersion { get; set; } = "1.0.0";
         public PlayerStats Stats { get; set; } = new PlayerStats();
         public InventoryData Inventory { get; set; } = new InventoryData();
@@ -64,6 +64,15 @@ namespace HeroOfEternia.Core
         public WorldState World { get; set; } = new WorldState();
         public Statistics StatsData { get; set; } = new Statistics();
         
+        // Equipped visual parts: PartCategory to resource path
+        public Dictionary<string, string> EquippedParts { get; set; } = new();
+
+        // Base attribute values for stats
+        public Dictionary<string, float> BaseAttributes { get; set; } = new();
+
+        // Active effect types
+        public List<string> ActiveEffects { get; set; } = new();
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();
@@ -85,7 +94,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 1;
+        private const int CurrentSaveVersion = 2;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.
@@ -271,7 +280,12 @@ namespace HeroOfEternia.Core
         private void MigrateProfile(SaveProfile profile)
         {
             Logger.Warning($"SaveManager: Migrating save profile from version {profile.SaveVersion} to {CurrentSaveVersion}...");
-            // Add custom schema logic transitions here
+            if (profile.SaveVersion < 2)
+            {
+                profile.EquippedParts = new Dictionary<string, string>();
+                profile.BaseAttributes = new Dictionary<string, float>();
+                profile.ActiveEffects = new List<string>();
+            }
             profile.SaveVersion = CurrentSaveVersion;
         }
 
