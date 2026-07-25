@@ -1,7 +1,7 @@
 # Project Memory — Hero of Eternia
 
 > Central knowledge base for all development decisions, architecture rules, and project state.  
-> Last Updated: 2026-07-25 (Phase 21 — Complete Audio Framework)
+> Last Updated: 2026-07-25 (Phase 30 — Chapter 3, First Major Dungeon & Act I Finale)
 
 ---
 
@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.21.0 |
+| **Version** | 0.30.0 |
 | **Assembly** | HeroOfEternia |
 
 ---

@@ -175,6 +175,42 @@ namespace HeroOfEternia.Core
         /// <summary>Audio preferences and category settings.</summary>
         public Audio.AudioSettings? AudioData { get; set; }
 
+        // Animation System (Save V17)
+        /// <summary>Animation settings and IK preferences.</summary>
+        public Animation.AnimationSaveData? AnimationData { get; set; }
+
+        // Visual Presentation & Graphics System (Save V18)
+        /// <summary>Graphics settings and post-processing preferences.</summary>
+        public Graphics.GraphicsSaveData? GraphicsData { get; set; }
+
+        // Procedural World Content System (Save V19)
+        /// <summary>Exploration tracking, POI states, and dungeon completion.</summary>
+        public World.Content.WorldContentSaveData? WorldContentData { get; set; }
+
+        // Reusable Exploration Content Framework (Save V20)
+        /// <summary>Activities, solved puzzles, discovered secrets, and collected items.</summary>
+        public Exploration.ExplorationContentSaveData? ExplorationContentData { get; set; }
+
+        // Reusable Story Progression Framework (Save V21)
+        /// <summary>Campaign progression, active missions, world state flags, and lore codex.</summary>
+        public Story.StoryProgressionSaveData? StoryProgressionData { get; set; }
+
+        // Campaign Design & Narrative Blueprint (Save V22)
+        /// <summary>Discovered region profiles, relationship levels, and defeated villains.</summary>
+        public Story.Campaign.CampaignSaveData? CampaignData { get; set; }
+
+        // Prologue, Starting Region & Chapter 1 Implementation (Save V23)
+        /// <summary>Tutorial step progress, NPC interactions, and Chapter 1 states.</summary>
+        public Content.Prologue.PrologueSaveData? PrologueData { get; set; }
+
+        // Chapter 2, Second Region & First Major Story Arc (Save V24)
+        /// <summary>Sylvanwood locations, Elderwood reputation, relic decision, and world phase.</summary>
+        public Content.Chapter2.Chapter2SaveData? Chapter2Data { get; set; }
+
+        // Chapter 3, First Major Dungeon & Act I Finale (Save V25)
+        /// <summary>Dungeon room progress, checkpoints, boss phase, and Act I completion flag.</summary>
+        public Content.Chapter3.Chapter3SaveData? Chapter3Data { get; set; }
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();

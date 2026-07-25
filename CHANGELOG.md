@@ -7,6 +7,143 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.30.0] - 2026-07-25
+
+### Added — Chapter 3, First Major Dungeon & Act I Finale (Prompt 30)
+*   **Chapter3Manager**: Central `IInitializable` orchestrator registered in `ServiceLocator`. Coordinates dungeon layout, boss definitions, quest chain, faction escalation, world evolution, Tier 2 rewards, and presentation.
+*   **FirstDungeonContent**: 9-room dungeon layout builder for the Citadel of Void Shadows spanning 7 floors — Entrance, Floors 1–3, Mini-Boss Crucible, Boss Antechamber, and Boss Arena. Includes 4 auto-save checkpoints and 1 secret vault.
+*   **RegionalBossDefinition**: Commander Vareth the Void Knight — 3-phase data-driven boss (1,800 HP) with 5 abilities: Void Slash, Shadow Bolt Barrage, Void Surge Wave, Void Gate Summon, and Desperate Voidstrike.
+*   **Chapter3QuestChain**: 5-quest Act I finale chain (`q_chapter3_preparation` → `q_citadel_entry` → `q_shadow_knight_miniboss` → `q_void_knight_boss` → `q_act1_conclusion`) registered into `QuestDatabase`.
+*   **FactionEscalationManager**: Tracks 4 faction states and fires `OnFactionRelationChanged` events when territory or relations shift after Vareth's defeat.
+*   **ActIWorldEvolution**: 5 world consequence events (`evt_citadel_sealed`, `evt_oakvale_celebration`, `evt_sylvan_alliance_formal`, `evt_shadow_cult_retreat`, `evt_tier2_merchants`) auto-fired on Act I completion.
+*   **Chapter3Rewards**: 4 Tier 2 rewards registered — Void-Cleaved Broadsword, Shadow-Forged Plate, Void Crystal Fragment, and Elixir of Resilience.
+*   **Chapter3PresentationController**: Audio & lighting orchestrator for dungeon ambient, boss void theme, and Act I victory fanfare.
+*   **Chapter3SaveData & Save V25**: Dungeon room progress, checkpoints, boss phase state, and `IsActIComplete` persisted into SaveProfile Version 25.
+*   **Chapter3SystemTests**: 11-case unit test suite validating initialization, dungeon rooms, checkpoints, boss phases, quest chain, factions, world evolution, Act I completion, Tier 2 rewards, and Save V25 integration.
+*   **Documentation**: Created `CHAPTER_03.md`, `ACT_I.md`, `FIRST_DUNGEON.md`, `REGIONAL_BOSS.md`, and `WORLD_EVOLUTION.md`.
+
+## [0.29.0] - 2026-07-25
+
+### Added — Chapter 2, Second Region & First Major Story Arc (Prompt 29)
+*   **Chapter2Manager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating Sylvanwood Wilds region, Elderwood Grove settlement, Chapter 2 quest chain, NPC roster, enemy definitions, content additions, world evolution, and presentation.
+*   **SecondRegionContent**: Region layout builder for Sylvanwood Main Canopy, Ancient Elven Ruins of Aethelgard, Mistveil River Crossing, Venomous Cavern Entrance, Stormwatch Ridge, and Northguard Spire.
+*   **SecondSettlementContent**: Settlement layout builder for Elderwood Grove (Warden's Great Hall, Sylvan Marketplace, Ironwood Forge, Golden Leaf Inn, Corin's Alchemy Workshop, Temple of the Sun).
+*   **Chapter2NpcDefinitions**: Chapter 2 NPC definitions for Warden Kaelen, High Alchemist Master Corin, Scholar Elora, Guildmaster Vance, and Suspicious Stranger Vaelen with schedules, dialogue trees, and vendor tables.
+*   **Chapter2QuestChain**: Chapter 2 main quest chain (`q_sylvanwood_investigation`, `q_corrupted_shrine`, `q_ruin_guardian_boss`, `q_first_choice_decision`) registered into `QuestDatabase`.
+*   **Chapter2EnemyDefinitions**: Chapter 2 enemy profiles for Sylvan Elite Wolves, Forest Spirits, Corrupted Boars, Bandit Archers, Venom Spiders, and Ancient Ruin Guardian (boss).
+*   **Chapter2ContentAdditions**: Advanced crafting recipes for Steel Sword, Sylvan Leather Armor, and Greater Health Potions.
+*   **WorldEvolutionManager**: Dynamic world state evolution engine managing phase shifts (`OakvalePeace`, `BlightSpreading`, `AethelgardUnsealed`, `ShadowSiege`).
+*   **Chapter2PresentationController**: Audio & lighting orchestrator configuring Sylvanwood forest music, Elderwood town theme, ruins boss music, and canopy lighting profile.
+*   **Chapter2SaveData & Save V24**: Integrated Sylvanwood location discoveries, Elderwood reputation, relic decision choice, and world phase states into SaveProfile Version 24.
+*   **Chapter2SystemTests**: Unit test suite validating region building, settlement districts, NPC registration, Chapter 2 quest chain, enemy profiles, advanced recipes, world evolution, and Save V24 integration.
+*   **Documentation**: Created `CHAPTER_02.md`, `SECOND_REGION.md`, `SECOND_SETTLEMENT.md`, `CHAPTER2_NPCS.md`, and `WORLD_PROGRESSION.md`.
+
+## [0.28.0] - 2026-07-25
+
+### Added — Prologue, Starting Region & Chapter 1 Implementation (Prompt 28)
+*   **PrologueManager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating Oakvale starting region, tutorial flow, starter NPCs, Chapter 1 quest chain, starter enemies, equipment, exploration nodes, and presentation triggers.
+*   **StartingRegionContent**: Region layout builder for Oakvale Village Square, training field, blacksmith forge, merchant shop, inn, river crossing, farmstead, shrine of Eternia, watchtower, and hidden cave entrance.
+*   **IntroductionFlowManager**: Contextual learning flow controller guiding players step-by-step through movement, camera, interaction, dialogue, combat, gathering, crafting, inventory, map, journal, and save mechanics.
+*   **StarterNpcDefinitions**: Starter NPC roster definitions for Elder Alden, Blacksmith Thorin, Merchant Gideon, Guard Captain Valerius, and Hunter Lyra with schedule anchors, dialogue trees, vendor tables, and faction data.
+*   **Chapter1QuestChain**: Chapter 1 main quest chain (`q_oakvale_awakening`, `q_forging_the_blade`, `q_bandit_threat`, `q_boss_skarr_encounter`) registered into `QuestDatabase`.
+*   **StarterEnemyDefinitions**: Starter enemy profiles for Green Slimes, Forest Wolves, Wild Boars, Cave Spiders, Bandit Scouts, and Baron Skarr (mini-boss).
+*   **StarterEquipmentDefinitions**: Starter items and equipment definitions for Rusty Iron Sword, Leather Tunic, Miner's Pickaxe, Healing Salve, and Iron Ore.
+*   **StarterExplorationContent**: Exploration nodes for watchtower hidden chest, rune shrine puzzle, creation lore tablet, and scenic viewpoint.
+*   **StarterPresentationController**: Audio & lighting orchestrator configuring village peaceful music, combat music, and morning lighting profile.
+*   **PrologueSaveData & Save V23**: Integrated tutorial step progress, NPC interactions, and Chapter 1 states into SaveProfile Version 23.
+*   **PrologueSystemTests**: Unit test suite validating region building, tutorial flow, starter NPCs, Chapter 1 quest chain, starter enemies, equipment, exploration nodes, and Save V23 integration.
+*   **Documentation**: Created `PROLOGUE.md`, `CHAPTER_01.md`, `STARTING_REGION.md`, `STARTER_NPCS.md`, and `STARTER_CONTENT.md`.
+
+## [0.27.0] - 2026-07-25
+
+### Added — Campaign Design, Story Outline, Regions & Main Characters (Prompt 27)
+*   **CampaignManager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating 12 world regions, hero & ally profiles, villain registries, campaign outline acts, and plugin extensions (`ICampaignPlugin`).
+*   **RegionDefinition & RegionDatabase**: Data-driven definitions for 12 world regions (`StartingKingdom`, `ForestRegion`, `DesertKingdom`, `FrozenNorth`, `SwampLands`, `Highlands`, `VolcanicRegion`, `AncientEmpireRuins`, `MagicalIslands`, `DarkWastes`, `SkyRealm`, `Underworld`) with climate, biomes, settlements, level ranges, and DLC hooks.
+*   **CharacterProfile & CharacterDatabase**: Hero, Ally, Mentor, and NPC profile registry managing backstory, motivations, relationships, voice styles, and story importance scores.
+*   **VillainProfile & VillainDatabase**: Antagonist registry supporting Primary Villain (Malakor), Regional Villains (Baron Skarr), Elite Commanders, and Ancient Evils with goals, combat archetypes, and global influence scores.
+*   **CampaignOutline & CampaignDatabase**: Full campaign outline structure covering Prologue, Acts I-IV, Climax, Endgame, and DLC hooks with playtime estimates and recommended level brackets.
+*   **CampaignSaveData & Save V22**: Integrated discovered region profiles, character relationship values, active campaign acts, and defeated villains into SaveProfile Version 22.
+*   **CampaignDesignSystemTests**: Unit test suite validating 12 region registrations, character profiles, villain lookups, campaign outline structure, faction consistency, and Save V22 integration.
+*   **Documentation**: Created `WORLD_LORE.md`, `CAMPAIGN_DESIGN.md`, `CHARACTER_DATABASE.md`, `VILLAIN_DATABASE.md`, and `REGION_GUIDE.md`.
+
+## [0.26.0] - 2026-07-25
+
+### Added — Reusable Story Progression Framework (Prompt 26)
+*   **StoryFrameworkManager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating campaign chapters, world-state transitions, cinematic triggers, mission checkpoints, story events, lore codex, and plugin extensions (`IStoryContentPlugin`).
+*   **StoryEntry & StoryDatabase**: Data-driven story mission entry models and registry supporting level recommendations, prerequisite flags, reputation requirements, and DLC fields.
+*   **ChapterFramework**: Campaign chapter structure engine supporting Prologues, Acts, Chapters, Missions, Interludes, Finale hooks, and Expansion hooks with unlock conditions.
+*   **StoryProgressionManager**: Campaign orchestrator tracking active chapters, active missions, next content unlocks, and progression rule evaluations.
+*   **WorldStateManager**: Reversible world state engine managing story flags, regional flags, global flags, settlement states, NPC availability, enemy variants, and weather overrides.
+*   **CinematicTriggerFramework**: Reusable trigger architecture supporting Enter Area, Exit Area, Quest Completion, Dialogue Completion, Boss Defeat, and Manual Triggers.
+*   **MissionFlowController**: Mission lifecycle manager handling mission start, checkpoints, updates, failures, retries, and rewards.
+*   **StoryEventManager**: Narrative event manager handling NPC spawn overrides, lighting profiles, music overrides, and environment shifts.
+*   **LoreManager**: Historical codex database managing Books, Letters, Stone Tablets, Ancient Records, Memory Fragments, and Timeline Entries.
+*   **StoryProgressionSaveData & Save V21**: Integrated campaign progression, active missions, world state flags, and lore discoveries into SaveProfile Version 21.
+*   **StorySystemTests**: Unit test suite validating chapter progression, mission checkpoints, world state flag changes, cinematic triggers, lore discoveries, and Save V21 integration.
+*   **Documentation**: Created `STORY_SYSTEM.md`, `CHAPTER_SYSTEM.md`, `WORLD_STATE_SYSTEM.md`, `CINEMATIC_TRIGGER_SYSTEM.md`, and `LORE_SYSTEM.md`.
+
+## [0.25.0] - 2026-07-25
+
+### Added — Reusable Exploration Content Framework (Prompt 25)
+*   **ExplorationContentManager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating activities, puzzles, secrets, collectibles, interactions, dynamic events, rewards, and plugin extensions (`IExplorationContentPlugin`).
+*   **ActivityType & ActivityDefinition**: Data-driven activity definitions for 17 activity types (`TreasureHunt`, `PuzzleShrine`, `HiddenChest`, `TimedChallenge`, `ParkourChallenge`, `CombatChallenge`, `SurvivalEvent`, `FishingSpot`, `RareResourceNode`, `ArtifactDiscovery`, `LoreDiscovery`, `AncientMechanism`, `MemoryFragment`, `MagicAnomaly`, `WorldBossHook`, `SeasonalActivity`, `Custom`) with biome filters, completion rules, and reward hooks.
+*   **PuzzleManager**: Reusable puzzle state engine supporting Pressure Plates, Levers, Switches, Rune Activations, Light Reflection, Weight Sensors, Timed Puzzles, and Multi-stage puzzles with reset logic and state persistence.
+*   **SecretManager**: Secret revelation engine for Hidden Rooms, Passages, Breakable Walls, Illusionary Walls, Underground Entrances, and Invisible Triggers.
+*   **CollectibleDatabase**: Data-driven collection tracker for Relics, Books, Scrolls, Maps, Statues, Artifacts, Music Records, and Creature Entries.
+*   **EnvironmentalInteractionEngine**: Reusable elemental (Burn, Freeze, Electrify) and physical (Push, Pull, Open, Repair) interaction processor.
+*   **ExplorationEventManager**: Dynamic event scheduler managing Meteors, Traveling Merchants, Rare Creatures, Resource Surges, and Magic Storms.
+*   **ExplorationRewardFramework**: Exploration reward engine managing XP, Currency, Items, Materials, Lore, Achievements, and Reputation hooks.
+*   **ExplorationContentSaveData & Save V20**: Integrated completed activities, solved puzzles, discovered secrets, and collected items into SaveProfile Version 20.
+*   **ExplorationContentSystemTests**: Unit test suite validating activity completion, puzzle state logic, secret discovery, collectible tracking, environmental interactions, dynamic event triggers, reward distribution, and Save V20 integration.
+*   **Documentation**: Created `ACTIVITY_SYSTEM.md`, `PUZZLE_SYSTEM.md`, `SECRET_SYSTEM.md`, `COLLECTIBLE_SYSTEM.md`, and `EXPLORATION_EVENTS.md`.
+
+## [0.24.0] - 2026-07-25
+
+### Added — Procedural World Content Framework (Prompt 24)
+*   **WorldContentManager**: Central `IInitializable` manager registered in `ServiceLocator`, orchestrating POI placement, landmark discovery, dungeon room graphs, decoration streaming, regional variation, and plugin extensions (`IWorldContentPlugin`).
+*   **POIType & POIDefinition**: Data-driven POI definitions for 21 POI types (`AncientRuins`, `AbandonedCamp`, `Watchtower`, `CaveEntrance`, `Mine`, `Shrine`, `Temple`, `Waterfall`, `Lake`, `RiverCrossing`, `Bridge`, `HiddenGrove`, `StoneCircle`, `WizardTower`, `BanditCamp`, `HunterCabin`, `Farm`, `Graveyard`, `MonsterNest`, `MagicRift`, `Seasonal`) with distance rules, biome filters, and loot hooks.
+*   **PointOfInterestDatabase**: Thread-safe POI registry supporting category filtering, biome queries, and seed-reproducible generation.
+*   **WorldGenerationRules**: Procedural placement validation engine enforcing slope limits, elevation checks, settlement clearance, and seed reproducibility.
+*   **LandmarkDatabase**: Landmark registry managing Major/Minor landmarks, navigation markers, scenic viewpoints, exploration rewards, and visual uniqueness scoring.
+*   **DungeonFramework**: Reusable dungeon room graph architecture with enemy spawn hooks, loot anchors, and cleared state tracking.
+*   **ExplorationManager**: Area and landmark discovery tracker with map reveal hooks, exploration rewards, and achievement triggers.
+*   **WorldDecorationSystem**: Seeded procedural decoration generator for trees, rocks, flowers, grass, fallen logs, signs, and props.
+*   **RegionalVariationManager**: Regional density controller managing flora/fauna multipliers and architectural themes.
+*   **WorldContentSaveData & Save V19**: Integrated discovered locations, cleared dungeons, and world seeds into SaveProfile Version 19.
+*   **WorldContentSystemTests**: Unit test suite validating POI placement, spacing constraints, landmark generation, dungeon graphs, exploration tracking, seeded decoration generation, and Save V19 integration.
+*   **Documentation**: Created `POI_SYSTEM.md`, `LANDMARK_SYSTEM.md`, `EXPLORATION_SYSTEM.md`, `WORLD_GENERATION_RULES.md`, and `DUNGEON_FRAMEWORK.md`.
+
+## [0.23.0] - 2026-07-25
+
+### Added — Complete Visual Presentation Framework (Prompt 23)
+*   **VisualEffectManager**: Central `IInitializable` manager registered in `ServiceLocator`, supporting particle pooling, effect playback, priority preemption, LOD selection, and plugin extensions (`IVFXPlugin`).
+*   **ParticleDefinitions**: Data-driven particle presets for 16 particle types (`Dust`, `Smoke`, `Fire`, `Magic`, `WaterSplash`, `RainSplash`, `Snow`, `Leaves`, `Sand`, `Spark`, `Explosion`, `Healing`, `Buff`, `Debuff`, `Environmental`, `Custom`).
+*   **ShaderManager**: Material and shader controller supporting character, terrain, vegetation, water, sky, transparent, emission, dissolve, and highlight shader parameters.
+*   **LightingProfile & LightingManager**: Environmental lighting orchestrator with smooth profile blending across 10 contexts (`Morning`, `Day`, `Evening`, `Night`, `Dungeon`, `Indoor`, `Settlement`, `Storm`, `Fog`, `BossArena`).
+*   **PostProcessingProfile & PostProcessingManager**: Quality preset manager for Bloom, Color Grading, Ambient Occlusion, Depth of Field, Motion Blur, Vignette, Exposure, and Tone Mapping.
+*   **WeatherVisualsController**: Visual weather manager handling Rain, Snow, Fog, Wind, Lightning, Sandstorm, Ash, and Magic Storm transitions.
+*   **DecalSystem**: Reusable decal engine for Footprints, Blood, Scorch Marks, Water Ripples, Mud, Snow Tracks, Cracks, and Magic Circles with lifetime fading and pooling.
+*   **CameraEffectsController**: Camera FX controller managing camera shake impulses, impact zooms, damage flashes, screen fades, and environmental blur.
+*   **RenderingOptimizationManager**: Mobile-optimized rendering manager handling LOD distance culling, shadow quality presets, GPU instancing, and dynamic render scaling.
+*   **GraphicsSaveData & Save V18**: Integrated graphics settings and post-processing preferences into SaveProfile Version 18.
+*   **GraphicsSystemTests**: Unit test suite validating particle playback, lighting transitions, shader parameters, weather visuals, decal pooling, camera shake, quality presets, and Save V18 integration.
+*   **Documentation**: Created `VFX_SYSTEM.md`, `SHADER_SYSTEM.md`, `LIGHTING_SYSTEM.md`, `RENDERING_SYSTEM.md`, and `GRAPHICS_SETTINGS.md`.
+
+## [0.22.0] - 2026-07-25
+
+### Added — Complete Animation Framework (Prompt 22)
+*   **AnimationManager**: Central `IInitializable` manager registered in `ServiceLocator`, supporting state sync, blend layer management, playback priority preemption, caching, pooling, and plugin extension interface (`IAnimationPlugin`).
+*   **AnimationStateDefinitions**: Defined 26 reusable animation states (`Idle`, `Walk`, `Run`, `Sprint`, `Jump`, `Fall`, `Land`, `Swim`, `Climb`, `Crouch`, `Roll`, `Dodge`, `Attack`, `CastAbility`, `Block`, `HitReaction`, `Stunned`, `Interact`, `Gather`, `Craft`, `Sleep`, `Sit`, `Celebrate`, `Death`, `Respawn`, `Custom`).
+*   **AnimationLayer**: 10 independent blending layers (`FullBody`, `UpperBody`, `LowerBody`, `Head`, `Hands`, `Facial`, `WeaponLayer`, `AdditiveLayer`, `ProceduralLayer`, `CinematicLayer`) with weight and additive controls.
+*   **IKSystem**: Inverse Kinematics solver engine supporting leg ground placement, hand object placement, weapon stance alignment, and terrain adaptation. Per-character enable/disable toggle.
+*   **ProceduralAnimationEngine**: Procedural motion engine managing head look-at tracking, idle breathing displacement, weapon sway, and aim pitch adjustment.
+*   **AnimationEventSystem**: Frame-accurate animation event dispatcher supporting footsteps, weapon impacts, ability timing, sound/particle triggers, camera shake, damage windows, and custom payloads.
+*   **CharacterAnimationProfile**: Data-driven clip mapping model supporting Player, NPC, Merchant, Guard, Bandit, Animal, Monster, Boss, FlyingCreature, and SwimmingCreature archetypes.
+*   **RootMotionController**: Root motion extraction engine applying position and rotation deltas with network synchronization hooks.
+*   **AnimationSaveData & Save V17**: Integrated animation preferences and IK settings into SaveProfile Version 17.
+*   **AnimationSystemTests**: Unit test suite validating state playback, priority preemption, layer blending, IK toggles, procedural look-at, event routing, profile mapping, root motion, and Save V17 integration.
+*   **Documentation**: Created `ANIMATION_SYSTEM.md`, `IK_SYSTEM.md`, `PROCEDURAL_ANIMATION.md`, `ANIMATION_EVENTS.md`, and `CHARACTER_PROFILES.md`.
+
 ## [0.21.0] - 2026-07-25
 
 ### Added — Complete Audio Framework (Prompt 21)
