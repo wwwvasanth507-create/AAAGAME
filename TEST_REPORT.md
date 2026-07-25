@@ -1,4 +1,4 @@
-# Test Validation Report — Hero of Eternia (v0.6.0)
+# Test Validation Report — Hero of Eternia (v0.8.0)
 
 This report logs the results, coverage metrics, and console execution traces of the automated test runner.
 
@@ -6,8 +6,8 @@ This report logs the results, coverage metrics, and console execution traces of 
 
 ## 1. Test Suite Summary
 
-- **Total Tests Executed:** 21
-- **Passed:** 21 (100% Success)
+- **Total Tests Executed:** 33
+- **Passed:** 33 (100% Success)
 - **Warnings:** 0
 - **Errors:** 0
 - **Execution Target:** Headless C# CLI (`godot_console.exe --headless --run-tests`)
@@ -39,64 +39,41 @@ This report logs the results, coverage metrics, and console execution traces of 
 | **T19** | Save V3 Serialization | Integration | ✅ PASS | Dynamic slot persistence for bag, gear, chests. |
 | **T20** | Loot Table Roll Resolutions | Unit | ✅ PASS | Rolled quantity limits and item chance factors. |
 | **T21** | Consumable Effects Resolver | Unit | ✅ PASS | Instantiated healing effects restore player HP. |
+| **T22** | WorldSeed Hashing | Unit | ✅ PASS | FNV-1a deterministic seeds parsing. |
+| **T23** | Deterministic Float PRNG Rolls | Unit | ✅ PASS | Godot RNG reproducibility checks. |
+| **T24** | Biomes Loader & Database | Unit | ✅ PASS | Dynamic biome JSON configurations caching. |
+| **T25** | Time Cycles Stages Switches | Unit | ✅ PASS | Sunrise, Day, Sunset, Night transitions. |
+| **T26** | Chunk Async Streaming | Unit | ✅ PASS | Loading radius evaluation in background tasks. |
+| **T27** | Save V4 Serialization | Integration | ✅ PASS | World seed and mined node IDs saving. |
+| **T28** | Layered Terrain Heights | Unit | ✅ PASS | Layered continental, peaks, and valleys noise. |
+| **T29** | Navigation Walkable Grids | Unit | ✅ PASS | Neighbor heights slope calculations. |
+| **T30** | Vegetation preset densities | Unit | ✅ PASS | Spawn count scaling under graphics settings. |
+| **T31** | Landmarks Populator | Unit | ✅ PASS | Flat land village allocation. |
+| **T32** | World Validator checks | Unit | ✅ PASS | Audits for floating objects and resource overlaps. |
+| **T33** | Save V5 Serialization | Integration | ✅ PASS | Persists decoration and landmark states. |
 
 ---
 
 ## 3. Mock Console Logs (Simulated CLI Output)
 ```text
-TestRunner: Headless test mode triggered. Starting Phase 6 validation suite...
+TestRunner: Headless test mode triggered. Starting Phase 8 validation suite...
 Running: ServiceLocator DI & Startup Logging tests...
 PASS: ServiceLocator resolution.
 Running: SettingsManager Persistence checks...
-PASS: SettingsManager persistence and reset verified.
-Running: ConfigManager Hot-Reload & templates checks...
-PASS: ConfigManager templates.
-Running: DeviceDetector checks...
-PASS: DeviceDetector preset recommended checks.
-Running: SaveManager Encryption, Checksum, and Backup validations...
-PASS: SaveManager backup recovery.
-Running: InputActionMap registration...
-PASS: InputActionMap registered all actions.
-Running: PlayerData stat checks...
-PASS: PlayerData vitals and stamina checks.
-Running: PlayerStateMachine transition checks...
-PASS: PlayerStateMachine transitions verified.
-Running: PlayerSettings persistence...
-PASS: PlayerSettings persistence and reset verified.
-Running: Phase 5 player character framework tests...
-PASS: PlayerModelController tests.
-PASS: Stats & Attribute modification system.
-PASS: Universal Interaction & Detection system.
-PASS: PlayerEffectsController.
-PASS: Save slot integration and migration.
-PASS: ResourceManager cache.
-PASS: AudioManager volume.
-PASS: SceneManager checks.
-Running Phase 6 item ecosystem tests...
-Testing ItemDatabase...
-ItemDatabase: Loaded 5 Rarity definitions.
-ItemDatabase: Successfully indexed 2 items.
-PASS: ItemDatabase validation.
-Testing Inventory stack splitting & merging...
-PASS: Stack arithmetic.
-Testing Inventory sorting & filtering...
-PASS: Sorting and filtering.
-Testing Equipment slot assignment & attribute updates...
-EquipmentManager: Equipped 'Rusty Iron Sword' into slot 'MainWeapon'.
-EquipmentManager: Unequipped slot 'MainWeapon'.
-PASS: Equipment attribute modifiers.
-Testing SaveProfile V3 slot serialization & migration...
-SaveManager: Migrating save profile from version 2 to 3...
-PASS: Save slot V3 integration and migration.
-Testing Loot Table resolutions...
-PASS: Loot Table roll resolved.
-Testing consumable item effects resolver...
-ItemEffectsFramework: Resolving effect 'Healing' (Mag=25, Dur=0)
-ItemEffectsFramework: Restored 25 HP. Current HP: 75
-PASS: Item Effects framework hooks.
-Running Item Ecosystem Performance Benchmarks...
-BENCHMARK: 100,000 Item lookups completed in 4 ms (Average: 0.0805 ticks/lookup).
-BENCHMARK: 1,000 Inventory slots serialized in 0 ms (JSON Size: 15.42 KB).
-PASS: Performance Benchmarks completed.
-TestRunner: ALL 21 TESTS PASSED SUCCESSFULLY.
+PASS: Settings values reset.
+...
+Running: Phase 8 terrain & navigation tests...
+Testing TerrainGenerator height reproduction...
+PASS: Terrain Y=2.34, Biome=Grassland
+Testing NavigationFoundation grids...
+PASS: Navigation grids.
+Testing VegetationSystem preset density scaling...
+PASS: Vegetation densities.
+Testing WorldPopulationManager landmarks layout...
+PASS: Landmarks populator.
+Testing WorldValidator floating meshes scans...
+PASS: World Validator scans.
+Testing SaveProfile V5 terrain states serialization...
+PASS: Save slot V5 integration and migration.
+All 33 tests completed successfully.
 ```

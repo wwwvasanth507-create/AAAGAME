@@ -121,6 +121,12 @@ namespace HeroOfEternia.Core
                 case "weather_profiles":
                     defaultJson = "[\n  {\n    \"Type\": 0,\n    \"DisplayName\": \"Clear\",\n    \"TemperatureModifier\": 0.0,\n    \"WindStrength\": 0.0,\n    \"VisualEffectHook\": \"Vfx_Clear\",\n    \"AmbientSoundKey\": \"Ambient_Clear\"\n  },\n  {\n    \"Type\": 1,\n    \"DisplayName\": \"Rain\",\n    \"TemperatureModifier\": -0.05,\n    \"WindStrength\": 0.3,\n    \"VisualEffectHook\": \"Vfx_Rain\",\n    \"AmbientSoundKey\": \"Ambient_Rain\"\n  }\n]";
                     break;
+                case "world_population_rules":
+                    defaultJson = "{\n  \"max_villages\": 5,\n  \"camps_per_region\": 12,\n  \"ruins_spawn_chance\": 0.4\n}";
+                    break;
+                case "vegetation_rules":
+                    defaultJson = "{\n  \"grass_density_multiplier\": 1.0,\n  \"flower_spawn_chance\": 0.25,\n  \"log_decay_factor\": 0.1\n}";
+                    break;
             }
 
             try

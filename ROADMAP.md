@@ -18,17 +18,18 @@ gantt
     Phase 5: Player Character Framework (P5)        :done,   p5,  after p4,   2d
     Phase 6: Item Ecosystem (P6)                    :done,   p6,  after p5,   2d
     Phase 7: Procedural World & Streaming (P7)      :done,   p7,  after p6,   2d
+    Phase 8: Procedural Terrain & Navigation (P8)    :done,   p8,  after p7,   2d
     section Database & World
-    Phase 8: Offline Storage & Database (P8-P10)    :active, p8,  after p7,   5d
+    Phase 9: Offline Storage & Database (P9-P11)    :active, p9,  after p8,   5d
     section Rendering
-    Phase 9: 3D Shaders & Presets (P11-P30)         :        p9,  after p8,   10d
+    Phase 10: 3D Shaders & Presets (P12-P30)         :        p10, after p9,   10d
     section Mechanics
-    Phase 10: Gameplay & Combat (P31-P70)           :        p10, after p9,   20d
+    Phase 11: Gameplay & Combat (P31-P70)           :        p11, after p10,  20d
     section Content
-    Phase 11: Dungeons, AI & World (P71-P110)       :        p11, after p10,  20d
+    Phase 12: Dungeons, AI & World (P71-P110)       :        p12, after p11,  20d
     section Polish
-    Phase 12: UI/UX & Audio (P111-P130)             :        p12, after p11,  10d
-    Phase 13: Security & QA Release (P131-P150)     :        p13, after p12,  10d
+    Phase 13: UI/UX & Audio (P111-P130)             :        p13, after p12,  10d
+    Phase 14: Security & QA Release (P131-P150)     :        p14, after p13,  10d
 ```
 
 ---
@@ -92,20 +93,30 @@ gantt
     *   `Save Integration` — SaveProfile V4 serialization.
     *   `Test suite` — Expanded to 27 unit/integration tests running headlessly.
 
-### 🔲 Phase 8: Offline Database & Local Storage (Next — Prompts 8–10)
+### ✅ Phase 8: Procedural Terrain & Navigation (Completed — Prompt 8)
+*   **Features:**
+    *   `Layered Noise Terrain` — 3 overlapping FastNoiseLite layers (continent simplex, ridged mountain, valley carving) representing height queries.
+    *   `NavigationFoundation` — walkable cell grids slope checking and water restrictions avoiding graphics Mesh baking overhead.
+    *   `VegetationSystem` — scales environment counts and spawn probabilities based on Low, Medium, and High presets.
+    *   `WorldPopulationManager` — distributes ruins, shrines, and central arena landmarks on flat plateaus.
+    *   `WorldValidator` — quality sweeps checking Y offsets floating objects and resource overlaps.
+    *   `Save Integration` — SaveProfile V5 serialization.
+    *   `Test suite` — Expanded from 27 to 33 unit/integration tests running headlessly.
+
+### 🔲 Phase 9: Offline Database & Local Storage (Next — Prompts 9–11)
 *   **Planned Features:** SQLite schema for items, quests, world states. Data access layer (DAL). Migration runner.
 
-### 🔲 Phase 9: 3D Rendering & Shaders (Prompts 11–30)
+### 🔲 Phase 10: 3D Rendering & Shaders (Prompts 12–30)
 *   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, outline highlights.
 
-### 🔲 Phase 10: Gameplay & Combat (Prompts 31–70)
+### 🔲 Phase 11: Gameplay & Combat (Prompts 31–70)
 *   **Planned Features:** Combat states, weapons hitboxes, dynamic attributes multipliers, skill trees.
 
-### 🔲 Phase 11: Dungeons, World & AI (Prompts 71–110)
+### 🔲 Phase 12: Dungeons, World & AI (Prompts 71–110)
 *   **Planned Features:** Seeded generation, FSM enemy AI, dialogues.
 
-### 🔲 Phase 12: UI/UX & Audio (Prompts 111–130)
+### 🔲 Phase 13: UI/UX & Audio (Prompts 111–130)
 *   **Planned Features:** Glassmorphic HUD overlay screens, settings, volume sliders.
 
-### 🔲 Phase 13: Security, Optimization & QA Release (Prompts 131–150)
+### 🔲 Phase 14: Security, Optimization & QA Release (Prompts 131–150)
 *   **Planned Features:** OBX profiling, Google Play Store signed release APK.

@@ -83,3 +83,12 @@ System-to-system communications occur asynchronously via a centralized `EventBus
 *   **InventoryContainer:** Coordinates slot collections, implementing stack merging, splitting, sorting (favorited items prioritized), and filters.
 *   **EquipmentManager:** Assigns Helmet, Chest, Weapon, Ring slots and automatically binds/unbinds their attribute modifiers to/from the player's active attribute set.
 *   **LootTable & ItemEffects:** Resolves item drop chances and provides consumable effect execution stubs (healing, mana, teleport).
+
+---
+
+## 7. Procedural World & Terrain Pipeline
+*   **TerrainGenerator:** Employs three layers of FastNoiseLite (Continental simplex noise, Ridged mountains, and valley carving) to generate deterministic heights and biomes from a 64-bit seed.
+*   **NavigationFoundation:** Calculates cell-by-cell walkability based on neighbor elevations slope tilt angles and water height thresholds, avoiding expensive runtime graphical scene-tree NavMesh baking.
+*   **ChunkManager:** Manages background thread generation via thread-safe concurrent maps and double-radius buffers to protect frame rates.
+*   **VegetationSystem:** Adapts environmental spawning counts and probabilities to Low, Medium, and High graphics preset settings.
+*   **WorldValidator:** Scans active chunks to detect floating meshes (deviation > 0.5 units), overlaps, and isolated path areas.

@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.7.0 |
+| **Version** | 0.8.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -132,6 +132,11 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | ResourceSpawner | ✅ Complete | Spawning chance, biomes, and slope limits |
 | WorldTimeSystem | ✅ Complete | Day/night cycle stage intervals |
 | WeatherManager | ✅ Complete | Transitions climate profile offsets |
+| TerrainGenerator | ✅ Complete | Layered simplex & ridged noise height computations |
+| NavigationFoundation | ✅ Complete | Walkable cell grid slope calculations |
+| VegetationSystem | ✅ Complete | Dynamic plant density scaling based on presets |
+| WorldPopulationManager | ✅ Complete | Data-only landmark coordinate layout planner |
+| WorldValidator | ✅ Complete | Scans chunks to detect floating meshes and overlaps |
 
 ### Player Systems
 | System | Status | Notes |
@@ -199,7 +204,7 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (27 tests)
+### Current Test Suite (33 tests)
 | Test | Type | Status |
 |------|------|--------|
 | ServiceLocator DI & Boot | Integration | ✅ |
@@ -229,6 +234,12 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 | Time Cycles Stages Switches | Unit | ✅ |
 | Chunk Async Streaming & Modifying | Unit | ✅ |
 | Save V4 Serialization & Migration | Integration | ✅ |
+| Layered Terrain Heights | Unit | ✅ |
+| Navigation Walkable Grids | Unit | ✅ |
+| Vegetation preset densities | Unit | ✅ |
+| Landmarks Populator | Unit | ✅ |
+| World Validator checks | Unit | ✅ |
+| Save V5 Serialization & Migration | Integration | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions

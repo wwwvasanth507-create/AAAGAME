@@ -83,6 +83,11 @@ namespace HeroOfEternia.Core
         public HashSet<string> DiscoveredRegions { get; set; } = new();
         public Dictionary<string, List<string>> ModifiedChunkNodes { get; set; } = new();
 
+        // Procedural Terrain & Decoration Systems
+        public Dictionary<string, List<string>> ModifiedDecorations { get; set; } = new();
+        public HashSet<string> DiscoveredNavRegions { get; set; } = new();
+        public Dictionary<string, string> PopulatedLandmarks { get; set; } = new();
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();
@@ -104,7 +109,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 4;
+        private const int CurrentSaveVersion = 5;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.
@@ -307,6 +312,12 @@ namespace HeroOfEternia.Core
                 profile.WorldSeed = 12345u;
                 profile.DiscoveredRegions = new HashSet<string>();
                 profile.ModifiedChunkNodes = new Dictionary<string, List<string>>();
+            }
+            if (profile.SaveVersion < 5)
+            {
+                profile.ModifiedDecorations = new Dictionary<string, List<string>>();
+                profile.DiscoveredNavRegions = new HashSet<string>();
+                profile.PopulatedLandmarks = new Dictionary<string, string>();
             }
             profile.SaveVersion = CurrentSaveVersion;
         }

@@ -1,4 +1,4 @@
-# Bug Report — Hero of Eternia (v0.6.0)
+# Bug Report — Hero of Eternia (v0.8.0)
 
 This report tracks and documents issue resolution status across all systems.
 
@@ -19,19 +19,17 @@ This report tracks and documents issue resolution status across all systems.
 | **P6-E1** | Low | `InventoryContainer.cs`| Unused local variable `ordered` warning | ✅ FIXED (Removed variable) |
 | **P6-E2** | Low | `EquipmentManager.cs` | Missing `using Godot;` import for Material loader | ✅ FIXED (Added import) |
 | **P6-E3** | Medium| `EquipmentManager.cs` | RemoveModifier expecting string ID, got StatModifier | ✅ FIXED (Passed `modifier.Id`) |
+| **P7-E1** | Low | `TestRunner.cs` | Missing `using HeroOfEternia.World;` imports block | ✅ FIXED (Added import statement) |
+| **P8-E1** | Medium| `TerrainGenerator.cs`| Capitalization and enum qualifying compiler errors | ✅ FIXED (Corrected FastNoiseLite API) |
 
 ---
 
-## 2. Fixed Issue Details (Phase 6)
+## 2. Fixed Issue Details (Phase 7 & 8)
 
-### P6-E1 — Unused Variable Warning
-- **Issue:** Compiler warning CS0168 declared `IOrderedEnumerable<System.Dynamic.ExpandoObject> ordered` but never used.
-- **Fix:** Deleted the declaration to keep the build warning-free.
+### P7-E1 — Missing World Namespace in TestRunner
+- **Issue:** TestRunner compiler errors: `WorldSeed` and `ChunkManager` could not be resolved because the namespace import was missing.
+- **Fix:** Added `using HeroOfEternia.World;` and restored Standard libraries.
 
-### P6-E2 — Missing Namespace Import in EquipmentManager
-- **Issue:** `GD.Load<Material>` and `Material` references caused compiler errors because `using Godot;` was not imported.
-- **Fix:** Added `using Godot;` to the top of `EquipmentManager.cs`.
-
-### P6-E3 — RemoveModifier Parameter Mismatch
-- **Issue:** `EquipmentManager.cs` passed the `StatModifier` instance directly to `RemoveModifier`, which expects a `string modifierId`.
-- **Fix:** Refactored the call to `player.Data.Attributes.RemoveModifier(pair.Item1, pair.Item2.Id)`.
+### P8-E1 — FastNoiseLite API Mismatches
+- **Issue:** `TerrainGenerator.cs` utilized `GetNoise2d` (lowercase d) and unqualified `FastNoiseLite.NoiseTypeEnum.OpenSimplex2` enums, causing C# build errors in Godot 4.3.
+- **Fix:** Refactored calls to `GetNoise2D`, qualified `NoiseTypeEnum.Simplex`, and corrected `FractalTypeEnum.Ridged`.

@@ -342,6 +342,7 @@ namespace HeroOfEternia.Core
             if (!RunPhase5Tests(tempDir)) return false;
             if (!RunPhase6Tests(tempDir)) return false;
             if (!RunPhase7Tests(tempDir)) return false;
+            if (!RunPhase8Tests(tempDir)) return false;
 
             Directory.Delete(tempDir, true);
             return true;
@@ -1041,6 +1042,144 @@ namespace HeroOfEternia.Core
                 }
             }
             GD.Print("PASS: Save slot V4 integration and migration.");
+
+            // Restore primary TestRunner registrations
+            ServiceLocator.Clear();
+            var resolvedPm = new PerformanceManager();
+            var resolvedSm = new SettingsManager(tempDir);
+            var resolvedLm = new LocalizationManager();
+            var resolvedGm = new GameManager();
+            var resolvedAm = new AudioManager();
+            var resolvedScm = new SceneManager();
+            var resolvedRm = new ResourceManager();
+            var resolvedUm = new UIManager();
+
+            ServiceLocator.Register(resolvedPm);
+            ServiceLocator.Register(resolvedSm);
+            ServiceLocator.Register(resolvedLm);
+            ServiceLocator.Register(resolvedGm);
+            ServiceLocator.Register(resolvedAm);
+            ServiceLocator.Register(resolvedScm);
+            ServiceLocator.Register(resolvedRm);
+            ServiceLocator.Register(resolvedUm);
+
+            resolvedSm.LoadSettings();
+
+            return true;
+        }
+
+        private bool RunPhase8Tests(string tempDir)
+        {
+            GD.Print("Running Phase 8 terrain & navigation tests...");
+
+            ulong testSeed = 54321u;
+            var terrainGen = new TerrainGenerator(testSeed);
+
+            // 1. Layered Terrain Generation check
+            GD.Print("Testing TerrainGenerator height reproduction...");
+            float h1 = terrainGen.GetHeight(25f, -40f);
+            float h2 = terrainGen.GetHeight(25f, -40f);
+            if (Mathf.Abs(h1 - h2) > 0.0001f)
+            {
+                GD.Print("FAIL: TerrainGenerator height calculations are not deterministic.");
+                return false;
+            }
+
+            BiomeType bType = terrainGen.GetBiomeAt(25f, -40f);
+            GD.Print($"PASS: Terrain Y={h1:F2}, Biome={bType}");
+
+            // 2. Navigation walkable grid check
+            GD.Print("Testing NavigationFoundation grids...");
+            bool[,] navGrid = NavigationFoundation.GenerateNavigationGrid(terrainGen, Vector2I.Zero, 16);
+            if (navGrid == null || navGrid.GetLength(0) != 16)
+            {
+                GD.Print("FAIL: NavigationFoundation did not generate 16x16 grid.");
+                return false;
+            }
+            GD.Print("PASS: Navigation grids.");
+
+            // 3. Graphics-scaled Vegetation density check
+            GD.Print("Testing VegetationSystem preset density scaling...");
+            int lowCount = VegetationSystem.ScaleSpawnCount(100, "Low");
+            int highCount = VegetationSystem.ScaleSpawnCount(100, "High");
+            if (lowCount != 25 || highCount != 100)
+            {
+                GD.Print($"FAIL: VegetationSystem count scale. Low={lowCount}, High={highCount}");
+                return false;
+            }
+            GD.Print("PASS: Vegetation densities.");
+
+            // 4. World Population landmark checks
+            GD.Print("Testing WorldPopulationManager landmarks layout...");
+            var popManager = new WorldPopulationManager(testSeed);
+            popManager.GenerateLandmarks(terrainGen, 5);
+            var landmarks = popManager.GetAllLandmarks();
+            if (landmarks.Count == 0 || landmarks[0].Type != LandmarkType.BossArena)
+            {
+                GD.Print("FAIL: WorldPopulationManager did not place central arena.");
+                return false;
+            }
+            GD.Print("PASS: Landmarks populator.");
+
+            // 5. Automated World Validator audits
+            GD.Print("Testing WorldValidator floating meshes scans...");
+            var testChunk = new Chunk(Vector2I.Zero);
+            
+            // Add a floating tree (Y is 50.0 units, terrain is h1 ~ base)
+            testChunk.ActiveNodes.Add(new SpawnedNode
+            {
+                NodeInstanceId = "float_tree",
+                ElementRecordId = "tree_oak",
+                LocalX = 0f,
+                LocalY = 100f, // Extreme height
+                LocalZ = 0f
+            });
+
+            var validationReport = WorldValidator.ValidateChunk(testChunk, terrainGen);
+            if (validationReport.IsSuccess || validationReport.ErrorsCount != 1 || !validationReport.Errors[0].Contains("FloatingObject"))
+            {
+                GD.Print($"FAIL: WorldValidator did not flag floating tree node. Errors Count={validationReport.ErrorsCount}");
+                return false;
+            }
+            GD.Print("PASS: World Validator scans.");
+
+            // 6. Save slot V5 serialization & migration checks
+            GD.Print("Testing SaveProfile V5 terrain states serialization...");
+            var saveManager = new SaveManager(tempDir);
+            var saveProf = new SaveProfile();
+            saveProf.WorldSeed = testSeed;
+            saveProf.DiscoveredNavRegions.Add("NavFields");
+            saveProf.ModifiedDecorations["0_0"] = new List<string> { "float_tree" };
+
+            if (!saveManager.Save(12, saveProf))
+            {
+                GD.Print("FAIL: SaveManager did not save slot 12.");
+                return false;
+            }
+
+            var loadedProf = saveManager.Load(12);
+            if (loadedProf == null || loadedProf.WorldSeed != testSeed || 
+                !loadedProf.DiscoveredNavRegions.Contains("NavFields") || 
+                !loadedProf.ModifiedDecorations["0_0"].Contains("float_tree"))
+            {
+                GD.Print("FAIL: SaveProfile V5 loaded parameters mismatch.");
+                return false;
+            }
+
+            // Legacy V4 to V5 migration
+            var legacyProf = new SaveProfile();
+            legacyProf.SaveVersion = 4;
+            var migrateMethod = typeof(SaveManager).GetMethod("MigrateProfile", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (migrateMethod != null)
+            {
+                migrateMethod.Invoke(saveManager, new object[] { legacyProf });
+                if (legacyProf.SaveVersion != 5 || legacyProf.ModifiedDecorations == null || legacyProf.DiscoveredNavRegions == null)
+                {
+                    GD.Print("FAIL: SaveProfile V4 to V5 migration failed.");
+                    return false;
+                }
+            }
+            GD.Print("PASS: Save slot V5 integration and migration.");
 
             // Restore primary TestRunner registrations
             ServiceLocator.Clear();
