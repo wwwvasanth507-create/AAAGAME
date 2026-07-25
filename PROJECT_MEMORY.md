@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.6.0 |
+| **Version** | 0.7.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -126,6 +126,12 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | ItemDatabase | ✅ Complete | Data-driven JSON loading, fast lookups |
 | LootTable | ✅ Complete | Dynamic loot drop table roller |
 | ItemEffectsFramework | ✅ Complete | Consumables healing & buff resolvers |
+| WorldSeed | ✅ Complete | Deterministic FNV-1a hashing & hex parsing |
+| WorldDatabase | ✅ Complete | Data-driven biomes & element specifications |
+| ChunkManager | ✅ Complete | Asynchronous chunk streaming, distance buffers |
+| ResourceSpawner | ✅ Complete | Spawning chance, biomes, and slope limits |
+| WorldTimeSystem | ✅ Complete | Day/night cycle stage intervals |
+| WeatherManager | ✅ Complete | Transitions climate profile offsets |
 
 ### Player Systems
 | System | Status | Notes |
@@ -193,7 +199,7 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (21 tests)
+### Current Test Suite (27 tests)
 | Test | Type | Status |
 |------|------|--------|
 | ServiceLocator DI & Boot | Integration | ✅ |
@@ -217,6 +223,12 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 | Save V3 Slot Serialization | Integration | ✅ |
 | Loot Table Roll Resolutions | Unit | ✅ |
 | Consumable Item Effect Resolvers | Unit | ✅ |
+| WorldSeed Text Hashing Determinism | Unit | ✅ |
+| Deterministic Float PRNG Rolls | Unit | ✅ |
+| Biomes Loader & Database Fallbacks | Unit | ✅ |
+| Time Cycles Stages Switches | Unit | ✅ |
+| Chunk Async Streaming & Modifying | Unit | ✅ |
+| Save V4 Serialization & Migration | Integration | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions
@@ -236,9 +248,22 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ---
 
-## Next Steps (Prompt 7)
+## Next Steps (Prompt 8)
 
 1. **Offline Database & SQLite Storage** — Establish SQLite tables for items, quests, and world configuration, linking back to the Save System.
 2. **3D Shaders & Presets** — Develop vertex and outline shading systems.
 3. **UIManager & HUD Overlays** — Interface overlays and inventory HUD screen menus.
 4. **Gameplay & Combat Systems** — Begin Combat triggers and weapon hitboxes.
+
+---
+
+## World System Rules
+
+1. All procedural generation must be deterministic.
+2. World changes must be saved through versioned serialization.
+3. Chunk systems must never block the main gameplay thread.
+4. Every biome must be data-driven.
+5. Environmental systems must support future gameplay integration.
+6. Procedural assets must use AI asset metadata tracking.
+7. World streaming must maintain Android memory limits.
+8. New world systems require save migration testing.

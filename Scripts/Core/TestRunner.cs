@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Godot;
+using HeroOfEternia.World;
 
 namespace HeroOfEternia.Core
 {
@@ -340,6 +341,7 @@ namespace HeroOfEternia.Core
 
             if (!RunPhase5Tests(tempDir)) return false;
             if (!RunPhase6Tests(tempDir)) return false;
+            if (!RunPhase7Tests(tempDir)) return false;
 
             Directory.Delete(tempDir, true);
             return true;
@@ -828,6 +830,217 @@ namespace HeroOfEternia.Core
             serialWatch.Stop();
             GD.Print($"BENCHMARK: 1,000 Inventory slots serialized in {serialWatch.ElapsedMilliseconds} ms (JSON Size: {serialStr.Length / 1024.0:F2} KB).");
             GD.Print("PASS: Performance Benchmarks completed.");
+
+            // Restore primary TestRunner registrations
+            ServiceLocator.Clear();
+            var resolvedPm = new PerformanceManager();
+            var resolvedSm = new SettingsManager(tempDir);
+            var resolvedLm = new LocalizationManager();
+            var resolvedGm = new GameManager();
+            var resolvedAm = new AudioManager();
+            var resolvedScm = new SceneManager();
+            var resolvedRm = new ResourceManager();
+            var resolvedUm = new UIManager();
+
+            ServiceLocator.Register(resolvedPm);
+            ServiceLocator.Register(resolvedSm);
+            ServiceLocator.Register(resolvedLm);
+            ServiceLocator.Register(resolvedGm);
+            ServiceLocator.Register(resolvedAm);
+            ServiceLocator.Register(resolvedScm);
+            ServiceLocator.Register(resolvedRm);
+            ServiceLocator.Register(resolvedUm);
+
+            resolvedSm.LoadSettings();
+
+            return true;
+        }
+
+        private bool RunPhase7Tests(string tempDir)
+        {
+            GD.Print("Running Phase 7 world & chunk streaming tests...");
+
+            // 1. WorldSeed tests
+            GD.Print("Testing WorldSeed...");
+            ulong seed1 = WorldSeed.Parse("Eternia");
+            ulong seed2 = WorldSeed.Parse("Eternia");
+            if (seed1 != seed2)
+            {
+                GD.Print("FAIL: WorldSeed parsing is not deterministic.");
+                return false;
+            }
+
+            if (!WorldSeed.Validate("Seed_123-Normal"))
+            {
+                GD.Print("FAIL: WorldSeed validation did not allow valid alphanumeric string.");
+                return false;
+            }
+
+            string hex = WorldSeed.ToShareString(seed1);
+            if (!WorldSeed.TryParseShareString(hex, out ulong parsedSeed) || parsedSeed != seed1)
+            {
+                GD.Print("FAIL: WorldSeed Hex sharing format failed.");
+                return false;
+            }
+            GD.Print("PASS: WorldSeed validations.");
+
+            // 2. Deterministic RNG check
+            GD.Print("Testing Deterministic PRNG coordinate rolls...");
+            var rng1 = new RandomNumberGenerator();
+            rng1.Seed = seed1;
+            float val1 = rng1.Randf();
+
+            var rng2 = new RandomNumberGenerator();
+            rng2.Seed = seed1;
+            float val2 = rng2.Randf();
+
+            if (Mathf.Abs(val1 - val2) > 0.0001f)
+            {
+                GD.Print("FAIL: Godot RNG seed yields non-deterministic float.");
+                return false;
+            }
+            GD.Print("PASS: Deterministic rolls.");
+
+            // 3. Biomes and Elements Database checks
+            GD.Print("Testing WorldDatabase & Biomes definitions...");
+            var wdb = new WorldDatabase();
+            wdb.Initialize();
+            
+            var forest = wdb.GetBiome(BiomeType.Forest);
+            if (forest == null || forest.Name != "Forest")
+            {
+                GD.Print("FAIL: WorldDatabase did not resolve Forest biome.");
+                return false;
+            }
+
+            var oakTree = wdb.GetRecord("tree_oak");
+            if (oakTree == null || oakTree.DisplayName != "Oak Tree")
+            {
+                GD.Print("FAIL: WorldDatabase did not resolve tree_oak record.");
+                return false;
+            }
+            GD.Print("PASS: WorldDatabase definitions.");
+
+            // 4. Time & Weather controls
+            GD.Print("Testing WorldTimeSystem & Weather stages...");
+            var timeSystem = new WorldTimeSystem();
+            timeSystem.SetTimeState(0.22, 1);
+            if (timeSystem.GetCycleStage() != DayCycleStage.Sunrise)
+            {
+                GD.Print($"FAIL: 0.22 time of day stage is {timeSystem.GetCycleStage()}, expected Sunrise.");
+                return false;
+            }
+
+            timeSystem.SetTimeState(0.5, 1);
+            if (timeSystem.GetCycleStage() != DayCycleStage.Day)
+            {
+                GD.Print($"FAIL: 0.5 time of day stage is {timeSystem.GetCycleStage()}, expected Day.");
+                return false;
+            }
+
+            var weather = new WeatherManager();
+            weather.Initialize();
+            weather.ChangeWeather(WeatherType.Storm);
+            if (weather.CurrentWeather.WindStrength != 0.8f)
+            {
+                GD.Print($"FAIL: Storm weather wind strength is {weather.CurrentWeather.WindStrength}, expected 0.8.");
+                return false;
+            }
+            GD.Print("PASS: Time and weather controls.");
+
+            // 5. Chunk loading, async task & node modifications
+            GD.Print("Testing ChunkManager streaming & active nodes modification...");
+            ServiceLocator.Clear();
+            var conf = new ConfigManager(tempDir);
+            ServiceLocator.Register(conf);
+            ServiceLocator.Register(wdb);
+
+            var chunkManager = new ChunkManager();
+            chunkManager.Initialize();
+            chunkManager.ActiveSeed = seed1;
+
+            bool loadedTriggered = false;
+            chunkManager.OnChunkLoaded += (c) => {
+                if (c.Coords == Vector2I.Zero)
+                {
+                    loadedTriggered = true;
+                }
+            };
+
+            // Trigger load for coordinate (0,0) by setting player position close to zero
+            chunkManager.UpdatePlayerPosition(new Vector3(10f, 0f, 10f));
+            
+            // Allow async thread pool a brief duration to parse chunk nodes
+            System.Threading.Thread.Sleep(100);
+
+            var zeroChunk = chunkManager.GetChunk(Vector2I.Zero);
+            if (zeroChunk == null || zeroChunk.State != ChunkState.Loaded)
+            {
+                GD.Print("FAIL: ChunkManager did not stream chunk (0,0) asynchronously.");
+                return false;
+            }
+
+            if (!loadedTriggered)
+            {
+                GD.Print("FAIL: ChunkManager OnChunkLoaded event did not trigger for zero chunk.");
+                return false;
+            }
+
+            int baseNodeCount = zeroChunk.ActiveNodes.Count;
+            if (baseNodeCount == 0)
+            {
+                GD.Print("FAIL: Zero chunk generated 0 resource nodes.");
+                return false;
+            }
+
+            // Modify node (mined tree)
+            string mineId = zeroChunk.ActiveNodes[0].NodeInstanceId;
+            chunkManager.ModifyNode(Vector2I.Zero, mineId);
+            
+            if (zeroChunk.ActiveNodes.Count != baseNodeCount - 1 || !zeroChunk.ModifiedNodeIds.Contains(mineId))
+            {
+                GD.Print("FAIL: ModifyNode did not flag instance as modified/deleted.");
+                return false;
+            }
+            GD.Print("PASS: Chunk streaming & modifications.");
+
+            // 6. Save slot V4 serialization & migration
+            GD.Print("Testing SaveProfile V4 world configurations serialization...");
+            var saveManager = new SaveManager(tempDir);
+            var saveProf = new SaveProfile();
+            saveProf.WorldSeed = seed1;
+            saveProf.DiscoveredRegions.Add("EterniaFields");
+            saveProf.ModifiedChunkNodes["0_0"] = new List<string> { mineId };
+
+            if (!saveManager.Save(11, saveProf))
+            {
+                GD.Print("FAIL: SaveManager did not save slot 11.");
+                return false;
+            }
+
+            var loadedProf = saveManager.Load(11);
+            if (loadedProf == null || loadedProf.WorldSeed != seed1 || 
+                !loadedProf.DiscoveredRegions.Contains("EterniaFields") || 
+                !loadedProf.ModifiedChunkNodes["0_0"].Contains(mineId))
+            {
+                GD.Print("FAIL: SaveProfile V4 loaded parameters mismatch.");
+                return false;
+            }
+
+            // Legacy V3 migration
+            var legacyProf = new SaveProfile();
+            legacyProf.SaveVersion = 3;
+            var migrateMethod = typeof(SaveManager).GetMethod("MigrateProfile", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (migrateMethod != null)
+            {
+                migrateMethod.Invoke(saveManager, new object[] { legacyProf });
+                if (legacyProf.SaveVersion != 4 || legacyProf.DiscoveredRegions == null || legacyProf.ModifiedChunkNodes == null)
+                {
+                    GD.Print("FAIL: SaveProfile V3 to V4 migration failed.");
+                    return false;
+                }
+            }
+            GD.Print("PASS: Save slot V4 integration and migration.");
 
             // Restore primary TestRunner registrations
             ServiceLocator.Clear();

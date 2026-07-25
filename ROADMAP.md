@@ -17,17 +17,18 @@ gantt
     Phase 4: Player Controller & Input (P4)         :done,   p4,  after p3,   2d
     Phase 5: Player Character Framework (P5)        :done,   p5,  after p4,   2d
     Phase 6: Item Ecosystem (P6)                    :done,   p6,  after p5,   2d
+    Phase 7: Procedural World & Streaming (P7)      :done,   p7,  after p6,   2d
     section Database & World
-    Phase 7: Offline Storage & Database (P7-P10)    :active, p7,  after p6,   5d
+    Phase 8: Offline Storage & Database (P8-P10)    :active, p8,  after p7,   5d
     section Rendering
-    Phase 8: 3D Shaders & Presets (P11-P30)         :        p8,  after p7,   10d
+    Phase 9: 3D Shaders & Presets (P11-P30)         :        p9,  after p8,   10d
     section Mechanics
-    Phase 9: Gameplay & Combat (P31-P70)            :        p9,  after p8,   20d
+    Phase 10: Gameplay & Combat (P31-P70)           :        p10, after p9,   20d
     section Content
-    Phase 10: Dungeons, AI & World (P71-P110)       :        p10, after p9,   20d
+    Phase 11: Dungeons, AI & World (P71-P110)       :        p11, after p10,  20d
     section Polish
-    Phase 11: UI/UX & Audio (P111-P130)             :        p11, after p10,  10d
-    Phase 12: Security & QA Release (P131-P150)     :        p12, after p11,  10d
+    Phase 12: UI/UX & Audio (P111-P130)             :        p12, after p11,  10d
+    Phase 13: Security & QA Release (P131-P150)     :        p13, after p12,  10d
 ```
 
 ---
@@ -80,20 +81,31 @@ gantt
     *   `Save Integration` — SaveProfile V3 with version 2-to-3 backward-compatible migration.
     *   `Test suite` — Expanded from 14 to 21 unit/integration tests passing 100% success.
 
-### 🔲 Phase 7: Offline Database & Local Storage (Next — Prompts 7–10)
+### ✅ Phase 7: Procedural World & Streaming (Completed — Prompt 7)
+*   **Features:**
+    *   `WorldSeed` — deterministic 64-bit seed systems parsing manual alphanumeric string seeds using FNV-1a.
+    *   `WorldDatabase` — loads biome elevation parameters and element paths.
+    *   `ChunkManager` — asynchronous streaming load bounds via thread pools.
+    *   `ResourceSpawner` — spawn chance constraints, tilt angle filters.
+    *   `WorldTimeSystem` — cycle stage checks (Sunrise, Day, Sunset, Night) and seasonal shift triggers.
+    *   `WeatherManager` — profile values for blizzards, sandstorms, and ash falls.
+    *   `Save Integration` — SaveProfile V4 serialization.
+    *   `Test suite` — Expanded to 27 unit/integration tests running headlessly.
+
+### 🔲 Phase 8: Offline Database & Local Storage (Next — Prompts 8–10)
 *   **Planned Features:** SQLite schema for items, quests, world states. Data access layer (DAL). Migration runner.
 
-### 🔲 Phase 8: 3D Rendering & Shaders (Prompts 11–30)
+### 🔲 Phase 9: 3D Rendering & Shaders (Prompts 11–30)
 *   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, outline highlights.
 
-### 🔲 Phase 9: Gameplay & Combat (Prompts 31–70)
+### 🔲 Phase 10: Gameplay & Combat (Prompts 31–70)
 *   **Planned Features:** Combat states, weapons hitboxes, dynamic attributes multipliers, skill trees.
 
-### 🔲 Phase 10: Dungeons, World & AI (Prompts 71–110)
+### 🔲 Phase 11: Dungeons, World & AI (Prompts 71–110)
 *   **Planned Features:** Seeded generation, FSM enemy AI, dialogues.
 
-### 🔲 Phase 11: UI/UX & Audio (Prompts 111–130)
+### 🔲 Phase 12: UI/UX & Audio (Prompts 111–130)
 *   **Planned Features:** Glassmorphic HUD overlay screens, settings, volume sliders.
 
-### 🔲 Phase 12: Security, Optimization & QA Release (Prompts 131–150)
+### 🔲 Phase 13: Security, Optimization & QA Release (Prompts 131–150)
 *   **Planned Features:** OBX profiling, Google Play Store signed release APK.

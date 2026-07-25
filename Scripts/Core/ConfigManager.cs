@@ -112,6 +112,15 @@ namespace HeroOfEternia.Core
                 case "rarities":
                     defaultJson = "[\n  {\n    \"Rarity\": 0,\n    \"ColorHex\": \"#9D9D9D\",\n    \"BorderSpritePath\": \"res://Assets/UI/Borders/common.png\",\n    \"DropWeight\": 100.0,\n    \"VisualEffectHook\": \"Vfx_Common\",\n    \"AudioHook\": \"Sfx_Common\"\n  },\n  {\n    \"Rarity\": 1,\n    \"ColorHex\": \"#1EFF00\",\n    \"BorderSpritePath\": \"res://Assets/UI/Borders/uncommon.png\",\n    \"DropWeight\": 40.0,\n    \"VisualEffectHook\": \"Vfx_Uncommon\",\n    \"AudioHook\": \"Sfx_Uncommon\"\n  },\n  {\n    \"Rarity\": 2,\n    \"ColorHex\": \"#0070DD\",\n    \"BorderSpritePath\": \"res://Assets/UI/Borders/rare.png\",\n    \"DropWeight\": 15.0,\n    \"VisualEffectHook\": \"Vfx_Rare\",\n    \"AudioHook\": \"Sfx_Rare\"\n  },\n  {\n    \"Rarity\": 3,\n    \"ColorHex\": \"#A335EE\",\n    \"BorderSpritePath\": \"res://Assets/UI/Borders/epic.png\",\n    \"DropWeight\": 5.0,\n    \"VisualEffectHook\": \"Vfx_Epic\",\n    \"AudioHook\": \"Sfx_Epic\"\n  },\n  {\n    \"Rarity\": 4,\n    \"ColorHex\": \"#FF8000\",\n    \"BorderSpritePath\": \"res://Assets/UI/Borders/legendary.png\",\n    \"DropWeight\": 1.0,\n    \"VisualEffectHook\": \"Vfx_Legendary\",\n    \"AudioHook\": \"Sfx_Legendary\"\n  }\n]";
                     break;
+                case "biomes":
+                    defaultJson = "[\n  {\n    \"Type\": 0,\n    \"Name\": \"Forest\",\n    \"Temperature\": 0.6,\n    \"Humidity\": 0.7,\n    \"MinElevation\": 0.1,\n    \"MaxElevation\": 0.6,\n    \"TerrainType\": \"Hilly\",\n    \"SkyProfile\": \"res://Assets/Environment/Sky/forest_sky.tres\",\n    \"WeatherProfile\": \"Clear\"\n  },\n  {\n    \"Type\": 1,\n    \"Name\": \"Grassland\",\n    \"Temperature\": 0.5,\n    \"Humidity\": 0.5,\n    \"MinElevation\": 0.0,\n    \"MaxElevation\": 0.4,\n    \"TerrainType\": \"Flat\",\n    \"SkyProfile\": \"res://Assets/Environment/Sky/grassland_sky.tres\",\n    \"WeatherProfile\": \"Clear\"\n  }\n]";
+                    break;
+                case "world_database":
+                    defaultJson = "[\n  {\n    \"Id\": \"tree_oak\",\n    \"Category\": \"Tree\",\n    \"DisplayName\": \"Oak Tree\",\n    \"ModelPath\": \"res://Assets/Environment/Meshes/tree_oak.glb\",\n    \"BaseSpawnWeight\": 10.0\n  },\n  {\n    \"Id\": \"rock_granite\",\n    \"Category\": \"Rock\",\n    \"DisplayName\": \"Granite Rock\",\n    \"ModelPath\": \"res://Assets/Environment/Meshes/rock_granite.glb\",\n    \"BaseSpawnWeight\": 5.0\n  }\n]";
+                    break;
+                case "weather_profiles":
+                    defaultJson = "[\n  {\n    \"Type\": 0,\n    \"DisplayName\": \"Clear\",\n    \"TemperatureModifier\": 0.0,\n    \"WindStrength\": 0.0,\n    \"VisualEffectHook\": \"Vfx_Clear\",\n    \"AmbientSoundKey\": \"Ambient_Clear\"\n  },\n  {\n    \"Type\": 1,\n    \"DisplayName\": \"Rain\",\n    \"TemperatureModifier\": -0.05,\n    \"WindStrength\": 0.3,\n    \"VisualEffectHook\": \"Vfx_Rain\",\n    \"AmbientSoundKey\": \"Ambient_Rain\"\n  }\n]";
+                    break;
             }
 
             try

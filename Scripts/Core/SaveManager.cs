@@ -56,7 +56,7 @@ namespace HeroOfEternia.Core
     /// </summary>
     public class SaveProfile
     {
-        public int SaveVersion { get; set; } = 3;
+        public int SaveVersion { get; set; } = 4;
         public string GameVersion { get; set; } = "1.0.0";
         public PlayerStats Stats { get; set; } = new PlayerStats();
         public InventoryData Inventory { get; set; } = new InventoryData();
@@ -77,6 +77,11 @@ namespace HeroOfEternia.Core
         public List<Inventory.InventorySlot> PlayerInventory { get; set; } = new();
         public Dictionary<string, Inventory.InventorySlot> EquippedSlots { get; set; } = new();
         public Dictionary<string, List<Inventory.InventorySlot>> StorageChests { get; set; } = new();
+
+        // Procedural World Systems
+        public ulong WorldSeed { get; set; } = 12345u;
+        public HashSet<string> DiscoveredRegions { get; set; } = new();
+        public Dictionary<string, List<string>> ModifiedChunkNodes { get; set; } = new();
 
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
@@ -99,7 +104,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 3;
+        private const int CurrentSaveVersion = 4;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.
@@ -296,6 +301,12 @@ namespace HeroOfEternia.Core
                 profile.PlayerInventory = new List<Inventory.InventorySlot>();
                 profile.EquippedSlots = new Dictionary<string, Inventory.InventorySlot>();
                 profile.StorageChests = new Dictionary<string, List<Inventory.InventorySlot>>();
+            }
+            if (profile.SaveVersion < 4)
+            {
+                profile.WorldSeed = 12345u;
+                profile.DiscoveredRegions = new HashSet<string>();
+                profile.ModifiedChunkNodes = new Dictionary<string, List<string>>();
             }
             profile.SaveVersion = CurrentSaveVersion;
         }

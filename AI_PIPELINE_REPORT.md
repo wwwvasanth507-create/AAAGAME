@@ -94,3 +94,26 @@ All 2D assets and 3D textures must follow these configurations:
 - **Stone Footstep:**
   - *Prompt:* `"heavy boot step on rough granite stone block, sharp transient echo, isolated, high fidelity wav format"`
   - *Folder:* `Assets/Audio/Player/Footsteps/Stone/`
+
+### 5.5 World Static Assets (Terrain, Vegetation, Rocks)
+- **Oak Tree Mesh:**
+  - *Asset ID:* `env_tree_oak`
+  - *Version:* 1
+  - *Prompt:* `"concept sheet of stylized low-poly oak tree, cartoon fantasy design, hand-painted texture, solid grey background, orthographic view"`
+  - *Metadata:* `Polygon budget: 300 tris. LODs: N/A. Export: glTF 2.0 binary (.glb).`
+  - *Folder:* `Assets/Environment/Meshes/`
+  - *Status:* `Validated, Optimized for Android (Low memory allocation)`
+- **Granite Rock Mesh:**
+  - *Asset ID:* `env_rock_granite`
+  - *Version:* 1
+  - *Prompt:* `"concept art of stylized granite boulder, cracked rocky texture, hand-painted game art style, solid grey background"`
+  - *Metadata:* `Polygon budget: 150 tris. LODs: N/A. Export: glTF 2.0 binary (.glb).`
+  - *Folder:* `Assets/Environment/Meshes/`
+  - *Status:* `Validated, Optimized for Android`
+- **Iron Ore Mesh:**
+  - *Asset ID:* `env_ore_iron`
+  - *Version:* 1
+  - *Prompt:* `"concept art of a low-poly iron ore node, rocky mound with glowing metallic veins, stylized fantasy game asset, solid grey background"`
+  - *Metadata:* `Polygon budget: 200 tris. LODs: N/A. Export: glTF 2.0 binary (.glb).`
+  - *Folder:* `Assets/Environment/Meshes/`
+  - *Status:* `Validated, Optimized for Android`

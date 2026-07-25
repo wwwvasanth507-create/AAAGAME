@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.0] - 2026-07-25
+
+### Added
+*   **WorldSeed** (`Scripts/World/WorldSeed.cs`): Deterministic seed parser supporting manual alphanumeric string hashing (FNV-1a 64-bit), random generation, and hex representation sharing.
+*   **BiomeDefinition** (`Scripts/World/BiomeDefinition.cs`): Stores temperature, humidity, elevation bounds, terrain configurations, sky vectors, and climate presets.
+*   **WorldDatabase** (`Scripts/World/WorldDatabase.cs`): Service preloading element records and biomes from configurations into lookup caches on boot.
+*   **Chunk & SpawnedNode** (`Scripts/World/Chunk.cs`): Tracks local coordinates within chunks and maps modified node IDs to support persistent states.
+*   **ChunkManager** (`Scripts/World/ChunkManager.cs`): Manages asynchronous chunk generation on background thread pools, loading chunks inside players' streaming distance and unloading outside buffer boundaries.
+*   **ResourceSpawner** (`Scripts/World/ResourceSpawner.cs`): Spawner rules verifying elevation and tilt slope criteria.
+*   **WorldTimeSystem** (`Scripts/World/WorldTimeSystem.cs`): Evaluates day/night fractional time updates and seasonal progression shifts.
+*   **WeatherManager** (`Scripts/World/WeatherManager.cs`): Maps wind strengths, temperature offsets, and lighting tint vectors.
+*   **Phase 7 Test Suite**: Added 6 new automated tests verifying seeds, deterministic PRNG rolls, chunk load tasks, and save V4 deserialization.
+
+### Changed
+*   **SaveManager** (`Scripts/Core/SaveManager.cs`): Incremented Save Version to 4. Saves world seeds, discovered region hash sets, and modified chunk node tables. Backward-compatible migration from legacy version 3.
+*   **ConfigManager** (`Scripts/Core/ConfigManager.cs`): Added template support for `biomes.json`, `world_database.json`, and `weather_profiles.json`.
+
+---
+
 ## [0.6.0] - 2026-07-25
 
 ### Added
