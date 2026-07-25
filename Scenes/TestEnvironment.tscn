@@ -1,3 +1,39 @@
-[gd_scene format=3 uid="uid://testenv0000"]
+[gd_scene load_steps=5 format=3 uid="uid://testenv0000"]
 
+[ext_resource type="PackedScene" path="res://Scenes/Player.tscn" id="1_player"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_test"]
+size = Vector3(50, 0.2, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_test"]
+
+; =======================================================================
+; TEST ENVIRONMENT — minimal world scene used by automated test harness
+; =======================================================================
 [node name="TestEnvironment" type="Node3D"]
+
+; Flat terrain for physics tests
+[node name="Terrain" type="StaticBody3D" parent="."]
+
+[node name="TerrainCollision" type="CollisionShape3D" parent="Terrain"]
+shape = SubResource("BoxShape3D_test")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Terrain"]
+mesh = SubResource("PlaneMesh_test")
+transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
+
+; Minimal directional light
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866, 0.5, 0, -0.5, 0.866, 0, 20, 0)
+
+; Player instance at origin
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+; Enemy spawn marker for test waves
+[node name="SpawnMarker0" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+
+[node name="SpawnMarker1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)

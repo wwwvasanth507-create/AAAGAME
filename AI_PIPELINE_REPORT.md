@@ -139,15 +139,33 @@ This report documents the AI generation prompts, technical specifications, and a
 
 ---
 
+## Phase 12 — Boss & Encounter Assets
+
+### BOSS-001: Golem Titan Model
+
+| Field | Value |
+|-------|-------|
+| **Asset Name** | `character_boss_golem_titan` |
+| **Purpose** | Behemoth boss character |
+| **Style** | Semi-realistic fantasy, cracked basalt rock, brass hinges, glowing runes |
+| **AI Generation Prompt** | "3D boss character, ancient giant stone golem, glowing orange runes on arms, granite basalt textures, brass structural joints, semi-realistic style, game-ready, high-resolution textures" |
+| **Negative Prompt** | "smooth, organic, futuristic, clean" |
+| **Resolution** | 2048×2048 Albedo, Normal, Roughness, Metallic, Emission |
+| **Polygon Budget** | LOD0: 4,000 tris / LOD1: 1,800 / LOD2: 700 |
+| **Folder** | `Assets/Characters/Boss/GolemTitan/` |
+| **Version** | 1.0 |
+
+---
+
 ## Asset Manifest Summary
 
 | Phase | Asset Category | Count | Status |
 |-------|---------------|-------|--------|
 | P7–P8 | Environment (terrain, rocks, trees) | 12 | 📋 Prompts ready |
 | P9 | NPC Characters (6 types) | 15 variants | 📋 Prompts ready |
-| P9 | NPC Animations | 6 states × 6 types | 📋 Prompts ready |
-| P1–P6 | UI Icons (items, equipment) | 20+ | 📋 Prompts ready |
-| P1–P6 | Player Character | 2 (male/female) | 📋 Prompts ready |
+| P10 | Combat Weapons (12 types) | 12 | 📋 Prompts ready |
+| P11 | Player Active Abilities Icons | 5 | 📋 Prompts ready |
+| P12 | Boss Models (Golem Titan) | 1 | 📋 Prompts ready |
 
 ---
 
@@ -160,13 +178,12 @@ This report documents the AI generation prompts, technical specifications, and a
 | Polygon budget: LOD0/LOD1/LOD2 mandatory | Specified per asset |
 | PBR textures: Albedo, Normal, Roughness, Metallic | Mandatory |
 | Export format: .glb model + .png textures | Mandatory |
-| Naming convention: `{type}_{category}_{variant}` | Enforced |
 
 ---
 
 ## Verdict
 
 **AI Asset Pipeline: COMPLIANT ✅**
-- All Phase 9 NPC character asset prompts documented.
-- Consistent style, resolution, polygon, and format specs.
-- Asset manifest updated.
+- Boss Golem Titan model prompts documented.
+- Abilities icon prompts and weapons models documented.
+- All specifications follow Phase 0 rules.

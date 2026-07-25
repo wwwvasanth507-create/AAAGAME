@@ -5,23 +5,64 @@ namespace HeroOfEternia.Player.Stats
 {
     /// <summary>
     /// Type identifier for stats/attributes.
+    /// Extended to support all equipment-related stats in Prompt 14.
     /// </summary>
     public enum AttributeType
     {
+        // Core Vitals
         Health,
         Mana,
         Energy,
         Stamina,
+        
+        // Core Stats
         Strength,
         Vitality,
         Magic,
         Dexterity,
         Luck,
+        
+        // Combat Stats
         Attack,
+        MagicAttack,
         Defense,
+        MagicDefense,
         Speed,
         CriticalRate,
-        CriticalDamage
+        CriticalDamage,
+        AttackSpeed,
+        CastingSpeed,
+        MovementSpeed,
+        
+        // Defensive Stats
+        BlockChance,
+        DodgeChance,
+        
+        // Elemental Resistances
+        FireResistance,
+        IceResistance,
+        LightningResistance,
+        PoisonResistance,
+        HolyResistance,
+        ShadowResistance,
+        
+        // Status Resistances
+        StunResistance,
+        FreezeResistance,
+        BurnResistance,
+        BleedResistance,
+        SilenceResistance,
+        KnockbackResistance,
+        
+        // Special Hooks (value-based)
+        LifeSteal,
+        ManaRegen,
+        HealthRegen,
+        ExperienceBonus,
+        GoldBonus,
+        
+        // Custom / Future
+        Custom
     }
 
     /// <summary>

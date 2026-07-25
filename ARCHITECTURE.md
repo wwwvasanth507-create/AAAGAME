@@ -27,6 +27,12 @@ graph TD
         E --> K[InventoryManager]
         E --> L[QuestManager]
         E --> M[WorldManager]
+        E --> N[AbilityManager]
+        E --> O[CategoryManager]
+        E --> P[EffectsManager]
+        E --> Q[LoadoutManager]
+        E --> R[ResourceManager]
+        E --> S[PlayerProgression]
     end
 
     subgraph Player Systems
@@ -86,7 +92,52 @@ System-to-system communications occur asynchronously via a centralized `EventBus
 
 ---
 
-## 7. Procedural World & Terrain Pipeline
+## 7. Ability & Progression Systems
+
+### AbilityManager
+Central execution framework for all player abilities. Responsibilities:
+- Ability activation with full validation pipeline (cooldowns, charges, resources, targets, level requirements)
+- Cast time tracking and completion
+- Cancellation and interruption handling
+- Global cooldown management
+- Animation, VFX, and SFX trigger hooks
+- Network-ready event-driven architecture
+- Save/load of runtime state (cooldowns, charges, cast progress)
+
+### CategoryManager
+Extensible category definitions for organizing abilities:
+- 11 default categories (Melee, Magic, Ranged, Movement, Support, Healing, Defensive, Summoning, Passive, Ultimate, Utility)
+- Runtime registration of new categories without code changes
+- Unlock conditions per category
+
+### EffectsManager
+Reusable ability effect framework:
+- 12 effect types (Damage, Healing, Shield, Teleport, Buff, Debuff, Summon, ProjectileSpawn, AreaCreation, Movement, EnvironmentalInteraction, Custom)
+- Stacking with configurable max stacks
+- Duration tracking and tick-based processing
+- Event-driven lifecycle (applied, expired, stacked)
+
+### LoadoutManager
+Configurable ability loadout system:
+- Up to 6 loadouts with primary/secondary/passive/ultimate/quick slots
+- Save/load persistence with versioning
+- Runtime loadout switching
+
+### ResourceManager
+Configurable resource pool system:
+- 7 resource types (Health, Mana, Stamina, Energy, Focus, Rage, Spirit)
+- Configurable max values and regen rates
+- No hardcoded assumptions about which resources exist
+- Event-driven change notifications
+
+### PlayerProgression
+Player level and experience system:
+- Level 1-100 with configurable XP curves
+- Stat growth hooks per level
+- Prestige system (10 levels) with permanent bonuses
+- Future seasonal/prestige system support
+
+## 8. Procedural World & Terrain Pipeline
 *   **TerrainGenerator:** Employs three layers of FastNoiseLite (Continental simplex noise, Ridged mountains, and valley carving) to generate deterministic heights and biomes from a 64-bit seed.
 *   **NavigationFoundation:** Calculates cell-by-cell walkability based on neighbor elevations slope tilt angles and water height thresholds, avoiding expensive runtime graphical scene-tree NavMesh baking.
 *   **ChunkManager:** Manages background thread generation via thread-safe concurrent maps and double-radius buffers to protect frame rates.

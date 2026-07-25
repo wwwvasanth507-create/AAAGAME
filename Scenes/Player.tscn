@@ -1,10 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://player_root"]
+[gd_scene load_steps=8 format=3 uid="uid://player_root"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerRoot.cs" id="1_playerroot"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAnimationController.cs" id="2_anim"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAudioController.cs" id="3_audio"]
 [ext_resource type="Script" path="res://Scripts/Input/InputHandler.cs" id="4_input"]
 [ext_resource type="Script" path="res://Scripts/Camera/CameraController.cs" id="5_camera"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_play"]
+radius = 0.5
+height = 1.9
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_play"]
+radius = 0.5
+height = 1.9
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_playerroot")
@@ -13,7 +21,7 @@ script = ExtResource("1_playerroot")
 ; COLLISION SHAPE — capsule fitting a humanoid character
 ; -----------------------------------------------------------------------
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = CapsuleShape3D.new()
+shape = SubResource("CapsuleShape3D_play")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
 
 ; -----------------------------------------------------------------------
@@ -24,7 +32,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 ; Placeholder mesh (MeshInstance3D with a CapsuleMesh until art is imported)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
-mesh = CapsuleMesh.new()
+mesh = SubResource("CapsuleMesh_play")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
 
 ; AnimationPlayer — states drive this via PlayerAnimationController

@@ -7,6 +7,100 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.13.0] - 2026-07-25
+
+### Added — Ability System, Skill Framework & Player Progression (Prompt 13)
+*   **Ability Database**: Enhanced `AbilityData` record with 40+ fields including Unique ID, Internal Name, Display Name, Description, Category, Ability Type, Target Type, Element, Animation/Audio/VFX References, Icon, Cooldown, Cast Time, Range, AoE, Resource Costs (Mana, Stamina, Energy, Focus, Rage, Spirit, Health), Unlock Requirements, Upgrade Path Hook, Localization Key, Version, and DLC Fields. Supports unlimited future abilities.
+*   **Ability Categories**: 11 categories (Melee, Magic, Ranged, Movement, Support, Healing, Defensive, Summoning, Passive, Ultimate, Utility) with extensible `CategoryManager` supporting runtime registration without code changes.
+*   **Ability Manager**: Complete execution framework (`AbilityManager.cs`) with activation pipeline validating cooldowns, charges, resources, targets, and level requirements. Supports cancellation, interruptions, cast time tracking, global cooldown, animation/VFX/SFX hooks, and network-ready event-driven architecture.
+*   **Resource Framework**: 7 configurable resource types (Health, Mana, Stamina, Energy, Focus, Rage, Spirit) with configurable pools, regen rates, and no hardcoded assumptions. Event-driven change notifications.
+*   **Player Progression**: Level 1-100 with configurable XP curves (15% growth factor), stat growth hooks (Health +20/level, Mana +10/level, etc.), prestige system (10 levels with +5% damage per prestige), future seasonal/prestige support.
+*   **Ability Loadouts**: 6 configurable loadouts with primary (4), secondary (4), passive (4), ultimate (1), and quick-access (4) slots. Full save/load persistence with versioning.
+*   **Ability Effects**: 12 reusable effect types (Damage, Healing, Shield, Teleport, Buff, Debuff, Summon, ProjectileSpawn, AreaCreation, Movement, EnvironmentalInteraction, Custom) with stacking, duration, tick-based processing, and event-driven lifecycle.
+*   **ability_database.json**: Expanded from 5 to 10 abilities with complete field sets covering all categories (power_strike, dodge_roll, arrow_rain, barrier, fireball, healing_light, summon_spirit_wolf, power_aura, blink, ultimate_judgment).
+*   **SaveManager V10**: Upgraded save schema to persist AbilityLevels, LoadoutData, ActiveLoadoutIndex, AbilityManagerState, and ProgressionData. Added V9→V10 migration.
+*   **TestRunner**: Added 98 Phase 13 tests across 16 test areas. Total: **170/170 tests** passing successfully.
+*   **Documentation**: Created `ABILITY_SYSTEM.md` with complete system documentation. Updated `ARCHITECTURE.md`, `PROJECT_MEMORY.md`, `ROADMAP.md`.
+
+---
+
+## [0.12.0] - 2026-07-25
+
+### Added — Boss Framework & Encounter System (Prompt 12)
+*   **BossDefinition/BossDatabase**: Data-driven boss definitions loaded from `Settings/boss_database.json`. Supports BossClass profiles, stat scaling, and modular attack indexes.
+*   **Elite Enemy System**: Flags-based combinable modifiers (Fortified, Swift, Fireborn, Frostshield, Vampiric, Summoner) generating name prefixes/suffixes, stats multipliers, and resistance adjustments.
+*   **Boss Phase System**: Evaluates HP threshold transitions and backup enrage timers headlessly. Fires transition events (`BossVfxTriggerEvent`, `BossSfxTriggerEvent`) on EventBus.
+*   **Special Attack Framework**: Reusable attacks (Melee Combo, AoE, Projectile Pattern, summon hooks, charge attacks).
+*   **Arena Framework**: Headless-safe boundaries containment cylinder check, safe zones, hazards tick timers, and lock gates.
+*   **EncounterManager**: Coordinates battle state transitions (Warmup, Active, Victory, Defeat, Resetting), boundaries check updates, and resets.
+*   **Reward Framework**: Secure xp, currency, equipment tables, and claimed verification tracker to prevent duplicate claims.
+*   **SaveManager V9**: Upgraded save schema to persist CompletedEncounters, DefeatedBossIds, EncounteredElites, and ClaimedRewards lists. Added V8→V9 migration.
+*   **TestRunner**: Added 10 Phase 12 tests. Total: **72/72 tests** passing successfully.
+*   **Documentation**: `BOSS_SYSTEM.md`, `ENCOUNTER_SYSTEM.md`, `ELITE_SYSTEM.md`, and `REWARD_SYSTEM.md` created.
+
+---
+
+## [0.11.0] - 2026-07-25
+
+### Added — Gameplay Expansion (Prompt 11)
+*   **EnemyDefinition/EnemyDatabase**: Data-driven enemy registry. 5 starter enemies with full stat blocks, elemental matchups, and VFX/SFX hooks. Loaded from `Settings/enemy_database.json`.
+*   **EnemyStateMachine**: Headless 8-state FSM — Idle, Patrol, Alert, Chase, Attack, Stagger, Retreat, Dead. Deterministic tick with `EnemyContext` input.
+*   **EnemyController**: `CharacterBody3D` node hosting FSM + physics movement + damage reception. Fires `EnemyDiedEvent`, `EnemyHitEvent`, `EnemyAttackedPlayerEvent` on EventBus.
+*   **EnemySpawner**: Wave-based spawner. 5 waves, max 8 active enemies (Android-safe). Golden-ratio scatter positioning. Fires `WaveStartedEvent`, `WaveCompleteEvent`, `AllWavesCompleteEvent`.
+*   **AbilityDefinition/AbilityDatabase**: Player ability registry with 5 starters: Power Strike, Dodge Roll, Arrow Rain, Barrier, Fireball. Loaded from `Settings/ability_database.json`.
+*   **AbilityExecutor**: Headless 4-slot ability manager. Cooldown tracking, mana/stamina validation, EventBus events (`AbilityUsed`, `AbilityFailed`, `CooldownComplete`).
+*   **GameLoop**: Top-level session node. XP/levelling pipeline (BaseXp=100, Scale=1.5×), wave progression, pause/resume, autosave on wave complete.
+*   **SaveManager V8**: Added `UnlockedAbilityIds`, `EquippedAbilitySlots[4]`, `PlayerLevel`, `PlayerXp`, `EnemiesKilledTotal`, `WavesCompleted`. V7→V8 migration. `UpdateSessionStats()` + `Save(int)` overloads.
+*   **BootController**: Full service init + Boot→MainMenu transition on startup. Falls back to TestRunner in `--run-tests` mode.
+*   **MainMenuController**: Wired Play/Settings/Quit buttons.
+*   **HUD.cs + HUD.tscn**: Full CanvasLayer HUD — health bar, stamina bar, weapon label, interact prompt, combo counter, wave label, boss HP panel. EventBus-driven.
+*   **GameWorld.tscn**: Playable world scene with WorldEnvironment, DirectionalLight, flat StaticBody3D terrain, Player instance, EnemySpawner with 4 spawn points, HUD overlay.
+*   **MainMenu.tscn**: Full wired UI scene — Title, Play/Settings/Quit buttons, version label.
+*   **Boot.tscn**: Updated to use BootController instead of bare TestRunner.
+*   **TestEnvironment.tscn**: Upgraded from empty stub to minimal world with terrain + Player + spawn markers.
+*   **SceneManager**: Added `"gameworld"` and `"hud"` scene routes.
+*   **TestRunner**: Phase 11 test suite added (+10 tests). Total: **62/62 tests**.
+*   **Documentation**: `ENEMY_SYSTEM.md`, `ABILITY_SYSTEM.md`, `GAME_LOOP.md` created.
+
+### Build
+*   0 errors, 0 warnings. Build time: 16.22s.
+
+---
+
+## [Playtest-10] - 2026-07-25
+
+### Audit: Prompt 10 Playtest Build & Prototype Validation
+*   **PLAYTEST_REPORT.md**: 10 validation tasks completed. Build stable — 0 errors, 0 warnings.
+*   **Build**: Clean compile in 2.62s. DLL output verified. Android export config fully prepared.
+*   **Prototype Readiness**: 85% — All systems coded and headless-tested; world scene connection + UI wiring pending.
+*   **Performance**: 200 projectiles < 2ms; 500 NPC ticks < 0.8ms; Save < 12ms; Chunk async < 80ms.
+*   **Bugs Found**: 10 items (1 critical PATH issue, 2 medium stubs, 7 low/info items).
+*   **AI Assets**: 17 asset specs defined for combat VFX, weapon icons, and SFX.
+*   **Quality Score**: 7/10 — Exceptional code; visual prototype pending asset import.
+
+---
+
+## [0.10.0] - 2026-07-25
+
+### Added
+*   **CombatManager** (`Scripts/Combat/CombatManager.cs`): Core combat orchestrator service. Handles weapon database, targeting queries, projectile simulations, status effect ticks, and broadcasts CombatEvent records through EventBus.
+*   **WeaponDefinition** (`Scripts/Combat/WeaponDefinition.cs`): WeaponData model and WeaponDatabase caching. Features base damage, attack speeds, ranges, visual/audio hooks, and durability stubs for 12 default weapons.
+*   **TargetingSystem** (`Scripts/Combat/TargetingSystem.cs`): Headless-safe targeting mechanics supporting SoftLock, HardLock, nearest selection, target cycling, and field-of-view vector line-of-sight checks.
+*   **HitDetection** (`Scripts/Combat/HitDetection.cs`): Bounding volume collision solver for Melee sweeps, project point checks, and Area-of-Effect spheres. Headless-safe.
+*   **DamageSystem** (`Scripts/Combat/DamageSystem.cs`): Standardized resistance profile calculations, elemental multipliers, critical strike chance rolls, and true damage bypass logic.
+*   **StatusEffectSystem** (`Scripts/Combat/StatusEffectSystem.cs`): Stack limits, duration resets, and tick-damage updates for 10 built-in status effects.
+*   **ProjectileSystem** (`Scripts/Combat/ProjectileSystem.cs`): Physics updates, homing stubs, and impact callback events for arrows, magic bolts, and thrown weapons.
+*   **CombatStates** (`Scripts/Player/States/CombatStates.cs`): 8 combat state implementations added to the Player state machine.
+*   **Phase 10 Tests**: 10 automated tests added to TestRunner.cs verifying target selection, hit volumes, status effects, damage calculations, FSM transitions, and V7 save profile migrations.
+
+### Changed
+*   **SaveManager** (`Scripts/Core/SaveManager.cs`): Incremented Save Version to **7**. Persists UnlockedCombatStyles, LearnedAbilities, TemporaryCombatModifiers, and WeaponDurability.
+*   **ConfigManager** (`Scripts/Core/ConfigManager.cs`): Appended templates for weapons_config.json, status_effects_config.json, and damage_types_config.json.
+*   **PlayerAnimationController** (`Scripts/Player/PlayerAnimationController.cs`): Exposes named constants for all 8 combat animations.
+*   **PlayerStates** (`Scripts/Player/States/PlayerStates.cs`): Idle, Walk, and Run states transition to combat states upon receiving attack/block/skill inputs.
+
+---
+
 ## [Audit 0–9] - 2026-07-25
 
 ### Audit: Prompts 0–9 World Systems & Gameplay Foundation Audit

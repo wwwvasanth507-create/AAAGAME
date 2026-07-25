@@ -57,7 +57,7 @@ namespace HeroOfEternia.Core
     /// </summary>
     public class SaveProfile
     {
-        public int SaveVersion { get; set; } = 4;
+        public int SaveVersion { get; set; } = 10;
         public string GameVersion { get; set; } = "1.0.0";
         public PlayerStats Stats { get; set; } = new PlayerStats();
         public InventoryData Inventory { get; set; } = new InventoryData();
@@ -97,6 +97,62 @@ namespace HeroOfEternia.Core
         /// <summary>Relationship snapshot keyed by "npcA_npcB" → float[4] (Friendship, Trust, Respect, Fear).</summary>
         public Dictionary<string, float[]> RelationshipSnapshot { get; set; } = new();
 
+        // Combat Systems (Save V7)
+        /// <summary>Combat style IDs unlocked by the player (framework hook).</summary>
+        public List<string> UnlockedCombatStyles { get; set; } = new();
+        /// <summary>Ability IDs the player has learned (framework hook — abilities not implemented yet).</summary>
+        public List<string> LearnedAbilities { get; set; } = new();
+        /// <summary>Temporary per-session combat modifiers (e.g. "damage_bonus" → 1.2f). Not persisted between sessions by default.</summary>
+        public Dictionary<string, float> TemporaryCombatModifiers { get; set; } = new();
+        /// <summary>Per-weapon durability remaining (weaponId → float 0.0–1.0).</summary>
+        public Dictionary<string, float> WeaponDurability { get; set; } = new();
+
+        // Gameplay Expansion Systems (Save V8)
+        /// <summary>Ability IDs the player has unlocked via levelling.</summary>
+        public List<string> UnlockedAbilityIds { get; set; } = new();
+        /// <summary>Up to 4 equipped ability slot IDs (index = slot 0–3, empty string = empty slot).</summary>
+        public string[] EquippedAbilitySlots { get; set; } = new string[4];
+        /// <summary>Current player character level.</summary>
+        public int PlayerLevel { get; set; } = 1;
+        /// <summary>Current player XP within the current level.</summary>
+        public int PlayerXp { get; set; } = 0;
+        /// <summary>Total enemies killed across all sessions.</summary>
+        public int EnemiesKilledTotal { get; set; } = 0;
+        /// <summary>Total waves completed across all sessions.</summary>
+        public int WavesCompleted { get; set; } = 0;
+
+        // Boss & Encounter Systems (Save V9)
+        public List<string> CompletedEncounters { get; set; } = new();
+        public List<string> DefeatedBossIds { get; set; } = new();
+        public List<string> EncounteredElites { get; set; } = new();
+        public List<string> ClaimedRewards { get; set; } = new();
+
+        // Ability System (Save V10)
+        /// <summary>Ability levels keyed by ability ID.</summary>
+        public Dictionary<string, int> AbilityLevels { get; set; } = new();
+        /// <summary>Current loadout configuration (index 0 = active).</summary>
+        public List<Player.Abilities.LoadoutSaveData> LoadoutData { get; set; } = new();
+        /// <summary>Active loadout index.</summary>
+        public int ActiveLoadoutIndex { get; set; } = 0;
+        /// <summary>Ability manager runtime state (cooldowns, charges, etc.).</summary>
+        public Player.Abilities.AbilityManagerSaveData? AbilityManagerState { get; set; }
+        /// <summary>Progression data (level, XP, prestige).</summary>
+        public Player.Progression.ProgressionSaveData? ProgressionData { get; set; }
+
+        // Equipment Systems (Save V11)
+        /// <summary>Complete equipment progression save data.</summary>
+        public Equipment.Save.EquipmentSaveData? EquipmentData { get; set; }
+
+        // Gathering, Profession & Crafting Systems (Save V12)
+        /// <summary>Profession levels and experience.</summary>
+        public List<Gathering.ProfessionSaveState> ProfessionStates { get; set; } = new();
+        /// <summary>Resource node world states for respawn tracking.</summary>
+        public List<Gathering.ResourceNodeState> ResourceNodeStates { get; set; } = new();
+        /// <summary>Known/learned recipe IDs.</summary>
+        public List<string> KnownRecipeIds { get; set; } = new();
+        /// <summary>Active craft queue items.</summary>
+        public List<Crafting.CraftQueueItem> CraftQueueItems { get; set; } = new();
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();
@@ -118,7 +174,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 6;
+        private const int CurrentSaveVersion = 12;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.
@@ -154,6 +210,56 @@ namespace HeroOfEternia.Core
                 // Headless test environments do not expose a device unique ID.
                 return AppSalt + "::TEST_DEVICE";
             }
+        }
+
+        // ----------------------------------------------------------------
+        // Active session profile — held in memory between saves
+        // ----------------------------------------------------------------
+        private SaveProfile? _activeProfile;
+
+        public SaveProfile GetOrCreateActiveProfile()
+        {
+            if (_activeProfile == null)
+                _activeProfile = new SaveProfile { SaveVersion = CurrentSaveVersion };
+            return _activeProfile;
+        }
+
+        /// <summary>
+        /// Called by GameLoop to update in-memory profile stats before autosave.
+        /// </summary>
+        public void UpdateSessionStats(int playerLevel, int playerXp, int enemiesKilled, int wavesCompleted)
+        {
+            var p = GetOrCreateActiveProfile();
+            p.PlayerLevel        = playerLevel;
+            p.PlayerXp           = playerXp;
+            p.EnemiesKilledTotal = enemiesKilled;
+            p.WavesCompleted     = wavesCompleted;
+            p.Stats.Level        = playerLevel;
+            p.Stats.CurrentXp    = playerXp;
+            p.StatsData.KillsCount = enemiesKilled;
+        }
+
+        /// <summary>
+        /// Called by EncounterManager to sync boss battle states.
+        /// </summary>
+        public void UpdateEncounterStats(
+            IEnumerable<string> completed,
+            IEnumerable<string> defeated,
+            IEnumerable<string> elites,
+            IEnumerable<string> claimedRewards)
+        {
+            var p = GetOrCreateActiveProfile();
+            p.CompletedEncounters = new List<string>(completed);
+            p.DefeatedBossIds     = new List<string>(defeated);
+            p.EncounteredElites    = new List<string>(elites);
+            p.ClaimedRewards       = new List<string>(claimedRewards);
+        }
+
+        /// <summary>Saves the active in-memory profile to the given slot.</summary>
+        public bool Save(int slotId)
+        {
+            var profile = GetOrCreateActiveProfile();
+            return Save(slotId, profile);
         }
 
         public bool Save(int slotId, SaveProfile profile)
@@ -333,6 +439,55 @@ namespace HeroOfEternia.Core
                 profile.NpcStates            = new Dictionary<string, NpcSaveState>();
                 profile.ReputationSnapshot   = new Dictionary<string, int>();
                 profile.RelationshipSnapshot = new Dictionary<string, float[]>();
+            }
+            if (profile.SaveVersion < 7)
+            {
+                profile.UnlockedCombatStyles     = new List<string>();
+                profile.LearnedAbilities          = new List<string>();
+                profile.TemporaryCombatModifiers  = new Dictionary<string, float>();
+                profile.WeaponDurability          = new Dictionary<string, float>();
+            }
+            if (profile.SaveVersion < 8)
+            {
+                profile.UnlockedAbilityIds   = new List<string>();
+                profile.EquippedAbilitySlots = new string[4];
+                profile.PlayerLevel          = profile.Stats.Level;  // promote from Stats
+                profile.PlayerXp             = profile.Stats.CurrentXp;
+                profile.EnemiesKilledTotal   = profile.StatsData.KillsCount;
+                profile.WavesCompleted       = 0;
+            }
+            if (profile.SaveVersion < 9)
+            {
+                profile.CompletedEncounters = new List<string>();
+                profile.DefeatedBossIds     = new List<string>();
+                profile.EncounteredElites    = new List<string>();
+                profile.ClaimedRewards       = new List<string>();
+            }
+            if (profile.SaveVersion < 10)
+            {
+                profile.UnlockedAbilityIds = profile.LearnedAbilities ?? new List<string>();
+                profile.AbilityLevels = new Dictionary<string, int>();
+                profile.LoadoutData = new List<Player.Abilities.LoadoutSaveData>();
+                profile.ActiveLoadoutIndex = 0;
+                profile.AbilityManagerState = null;
+                profile.ProgressionData = new Player.Progression.ProgressionSaveData
+                {
+                    Level = profile.PlayerLevel,
+                    Experience = profile.PlayerXp,
+                    PrestigeLevel = 0,
+                    Version = 1
+                };
+            }
+            if (profile.SaveVersion < 11)
+            {
+                profile.EquipmentData = new Equipment.Save.EquipmentSaveData();
+            }
+            if (profile.SaveVersion < 12)
+            {
+                profile.ProfessionStates = new List<Gathering.ProfessionSaveState>();
+                profile.ResourceNodeStates = new List<Gathering.ResourceNodeState>();
+                profile.KnownRecipeIds = new List<string>();
+                profile.CraftQueueItems = new List<Crafting.CraftQueueItem>();
             }
             profile.SaveVersion = CurrentSaveVersion;
         }

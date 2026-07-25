@@ -1,0 +1,23 @@
+{
+  "Version": "1.0",
+  "Quests": [
+    {
+      "Id": "quest_goblin_cull",
+      "Title": "Cull the Goblin Horde",
+      "Description": "Defeat 10 Goblins terrorizing the outskirts of Eternia.",
+      "TargetCount": 10,
+      "TargetType": "goblin_warrior",
+      "GoldReward": 300,
+      "XpReward": 500
+    },
+    {
+      "Id": "quest_titan_downfall",
+      "Title": "The Awakening Titan",
+      "Description": "Confront and defeat the Golem Titan in the ancient arena.",
+      "TargetCount": 1,
+      "TargetType": "boss_golem_titan",
+      "GoldReward": 2500,
+      "XpReward": 5000
+    }
+  ]
+}

@@ -30,6 +30,16 @@ namespace HeroOfEternia.Player
         Respawn,
         Frozen,
         Disabled,
+
+        // ── Combat States (Prompt 10) ─────────────────────────────────
+        Attack,        // Light attack swing
+        HeavyAttack,   // Charged / heavy attack swing
+        Casting,       // Casting a spell / ranged attack
+        Blocking,      // Active block (shield / parry window)
+        Parrying,      // Precise parry input (brief window)
+        HitReaction,   // Flinch from being hit
+        Knockdown,     // Knocked to the ground
+        Recovery,      // Rising from knockdown before Idle
     }
 
     /// <summary>

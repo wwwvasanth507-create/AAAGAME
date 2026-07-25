@@ -1,0 +1,52 @@
+{
+  "Version": "1.0",
+  "Items": [
+    {
+      "Id": "weapon_iron_sword",
+      "Name": "Iron Broadsword",
+      "Type": "Weapon",
+      "Rarity": "Common",
+      "BaseDamage": 25.0,
+      "AttackSpeed": 1.2,
+      "GoldValue": 150,
+      "Description": "A sturdy forged iron broadsword."
+    },
+    {
+      "Id": "weapon_flame_blade",
+      "Name": "Blazing Flameblade",
+      "Type": "Weapon",
+      "Rarity": "Rare",
+      "BaseDamage": 58.0,
+      "AttackSpeed": 1.4,
+      "GoldValue": 850,
+      "Description": "Imbued with molten fire, inflicts Burn on hit."
+    },
+    {
+      "Id": "armor_plate_mail",
+      "Name": "Eternian Plate Armor",
+      "Type": "Armor",
+      "Rarity": "Uncommon",
+      "BaseDefense": 40.0,
+      "HealthBonus": 120.0,
+      "GoldValue": 500,
+      "Description": "Heavy protective plate armor forged in Eternia."
+    },
+    {
+      "Id": "consumable_health_potion",
+      "Name": "Greater Healing Potion",
+      "Type": "Consumable",
+      "Rarity": "Common",
+      "HealAmount": 150.0,
+      "GoldValue": 50,
+      "Description": "Restores 150 Health instantly."
+    },
+    {
+      "Id": "mat_iron_ingot",
+      "Name": "Iron Ingot",
+      "Type": "Material",
+      "Rarity": "Common",
+      "GoldValue": 20,
+      "Description": "Refined iron used in blacksmith crafting."
+    }
+  ]
+}

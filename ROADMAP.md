@@ -21,16 +21,21 @@ gantt
     Phase 8: Procedural Terrain & Navigation (P8)    :done,   p8,  after p7,   2d
     section Database & World
     Phase 9: NPC Architecture (P9)                    :done,   p9a, after p8,   2d
-    Phase 10: World Systems Audit (P9-Audit)           :active, p9b, after p9a,  1d
+    Phase 10: World Systems Audit (P9-Audit)           :done,   p9b, after p9a,  1d
+    Phase 11: Combat Architecture (P10)                :done,   p10a, after p9b,  2d
+    Phase 12: Gameplay Expansion (P11)                 :done,   p10b, after p10a, 2d
+    Phase 13: Boss & Elite Encounters (P12)            :done,   p10c, after p10b, 2d
+    section Ability & Progression
+    Phase 14: Ability System (P13)                   :done,   p13, after p10c, 1d
     section Rendering
-    Phase 10: 3D Shaders & Presets (P12-P30)         :        p10, after p9,   10d
+    Phase 15: 3D Shaders & Presets (P14-P30)         :active, p14, after p13,  10d
     section Mechanics
-    Phase 11: Gameplay & Combat (P31-P70)           :        p11, after p10,  20d
+    Phase 16: Gameplay & Combat (P31-P70)           :        p15, after p14,  20d
     section Content
-    Phase 12: Dungeons, AI & World (P71-P110)       :        p12, after p11,  20d
+    Phase 17: Dungeons, AI & World (P71-P110)       :        p16, after p15,  20d
     section Polish
-    Phase 13: UI/UX & Audio (P111-P130)             :        p13, after p12,  10d
-    Phase 14: Security & QA Release (P131-P150)     :        p14, after p13,  10d
+    Phase 18: UI/UX & Audio (P111-P130)             :        p17, after p16,  10d
+    Phase 19: Security & QA Release (P131-P150)     :        p18, after p17,  10d
 ```
 
 ---
@@ -104,20 +109,82 @@ gantt
     *   `Save Integration` — SaveProfile V5 serialization.
     *   `Test suite` — Expanded from 27 to 33 unit/integration tests running headlessly.
 
-### 🔲 Phase 9: Offline Database & Local Storage (Next — Prompts 9–11)
-*   **Planned Features:** SQLite schema for items, quests, world states. Data access layer (DAL). Migration runner.
+### ✅ Phase 9: NPC Architecture (Completed — Prompt 9)
+*   **Features:**
+    *   `NpcDefinition` — NpcData and 15 NpcTypeEnum variants.
+    *   `NpcStateMachine` — 12-state FSM, conditional transition scoring.
+    *   `NpcScheduler` — Time-driven periods and override stack.
+    *   `Social Systems` — Scoped reputation and relationship floats.
+    *   `DialogueFramework` — Localization-key conditional scoring.
+    *   `NpcSpawner` — Seed-based placement rules.
+    *   `Save Integration` — SaveProfile V6 serialization.
+    *   `Test suite` — Expanded from 33 to 42 tests.
 
-### 🔲 Phase 10: 3D Rendering & Shaders (Prompts 12–30)
-*   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, outline highlights.
+### ✅ Phase 10: Combat Architecture (Completed — Prompt 10)
+*   **Features:**
+    *   `CombatManager` — Attacks, cooldowns, projectiles, and events coordination.
+    *   `WeaponDefinition` — Stats, range, speeds, visual/audio hooks for 12 weapons.
+    *   `TargetingSystem` — Locking modes and LoS math queries.
+    *   `HitDetection` — Headless bounding sphere/box collision checks.
+    *   `DamageSystem` — Element multipliers, resistances, and critical hits.
+    *   `StatusEffects` — Buff/de-buff ticks, stack limits, duration refreshes.
+    *   `ProjectileSystem` — Simulation pool, Homings, and impact callbacks.
+    *   `Player FSM Extension` — 8 combat states (Attack, Block, Parry, Stun, Knockdown).
+    *   `Save Integration` — SaveProfile V7 serialization.
+    *   `Test suite` — Expanded from 42 to 52 tests.
 
-### 🔲 Phase 11: Gameplay & Combat (Prompts 31–70)
-*   **Planned Features:** Combat states, weapons hitboxes, dynamic attributes multipliers, skill trees.
+### ✅ Phase 11: Gameplay Expansion (Completed — Prompt 11)
+*   **Features:**
+    *   `Enemy Spawning` — Data-driven EnemyDefinition/EnemyDatabase registry, 5 default configurations.
+    *   `Enemy AI` — Headless 8-state FSM controller node managing movement, attack triggers and deaths.
+    *   `Spawner` — Wave-based spawner featuring golden-ratio scatter placement.
+    *   `Player Abilities` — 4-slot executor service supporting cooldowns, resource usage and 5 default skills.
+    *   `Game Loop` — Managed timer session, XP progression thresholds, pauses, and autosaves on wave clears.
+    *   `Save Integration` — SaveProfile V8 version promoting level, XP, kill tracking.
+    *   `Test suite` — Expanded from 52 to 62 unit/integration tests running headlessly.
 
-### 🔲 Phase 12: Dungeons, World & AI (Prompts 71–110)
-*   **Planned Features:** Seeded generation, FSM enemy AI, dialogues.
+### ✅ Phase 12: Boss Framework, Elite Enemies & Encounter System (Completed — Prompt 12)
+*   **Features:**
+    *   `Boss Database` — Data-driven configurations with BossClass templates, loot tables, and music profiles.
+    *   `Elite Enemies` — Flags-based combinable modifiers (Fortified, Swift, Fireborn, etc.) scaling HP/damage/speed and resistances.
+    *   `Phase System` — Multi-stage combat phases transitioning on HP thresholds or enrage timers.
+    *   `Special Attacks` — Melee combos, AoE spells, summon hooks, charge runs, and hazards.
+    *   `Encounter Manager` — Warmup, active, victory, defeat states coordination with boundary cylinder checks and arena resets.
+    *   `Save Integration` — SaveProfile V9 persisting completions, defeat IDs, and claims with backward compatibility.
+    *   `Test suite` — Expanded from 62 to 72 unit/integration tests passing headlessly.
 
-### 🔲 Phase 13: UI/UX & Audio (Prompts 111–130)
+### ✅ Phase 13: Ability System, Skill Framework & Player Progression (Completed — Prompt 13)
+*   **Features:**
+    *   `Ability Database` — Data-driven JSON with 10 abilities, each containing 40+ fields (Unique ID, Internal Name, Display Name, Description, Category, Ability Type, Target Type, Element, Animation/Audio/VFX References, Icon, Cooldown, Cast Time, Range, AoE, Resource Costs, Unlock Requirements, Upgrade Path Hook, Localization Key, Version, DLC Fields)
+    *   `Ability Categories` — 11 extensible categories (Melee, Magic, Ranged, Movement, Support, Healing, Defensive, Summoning, Passive, Ultimate, Utility) with CategoryManager supporting runtime registration
+    *   `Ability Manager` — Full execution framework with activation pipeline, cancellation, interruptions, cooldowns, charges, resource consumption, target validation, animation/VFX/SFX hooks, global cooldown, network-ready event-driven architecture
+    *   `Resource Framework` — 7 configurable resource types (Health, Mana, Stamina, Energy, Focus, Rage, Spirit) with configurable pools, regen rates, no hardcoded assumptions
+    *   `Player Progression` — Level 1-100 with XP curves, stat growth hooks, prestige system (10 levels), future seasonal/prestige support
+    *   `Ability Loadouts` — 6 configurable loadouts with primary/secondary/passive/ultimate/quick slots, save/load persistence
+    *   `Ability Effects` — 12 reusable effect types (Damage, Healing, Shield, Teleport, Buff, Debuff, Summon, ProjectileSpawn, AreaCreation, Movement, EnvironmentalInteraction, Custom) with stacking, duration, tick-based processing
+    *   `Save Integration` — SaveProfile V10 with unlocked abilities, ability levels, loadout data, ability manager state, progression data, version migration
+    *   `Test suite` — Expanded from 72 to 170 unit/integration tests (98 new tests across 16 test areas)
+    *   `Documentation` — ABILITY_SYSTEM.md, PROJECT_MEMORY.md, ARCHITECTURE.md updated
+
+### ✅ Phase 14: Equipment, Gear Progression & Attribute Calculation System (Completed — Prompt 14)
+*   **Features:**
+    *   `Attribute Calculation Engine` — Centralized deterministic engine with 10 modifier layers (Base, Equipment, Ability, Buff, Debuff, Environment, Difficulty, Guild, Mount, Pet), dirty-flag caching, event-driven recalculations
+    *   `Expanded Attributes` — 40+ attribute types covering core vitals, combat stats, elemental resistances (Fire, Ice, Lightning, Poison, Holy, Shadow), status resistances (Stun, Freeze, Burn, Bleed, Silence, Knockback), special hooks (LifeSteal, ManaRegen, ExperienceBonus, GoldBonus)
+    *   `Item Modifier System` — Reusable modifier definitions with 5 stacking rules (Additive, HighestOnly, LowestOnly, Multiplicative, Override), 22 default modifier presets, category-based indexing
+    *   `Enchantment Framework` — 23 enchantments across 10 elements (Fire, Ice, Lightning, Poison, Holy, Shadow, Wind, Earth, Water, Custom) with level 1-10 scaling, target type filtering (Weapon/Armor/Accessory/Any)
+    *   `Durability System` — Per-item durability with max/current tracking, damage sources (Attack, Block, Hit, Ability), break state with repair hooks, visual damage event hooks, save/load persistence
+    *   `Gear Set System` — 4 default sets (Iron Warrior, Flame Mage, Shadow Assassin, Guardian) with tiered bonuses, piece counting, activation/deactivation events, visual override hooks
+    *   `Item Quality System` — 8 quality grades (Broken, Poor, Normal, Fine, Superior, Masterwork, Legendary, Divine) with configurable stat multipliers (0.25x-5.00x), upgrade success bonuses, max upgrade level caps, VFX hooks
+    *   `Upgrade Framework` — 10 upgrade levels with progressive success rates (95%→25%), failure downgrade chance, critical failure destroy chance (0%→20%), stat multiplier increases per level, cost hooks for future blacksmith integration
+    *   `Save Integration` — SaveProfile V11 with EquipmentSaveData (durability, upgrades, enchantments, quality, modifiers, active sets), V10→V11 migration
+    *   `Test suite` — 17 new tests covering all systems (attribute engine, modifiers, enchantments, durability, gear sets, quality, upgrades, save/load, version migration, stress testing)
+    *   `Documentation` — ATTRIBUTE_ENGINE.md, EQUIPMENT_PROGRESSION.md, MODIFIER_SYSTEM.md, ENCHANTMENT_SYSTEM.md, DURABILITY_SYSTEM.md
+
+### 🔲 Phase 15: Crafting, Gathering, Professions & Economy (Next — Prompt 15)
+*   **Planned Features:** Crafting system with recipes, gathering/harvesting mechanics, profession system, merchant economy, item enhancement through crafting, resource management.
+
+### 🔲 Phase 16: UI/UX & Audio (Prompts 71–110)
 *   **Planned Features:** Glassmorphic HUD overlay screens, settings, volume sliders.
 
-### 🔲 Phase 14: Security, Optimization & QA Release (Prompts 131–150)
+### 🔲 Phase 17: Security & QA Release (Prompts 111–150)
 *   **Planned Features:** OBX profiling, Google Play Store signed release APK.

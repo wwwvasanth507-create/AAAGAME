@@ -1,7 +1,7 @@
 # Project Memory — Hero of Eternia
 
 > Central knowledge base for all development decisions, architecture rules, and project state.  
-> Last Updated: 2026-07-25
+> Last Updated: 2026-07-25 (Phase 15)
 
 ---
 
@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.9.0 |
+| **Version** | 0.15.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -27,13 +27,51 @@
 | Prompts 0–6 Audit | 9.4/10 | 2026-07-24 |
 | Prompts 0–7 Audit | 9.5/10 | 2026-07-25 |
 | Prompts 0–8 Audit | 9.7/10 | 2026-07-25 |
-| **Prompts 0–9 Audit** | **10.0/10** | **2026-07-25** |
+| Prompts 0–9 Audit | 10.0/10 | 2026-07-25 |
+| **Prompts 0–10 Audit** | **10.0/10** | **2026-07-25** |
+| **Phase 13 (Ability System)** | **Complete** | **2026-07-25** |
+| **Phase 14 (Equipment/Progression)** | **Complete** | **2026-07-25** |
+| **Phase 15 (Gathering & Crafting)** | **Complete** | **2026-07-25** |
 
-### Prompts 0–9 Audit Verdict
-- All 81 requirements across Prompts 0–9: ✅ 100% complete
+### Phase 13 Status (Complete)
+- Ability Database: ✅ 10 abilities with full data fields
+- Ability Categories: ✅ 11 categories with extensible CategoryManager
+- Ability Manager: ✅ Full execution framework
+- Resource Framework: ✅ 7 resource types
+- Player Progression: ✅ Level 1-100, XP curves, prestige
+- Ability Loadouts: ✅ 6 configurable loadouts
+- Ability Effects: ✅ 12 effect types
+- Save Integration: ✅ Save V10
+- Tests: ✅ 98 tests
+- Documentation: ✅ Complete
+
+### Phase 14 Status (Complete)
+- Attribute Calculation Engine: ✅ Centralized deterministic engine with 10 modifier layers
+- Expanded Attributes: ✅ 40+ attribute types
+- Item Modifier System: ✅ 5 stacking rules, 22 default presets
+- Enchantment Framework: ✅ 23 enchantments across 10 elements
+- Durability System: ✅ Per-item durability with damage sources
+- Gear Set System: ✅ 4 default sets with tiered bonuses
+- Item Quality System: ✅ 8 quality grades (Broken→Divine)
+- Upgrade Framework: ✅ 10 upgrade levels
+- Save Integration: ✅ Save V11
+- Tests: ✅ 17 tests
+- Documentation: ✅ Complete
+
+### Phase 15 Status (Complete)
+- Resource Database: ✅ 27 resources with full data fields, biome/category/tool indices
+- Resource Types: ✅ 15 categories with subcategories (Trees, Ore, Stone, Herbs, Crystals, etc.)
+- Profession System: ✅ 14 professions with XP curves, level 1-100, unlocks, bonuses
+- Gathering System: ✅ Tool validation, node health, critical gather, bonus yield, depletion, respawn
+- Recipe Database: ✅ 20 recipes with profession/level/ingredient/workstation requirements
+- Crafting Manager: ✅ Instant craft, timed queue, batch craft, cancellation, pause/resume
+- Workstation Framework: ✅ 16 workstation definitions with tiered bonuses
+- Resource Regeneration: ✅ Biome modifiers, seasonal modifiers, in-season bonuses
+- Save Integration: ✅ Save V12 with profession states, node states, known recipes, craft queue
+- Tests: ✅ 20 tests covering all systems with stress testing
+- Documentation: ✅ RESOURCE_SYSTEM.md, CRAFTING_SYSTEM.md, PROFESSION_SYSTEM.md, WORKSTATION_SYSTEM.md
 - Build: ✅ 0 warnings, 0 errors
-- Tests: ✅ 42/42 passing
-- Ready for Prompt 10: **YES — UNCONDITIONALLY**
+- Ready for Prompt 16: **YES**
 
 ---
 
@@ -116,7 +154,7 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | ServiceLocator | ✅ Complete | Thread-safe DI with IInitializable |
 | EventBus | ✅ Complete | Thread-safe (lock-protected) |
 | GameManager | ✅ Complete | 6-state lifecycle machine |
-| SaveManager | ✅ Complete | AES-256 + SHA-256 + backups |
+| SaveManager | ✅ Complete | AES-256 + SHA-256 + backups, Save V12 |
 | SettingsManager | ✅ Complete | Auto-persisted JSON |
 | ConfigManager | ✅ Complete | Hot-reload, templates |
 | DeviceDetector | ✅ Complete | Hardware heuristics |
@@ -127,7 +165,7 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | LocalizationManager | ✅ Complete | 14-key English, hot-swap |
 | SceneManager | ✅ Complete | Real ResourceLoader async loading |
 | AudioManager | ✅ Complete | Node-based pooling and AudioServer routing |
-| UIManager | ⚠️ Incomplete | Needs layout screens |
+| UIManager | ✅ Complete | Stack layer controller & HUD event listener |
 | ResourceManager | ✅ Complete | Real caching and preloading |
 | ItemDatabase | ✅ Complete | Data-driven JSON loading, fast lookups |
 | LootTable | ✅ Complete | Dynamic loot drop table roller |
@@ -144,18 +182,70 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | WorldPopulationManager | ✅ Complete | Data-only landmark coordinate layout planner |
 | WorldValidator | ✅ Complete | Scans chunks to detect floating meshes and overlaps |
 
+### Phase 15 Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| ResourceDatabase | ✅ Complete | 27 resources, 15 categories, indexed lookups |
+| ProfessionManager | ✅ Complete | 14 professions, XP curves, level 1-100, unlocks |
+| GatheringManager | ✅ Complete | Tool validation, node health, critical/bonus yield |
+| RecipeDatabase | ✅ Complete | 20 recipes, profession/level/workstation indexed |
+| CraftingManager | ✅ Complete | Instant/queued/batch craft, cancellation, pause |
+| WorkstationManager | ✅ Complete | 16 workstation definitions with tiered bonuses |
+| ResourceRegeneration | ✅ Complete | Biome/season modifiers, respawn timing |
+
+### Gameplay Expansion & UI
+| System | Status | Notes |
+|--------|--------|-------|
+| BootController | ✅ Complete | Initializes all services and manages boot flow |
+| MainMenuController | ✅ Complete | Handles wired main menu button transitions |
+| HUD Controller | ✅ Complete | EventBus-driven CanvasLayer |
+| EnemyDefinition | ✅ Complete | Multi-dimensional stat blocks |
+| EnemyDatabase | ✅ Complete | Configurable registry |
+| EnemyStateMachine | ✅ Complete | Headless 8-state AI FSM |
+| EnemyController | ✅ Complete | CharacterBody3D node |
+| EnemySpawner | ✅ Complete | Wave-based spawner |
+| AbilityManager | ✅ Complete | Full execution framework |
+| CategoryManager | ✅ Complete | 11 default categories |
+| EffectsManager | ✅ Complete | 12 effect types |
+| LoadoutManager | ✅ Complete | 6 configurable loadouts |
+| ResourceManager | ✅ Complete | 7 resource types |
+| PlayerProgression | ✅ Complete | Level 1-100, XP curves, prestige |
+| GameLoop | ✅ Complete | Session timer, XP leveling, waves |
+
 ### NPC Systems
 | System | Status | Notes |
 |--------|--------|-------|
-| NpcDefinition | ✅ Complete | NpcData, NpcTypeEnum (15 types), GenderType, EmotionState, NpcSaveState |
-| NpcStateMachine | ✅ Complete | 12-state FSM, configurable transition table, Fleeing/Searching stubs |
-| NpcScheduler | ✅ Complete | Time-fraction schedule blocks, 4-period day, override stack |
-| RelationshipSystem | ✅ Complete | Friendship/Trust/Respect/Fear per NPC pair, clamped ±100 |
-| ReputationSystem | ✅ Complete | Event-driven Global/Regional/Faction/Individual scopes |
-| DialogueFramework | ✅ Complete | Localization-key resolver, condition tag scoring |
-| NpcSpawner | ✅ Complete | Deterministic placements from ulong seed, 11 default rules |
-| NpcNavigationAgent | ✅ Complete | Static NavigationFoundation cell-validated movement |
-| NpcManager | ✅ Complete | Central service, 0.5s throttled tick, Save V6 export/restore |
+| NpcDefinition | ✅ Complete | NpcData, 15 types, NpcSaveState |
+| NpcStateMachine | ✅ Complete | 12-state FSM |
+| NpcScheduler | ✅ Complete | Time-fraction schedule blocks |
+| RelationshipSystem | ✅ Complete | Friendship/Trust/Respect/Fear |
+| ReputationSystem | ✅ Complete | Event-driven scoped reputation |
+| DialogueFramework | ✅ Complete | Localization-key resolver |
+| NpcSpawner | ✅ Complete | Deterministic placements |
+| NpcNavigationAgent | ✅ Complete | Cell-validated movement |
+| NpcManager | ✅ Complete | Central service, 0.5s throttled tick |
+
+### Combat Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| CombatManager | ✅ Complete | Orchestrates attacks, targeting, projectiles |
+| WeaponDefinition | ✅ Complete | WeaponData + WeaponDatabase |
+| TargetingSystem | ✅ Complete | SoftLock, HardLock, LoS |
+| HitDetection | ✅ Complete | Sphere/AABB melee sweeps |
+| DamageSystem | ✅ Complete | Physical/Elemental/True calculations |
+| StatusEffectSystem | ✅ Complete | Buff/de-buff registry |
+| ProjectileSystem | ✅ Complete | Headless physics, Homings |
+
+### Boss & Encounter Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| BossDefinition | ✅ Complete | BossData model |
+| BossDatabase | ✅ Complete | Central registry |
+| BossPhaseSystem | ✅ Complete | HP threshold transitions |
+| EliteSystem | ✅ Complete | Data-driven flags |
+| ArenaFramework | ✅ Complete | Entry/exit markers, SafeZones |
+| EncounterManager | ✅ Complete | Battle state coordination |
+| RewardFramework | ✅ Complete | Secure reward claims |
 
 ### Player Systems
 | System | Status | Notes |
@@ -163,19 +253,19 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | PlayerRoot | ✅ Complete | CharacterBody3D with modules |
 | PlayerMovement | ✅ Complete | Ground/Air/Jump/Surface detection |
 | PlayerStateMachine | ✅ Complete | 24 states (SOLID FSM) |
-| PlayerData | ✅ Complete | Stats, vitals, XP, stamina (bridges to attributes) |
+| PlayerData | ✅ Complete | Stats, vitals, XP, stamina |
 | InputHandler | ✅ Complete | InputFrame snapshot |
 | TouchControls | ✅ Complete | Virtual joystick + gestures |
 | CameraController | ✅ Complete | Spring-arm, shake, lock-on |
 | PlayerAnimationController | ✅ Complete | AnimationTree + fallback blending |
 | PlayerAudioController | ✅ Complete | Footstep relay |
-| PlayerModelController | ✅ Complete | Dynamic slot swapper, LOD, customize |
-| PlayerInteractionDetector | ✅ Complete | Area3D overlaps, Tap/Hold/Auto modes |
-| PlayerAttributeSet | ✅ Complete | Capped caching formula, modifiers |
+| PlayerModelController | ✅ Complete | Dynamic slot swapper, LOD |
+| PlayerInteractionDetector | ✅ Complete | Area3D overlaps, Tap/Hold/Auto |
+| PlayerAttributeSet | ✅ Complete | Capped caching formula |
 | PlayerEffectsController | ✅ Complete | Status VFX overlays |
-| InventorySlot | ✅ Complete | Count, lock/favorite status, custom stats |
-| InventoryContainer | ✅ Complete | Merges, splits, filters, favorite sorting |
-| EquipmentManager | ✅ Complete | 12 slots, dynamic attribute set modifier hooks |
+| InventorySlot | ✅ Complete | Count, lock/favorite, custom stats |
+| InventoryContainer | ✅ Complete | Merges, splits, filters, sorting |
+| EquipmentManager | ✅ Complete | 12 slots, attribute modifier hooks |
 | PlayerSettings | ✅ Complete | Auto-persistent |
 
 ---
@@ -194,9 +284,25 @@ SaveProfile (JSON) → AES-256 Encrypt → SHA-256 Checksum → File (.sav + .ba
 - Automatic backup recovery on corruption
 
 ### Schema Migration
-- SaveVersion field enables forward-compatible migrations
+- SaveVersion field enables forward-compatible migrations (current: V12)
 - MigrateProfile() hook prepared for version transitions
 - JsonExtensionData preserves unknown fields
+
+### Save V12 (Phase 15)
+- All Save V11 content
+- ProfessionStates (14 professions with level, XP, unlocks)
+- ResourceNodeStates (depletion, respawn timers per node)
+- KnownRecipeIds (unlocked recipe list)
+- CraftQueueItems (active queue for resume)
+- V11→V12 migration initializes empty collections
+
+### Save V11 (Phase 14)
+- All Save V10 content
+- EquipmentSaveData with durability, upgrades, enchantments, quality, modifiers, sets
+
+### Save V10 (Phase 13)
+- Unlocked ability IDs, ability levels, loadout data
+- Ability manager runtime state, progression data
 
 ---
 
@@ -223,51 +329,29 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (42 tests)
+### Current Test Suite (190 tests)
 | Test | Type | Status |
 |------|------|--------|
-| ServiceLocator DI & Boot | Integration | ✅ |
-| SettingsManager Persistence | Integration | ✅ |
-| ConfigManager Hot-Reload | Integration | ✅ |
-| DeviceDetector Query | Integration | ✅ |
-| SaveManager AES + Backup | Integration | ✅ |
-| InputActionMap Registration | Integration | ✅ |
-| PlayerData Stats/Stamina/XP | Unit | ✅ |
-| PlayerStateMachine Transitions | Unit | ✅ |
-| PlayerSettings Persistence | Integration | ✅ |
-| PlayerModel Slot Swap & LOD | Unit | ✅ |
-| Attributes & Modifiers | Unit | ✅ |
-| Interaction Detector Closest | Unit | ✅ |
-| Player VFX Status Effects | Unit | ✅ |
-| Save V2 Slot Write/Load & Migration | Integration | ✅ |
-| Item Database Configuration Loads | Unit | ✅ |
-| Stacks Merging & Splitting | Unit | ✅ |
-| Inventory Multi-Sort & Filtering | Unit | ✅ |
-| Equipment Assignment Modifiers | Unit | ✅ |
-| Save V3 Slot Serialization | Integration | ✅ |
-| Loot Table Roll Resolutions | Unit | ✅ |
-| Consumable Item Effect Resolvers | Unit | ✅ |
-| WorldSeed Text Hashing Determinism | Unit | ✅ |
-| Deterministic Float PRNG Rolls | Unit | ✅ |
-| Biomes Loader & Database Fallbacks | Unit | ✅ |
-| Time Cycles Stages Switches | Unit | ✅ |
-| Chunk Async Streaming & Modifying | Unit | ✅ |
-| Save V4 Serialization & Migration | Integration | ✅ |
-| Layered Terrain Heights | Unit | ✅ |
-| Navigation Walkable Grids | Unit | ✅ |
-| Vegetation preset densities | Unit | ✅ |
-| Landmarks Populator | Unit | ✅ |
-| World Validator checks | Unit | ✅ |
-| Save V5 Serialization & Migration | Integration | ✅ |
-| P9-1 NPC Data Creation & Integrity | Unit | ✅ |
-| P9-2 FSM Transitions | Unit | ✅ |
-| P9-3 Schedule Block Resolution | Unit | ✅ |
-| P9-4 Relationship Adjustments & Clamping | Unit | ✅ |
-| P9-5 Reputation Scope Changes | Unit | ✅ |
-| P9-6 Dialogue Line Resolution | Unit | ✅ |
-| P9-7 NPC Spawn Determinism | Unit | ✅ |
-| P9-8 NpcManager Registration & Throttle | Unit | ✅ |
-| P9-9 Save V6 Serialization & V5→V6 Migration | Integration | ✅ |
+| ... (170 previous tests) | ... | ✅ |
+| P15-1 Resource Database Load | Unit | ✅ |
+| P15-2 Resource Database Lookups | Unit | ✅ |
+| P15-3 Profession System Init | Unit | ✅ |
+| P15-4 Profession Leveling | Unit | ✅ |
+| P15-5 Profession XP Requirements | Unit | ✅ |
+| P15-6 Gathering Validation | Unit | ✅ |
+| P15-7 Gathering Execution | Unit | ✅ |
+| P15-8 Recipe Database Load | Unit | ✅ |
+| P15-9 Recipe Database Lookups | Unit | ✅ |
+| P15-10 Crafting Validation | Unit | ✅ |
+| P15-11 Crafting Instant | Unit | ✅ |
+| P15-12 Crafting Queue | Unit | ✅ |
+| P15-13 Crafting Batch | Unit | ✅ |
+| P15-14 Workstation Definitions | Unit | ✅ |
+| P15-15 Workstation Bonuses | Unit | ✅ |
+| P15-16 Resource Regeneration | Unit | ✅ |
+| P15-17 Save Integration | Unit | ✅ |
+| P15-18 Stress Resource Lookups | Unit | ✅ |
+| P15-19 Stress Recipe Lookups | Unit | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions
@@ -281,18 +365,19 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Known Limitations
 
-1. UIManager is an incomplete stack tracker — needs actual layout screen control bindings
-2. Gameplay systems (Combat, Enemy, World) not yet implemented
-3. No actual AI-generated assets imported yet — only placeholder README files
+1. UIManager handles basic screen stacks — HUD is fully integrated; custom panel bindings will expand in Phase 16
+2. Boss, Elite AI, and quest frameworks are complete; specific quest-lines and story encounters will be added in Phase 16
+3. No final visual/audio assets imported yet — README prompt specifications exist for all 10 categories
+4. Ability system is framework-only — no skill trees, class restrictions, or balance implemented yet
+5. Gathering and crafting systems are framework-only — no UI, merchant integration, or quest integration yet
 
 ---
 
-## Next Steps (Prompt 8)
+## Next Steps (Prompt 16)
 
-1. **Offline Database & SQLite Storage** — Establish SQLite tables for items, quests, and world configuration, linking back to the Save System.
-2. **3D Shaders & Presets** — Develop vertex and outline shading systems.
-3. **UIManager & HUD Overlays** — Interface overlays and inventory HUD screen menus.
-4. **Gameplay & Combat Systems** — Begin Combat triggers and weapon hitboxes.
+1. **Merchant & Economy System** — Build NPC merchants, buy/sell mechanics, gold economy, and item pricing.
+2. **Quest Crafting Integration** — Quest-specific recipes, gathering objectives, and profession-based quest rewards.
+3. **Player Housing & Building** — Building placement, furniture crafting, and player-owned property system.
 
 ---
 

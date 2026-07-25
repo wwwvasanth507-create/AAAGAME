@@ -1,0 +1,72 @@
+[
+  {
+    "bossId": "golem_titan",
+    "displayName": "Golem Titan",
+    "class": "behemoth",
+    "arenaId": "arena_titan",
+    "biome": "mountains",
+    "minLevel": 15,
+    "maxLevel": 25,
+    "maxHp": 800.0,
+    "maxShield": 200.0,
+    "armor": 50.0,
+    "moveSpeed": 3.5,
+    "element": "earth",
+    "weaknesses": [ "lightning" ],
+    "resistances": [ "fire", "ice" ],
+    "lootTableId": "loot_golem_titan",
+    "musicProfileId": "music_golem_titan",
+    "vfxProfileId": "vfx_golem_titan",
+    "voiceProfileId": "voice_golem_titan",
+    "cameraProfileId": "camera_golem_titan",
+    "rewardProfileId": "reward_golem_titan",
+    "specialAttacks": [
+      {
+        "attackId": "titan_slam",
+        "displayName": "Titan Slam",
+        "attackType": "areaOfEffect",
+        "baseDamage": 45.0,
+        "range": 6.0,
+        "cooldown": 8.0,
+        "castTime": 2.0,
+        "aoeRadius": 8.0,
+        "vfxCastKey": "vfx_titan_slam_cast",
+        "sfxCastKey": "sfx_titan_slam_cast"
+      },
+      {
+        "attackId": "titan_charge",
+        "displayName": "Titan Charge",
+        "attackType": "movementCharge",
+        "baseDamage": 35.0,
+        "range": 15.0,
+        "cooldown": 12.0,
+        "castTime": 1.5,
+        "aoeRadius": 0.0,
+        "vfxCastKey": "vfx_titan_charge_cast",
+        "sfxCastKey": "sfx_titan_charge_cast"
+      }
+    ],
+    "phases": [
+      {
+        "phaseIndex": 1,
+        "hpThresholdPct": 1.0,
+        "behaviorModifier": "",
+        "speedMultiplier": 1.0,
+        "damageMultiplier": 1.0,
+        "vfxTriggerKey": "",
+        "sfxTriggerKey": "",
+        "phaseSpecialAttackIds": [ "titan_slam" ]
+      },
+      {
+        "phaseIndex": 2,
+        "hpThresholdPct": 0.5,
+        "behaviorModifier": "enraged",
+        "speedMultiplier": 1.25,
+        "damageMultiplier": 1.5,
+        "vfxTriggerKey": "vfx_titan_enrage",
+        "sfxTriggerKey": "sfx_titan_enrage",
+        "phaseSpecialAttackIds": [ "titan_slam", "titan_charge" ]
+      }
+    ]
+  }
+]

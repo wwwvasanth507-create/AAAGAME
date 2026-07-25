@@ -34,6 +34,14 @@ namespace HeroOfEternia.Player
         public const string ANIM_SIT        = "sit";
         public const string ANIM_CELEBRATE  = "celebrate";
         public const string ANIM_RESPAWN    = "respawn";
+        public const string ANIM_ATTACK     = "attack";
+        public const string ANIM_HEAVY_ATTACK = "heavy_attack";
+        public const string ANIM_CAST       = "cast";
+        public const string ANIM_BLOCK      = "block";
+        public const string ANIM_PARRY      = "parry";
+        public const string ANIM_HIT_REACTION = "hit_reaction";
+        public const string ANIM_KNOCKDOWN  = "knockdown";
+        public const string ANIM_RECOVERY   = "recovery";
 
         // ---------------------------------------------------------------
         // BLEND TIMES (seconds) — tune for feel

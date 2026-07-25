@@ -128,6 +128,8 @@ namespace HeroOfEternia.Core
                 case "settings": return "res://Scenes/Settings.tscn";
                 case "splash": return "res://Scenes/Splash.tscn";
                 case "testenvironment": return "res://Scenes/TestEnvironment.tscn";
+                case "gameworld": return "res://Scenes/GameWorld.tscn";
+                case "hud": return "res://Scenes/HUD.tscn";
                 default: return $"res://Scenes/{name}.tscn";
             }
         }

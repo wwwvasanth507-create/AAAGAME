@@ -1,0 +1,401 @@
+{
+  "Version": "1.0",
+  "Recipes": [
+    {
+      "RecipeId": "craft_iron_sword",
+      "Name": "Iron Broadsword",
+      "Description": "A sturdy iron broadsword.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 5,
+      "Ingredients": {
+        "res_iron_ore": 5,
+        "res_oak_tree": 2
+      },
+      "ResultItemId": "weapon_iron_sword",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 50,
+      "RequiredWorkstation": "Anvil",
+      "IsDefaultUnlock": true,
+      "Category": "Weapons",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_health_potion",
+      "Name": "Health Potion",
+      "Description": "A basic health potion that restores 50 HP.",
+      "Profession": "Alchemy",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_herb_healing": 2,
+        "res_water_source": 1
+      },
+      "ResultItemId": "consumable_health_potion",
+      "Quantity": 1,
+      "CraftTime": 3.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 30,
+      "RequiredWorkstation": "AlchemyTable",
+      "IsDefaultUnlock": true,
+      "Category": "Potions",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_mana_potion",
+      "Name": "Mana Potion",
+      "Description": "A mana potion that restores 30 MP.",
+      "Profession": "Alchemy",
+      "RequiredLevel": 5,
+      "Ingredients": {
+        "res_herb_magic": 2,
+        "res_magic_water_spring": 1
+      },
+      "ResultItemId": "consumable_mana_potion",
+      "Quantity": 1,
+      "CraftTime": 4.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 45,
+      "RequiredWorkstation": "AlchemyTable",
+      "IsDefaultUnlock": false,
+      "Category": "Potions",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_wooden_planks",
+      "Name": "Wooden Planks",
+      "Description": "Processed wooden planks for construction.",
+      "Profession": "Carpentry",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_oak_tree": 2
+      },
+      "ResultItemId": "mat_wooden_plank",
+      "Quantity": 4,
+      "CraftTime": 2.0,
+      "SuccessChance": 1.0,
+      "ExperienceReward": 10,
+      "RequiredWorkstation": "Workbench",
+      "IsDefaultUnlock": true,
+      "Category": "Materials",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_iron_ingot",
+      "Name": "Iron Ingot",
+      "Description": "Smelted iron ingot for blacksmithing.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_iron_ore": 3
+      },
+      "ResultItemId": "mat_iron_ingot",
+      "Quantity": 1,
+      "CraftTime": 4.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 20,
+      "RequiredWorkstation": "Smelter",
+      "IsDefaultUnlock": true,
+      "Category": "Materials",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_gold_ingot",
+      "Name": "Gold Ingot",
+      "Description": "Smelted gold ingot for jewelry and decoration.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 10,
+      "Ingredients": {
+        "res_gold_ore": 3
+      },
+      "ResultItemId": "mat_gold_ingot",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 35,
+      "RequiredWorkstation": "Smelter",
+      "IsDefaultUnlock": false,
+      "Category": "Materials",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_iron_armor",
+      "Name": "Iron Chestplate",
+      "Description": "A protective iron chestplate.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 10,
+      "Ingredients": {
+        "mat_iron_ingot": 5,
+        "res_stone_deposit": 2
+      },
+      "ResultItemId": "armor_iron_chest",
+      "Quantity": 1,
+      "CraftTime": 8.0,
+      "SuccessChance": 0.85,
+      "ExperienceReward": 80,
+      "RequiredWorkstation": "Anvil",
+      "IsDefaultUnlock": false,
+      "Category": "Armor",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_berry_pie",
+      "Name": "Berry Pie",
+      "Description": "A delicious berry pie that restores health over time.",
+      "Profession": "Cooking",
+      "RequiredLevel": 3,
+      "Ingredients": {
+        "res_berry_bush": 3,
+        "res_flower_common": 1
+      },
+      "ResultItemId": "food_berry_pie",
+      "Quantity": 2,
+      "CraftTime": 6.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 25,
+      "RequiredWorkstation": "CookingPot",
+      "IsDefaultUnlock": true,
+      "Category": "Food",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_linen_fabric",
+      "Name": "Linen Fabric",
+      "Description": "Basic linen fabric for tailoring.",
+      "Profession": "Tailoring",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_flower_common": 3
+      },
+      "ResultItemId": "mat_linen_fabric",
+      "Quantity": 2,
+      "CraftTime": 3.0,
+      "SuccessChance": 1.0,
+      "ExperienceReward": 15,
+      "RequiredWorkstation": "Loom",
+      "IsDefaultUnlock": true,
+      "Category": "Materials",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_leather_armor",
+      "Name": "Leather Vest",
+      "Description": "A light leather vest for protection.",
+      "Profession": "Leatherworking",
+      "RequiredLevel": 3,
+      "Ingredients": {
+        "res_herb_common": 2,
+        "mat_linen_fabric": 1
+      },
+      "ResultItemId": "armor_leather_chest",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 40,
+      "RequiredWorkstation": "TanningRack",
+      "IsDefaultUnlock": true,
+      "Category": "Armor",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_copper_ring",
+      "Name": "Copper Ring",
+      "Description": "A simple copper ring with minor stat bonuses.",
+      "Profession": "Jewelry",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_copper_ore": 2,
+        "res_flower_common": 1
+      },
+      "ResultItemId": "ring_copper_band",
+      "Quantity": 1,
+      "CraftTime": 4.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 30,
+      "RequiredWorkstation": "JewelryStation",
+      "IsDefaultUnlock": true,
+      "Category": "Accessories",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_basic_axe",
+      "Name": "Stone Axe",
+      "Description": "A basic stone axe for woodcutting.",
+      "Profession": "Carpentry",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_oak_tree": 2,
+        "res_stone_deposit": 1
+      },
+      "ResultItemId": "tool_stone_axe",
+      "Quantity": 1,
+      "CraftTime": 3.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 20,
+      "RequiredWorkstation": "Workbench",
+      "IsDefaultUnlock": true,
+      "Category": "Tools",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_basic_pickaxe",
+      "Name": "Stone Pickaxe",
+      "Description": "A basic stone pickaxe for mining.",
+      "Profession": "Carpentry",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_oak_tree": 2,
+        "res_stone_deposit": 2
+      },
+      "ResultItemId": "tool_stone_pickaxe",
+      "Quantity": 1,
+      "CraftTime": 3.0,
+      "SuccessChance": 0.95,
+      "ExperienceReward": 20,
+      "RequiredWorkstation": "Workbench",
+      "IsDefaultUnlock": true,
+      "Category": "Tools",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_iron_pickaxe",
+      "Name": "Iron Pickaxe",
+      "Description": "An iron pickaxe for mining tougher ores.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 5,
+      "Ingredients": {
+        "mat_iron_ingot": 3,
+        "res_oak_tree": 2
+      },
+      "ResultItemId": "tool_iron_pickaxe",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 45,
+      "RequiredWorkstation": "Anvil",
+      "IsDefaultUnlock": false,
+      "Category": "Tools",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_iron_axe",
+      "Name": "Iron Axe",
+      "Description": "An iron axe for efficient woodcutting.",
+      "Profession": "Blacksmithing",
+      "RequiredLevel": 5,
+      "Ingredients": {
+        "mat_iron_ingot": 3,
+        "res_oak_tree": 2
+      },
+      "ResultItemId": "tool_iron_axe",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 45,
+      "RequiredWorkstation": "Anvil",
+      "IsDefaultUnlock": false,
+      "Category": "Tools",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_healing_salve",
+      "Name": "Healing Salve",
+      "Description": "A healing salve that restores health over time.",
+      "Profession": "Alchemy",
+      "RequiredLevel": 3,
+      "Ingredients": {
+        "res_herb_healing": 3,
+        "res_clay_deposit": 1
+      },
+      "ResultItemId": "consumable_healing_salve",
+      "Quantity": 2,
+      "CraftTime": 4.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 35,
+      "RequiredWorkstation": "AlchemyTable",
+      "IsDefaultUnlock": true,
+      "Category": "Consumables",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_wooden_bow",
+      "Name": "Wooden Bow",
+      "Description": "A simple wooden bow for ranged attacks.",
+      "Profession": "Carpentry",
+      "RequiredLevel": 5,
+      "Ingredients": {
+        "res_oak_tree": 3,
+        "res_herb_common": 2
+      },
+      "ResultItemId": "weapon_wooden_bow",
+      "Quantity": 1,
+      "CraftTime": 6.0,
+      "SuccessChance": 0.85,
+      "ExperienceReward": 55,
+      "RequiredWorkstation": "Workbench",
+      "IsDefaultUnlock": false,
+      "Category": "Weapons",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_lesser_mana_elixir",
+      "Name": "Lesser Mana Elixir",
+      "Description": "A weak mana elixir that restores mana over time.",
+      "Profession": "Alchemy",
+      "RequiredLevel": 8,
+      "Ingredients": {
+        "res_herb_magic": 2,
+        "res_magic_water_spring": 1,
+        "res_crystal_deposit": 1
+      },
+      "ResultItemId": "consumable_lesser_mana_elixir",
+      "Quantity": 1,
+      "CraftTime": 5.0,
+      "SuccessChance": 0.85,
+      "ExperienceReward": 60,
+      "RequiredWorkstation": "AlchemyTable",
+      "IsDefaultUnlock": false,
+      "Category": "Consumables",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_simple_bandage",
+      "Name": "Simple Bandage",
+      "Description": "A simple cloth bandage for minor healing.",
+      "Profession": "Tailoring",
+      "RequiredLevel": 1,
+      "Ingredients": {
+        "res_flower_common": 2
+      },
+      "ResultItemId": "consumable_bandage",
+      "Quantity": 3,
+      "CraftTime": 2.0,
+      "SuccessChance": 1.0,
+      "ExperienceReward": 10,
+      "RequiredWorkstation": "TailorBench",
+      "IsDefaultUnlock": true,
+      "Category": "Consumables",
+      "Version": 1
+    },
+    {
+      "RecipeId": "craft_spring_blossom_tea",
+      "Name": "Spring Blossom Tea",
+      "Description": "A seasonal tea that provides a temporary buff.",
+      "Profession": "Cooking",
+      "RequiredLevel": 10,
+      "Ingredients": {
+        "res_seasonal_spring_flower": 2,
+        "res_water_source": 1
+      },
+      "ResultItemId": "food_spring_tea",
+      "Quantity": 1,
+      "CraftTime": 4.0,
+      "SuccessChance": 0.9,
+      "ExperienceReward": 50,
+      "RequiredWorkstation": "CookingPot",
+      "IsDefaultUnlock": false,
+      "Category": "Food",
+      "Version": 1
+    }
+  ]
+}

@@ -24,6 +24,12 @@ namespace HeroOfEternia.Player.States
             if (inp.Roll && p.Data.HasStamina(p.Data.RollStaminaCost))
                                                    return PlayerStateId.Rolling;
 
+            // Combat transitions
+            if (inp.Attack)                        return PlayerStateId.Attack;
+            if (inp.HeavyAttack)                   return PlayerStateId.HeavyAttack;
+            if (inp.Block)                         return PlayerStateId.Blocking;
+            if (inp.Skill1)                        return PlayerStateId.Casting;
+
             float speed = inp.MoveAxis.Length();
             if (speed > 0.1f)
             {
@@ -53,6 +59,13 @@ namespace HeroOfEternia.Player.States
             if (!p.IsOnFloor())                    return PlayerStateId.Falling;
             if (inp.Jump && p.Data.HasStamina(p.Data.JumpStaminaCost))
                                                    return PlayerStateId.Jumping;
+
+            // Combat transitions
+            if (inp.Attack)                        return PlayerStateId.Attack;
+            if (inp.HeavyAttack)                   return PlayerStateId.HeavyAttack;
+            if (inp.Block)                         return PlayerStateId.Blocking;
+            if (inp.Skill1)                        return PlayerStateId.Casting;
+
             if (inp.MoveAxis.Length() < 0.1f)      return PlayerStateId.Idle;
             if (!inp.Walk && !inp.Sprint)           return PlayerStateId.Running;
             if (inp.Sprint)                         return PlayerStateId.Sprinting;
@@ -84,6 +97,13 @@ namespace HeroOfEternia.Player.States
                                                    return PlayerStateId.Jumping;
             if (inp.Roll && p.Data.HasStamina(p.Data.RollStaminaCost))
                                                    return PlayerStateId.Rolling;
+
+            // Combat transitions
+            if (inp.Attack)                        return PlayerStateId.Attack;
+            if (inp.HeavyAttack)                   return PlayerStateId.HeavyAttack;
+            if (inp.Block)                         return PlayerStateId.Blocking;
+            if (inp.Skill1)                        return PlayerStateId.Casting;
+
             if (inp.MoveAxis.Length() < 0.1f)      return PlayerStateId.Idle;
             if (inp.Walk)                          return PlayerStateId.Walking;
             if (inp.Sprint)                        return PlayerStateId.Sprinting;

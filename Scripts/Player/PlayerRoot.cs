@@ -117,6 +117,16 @@ namespace HeroOfEternia.Player
             FSM.Register(new FrozenState());
             FSM.Register(new DisabledState());
 
+            // Combat States
+            FSM.Register(new AttackState());
+            FSM.Register(new HeavyAttackState());
+            FSM.Register(new CastingState());
+            FSM.Register(new BlockingState());
+            FSM.Register(new ParryingState());
+            FSM.Register(new HitReactionState());
+            FSM.Register(new KnockdownState());
+            FSM.Register(new RecoveryState());
+
             FSM.OnStateChanged += OnStateChanged;
             FSM.Start(this, PlayerStateId.Idle);
 
