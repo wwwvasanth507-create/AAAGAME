@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://hud000001"]
 
-[ext_resource type="Script" path="res://Scripts/UI/HUD.cs" id="1_hud"]
+[ext_resource type="Script" path="res://Scripts/UI/HUD/HUDController.cs" id="1_hud"]
 
 ; =======================================================================
 ; HUD ROOT — CanvasLayer renders above 3D world

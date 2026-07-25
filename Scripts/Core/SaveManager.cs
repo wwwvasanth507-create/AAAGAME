@@ -171,6 +171,10 @@ namespace HeroOfEternia.Core
         /// <summary>Dialogue manager runtime state.</summary>
         public Dialogue.DialogueManagerSaveData? DialogueData { get; set; }
 
+        // Audio System (Save V16)
+        /// <summary>Audio preferences and category settings.</summary>
+        public Audio.AudioSettings? AudioData { get; set; }
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();

@@ -7,7 +7,6 @@ using HeroOfEternia.Social.Crime;
 using HeroOfEternia.Social.Guard;
 using HeroOfEternia.Social.Diplomacy;
 using HeroOfEternia.Social.NpcReaction;
-using Newtonsoft.Json;
 
 namespace HeroOfEternia.Social
 {
@@ -139,7 +138,7 @@ namespace HeroOfEternia.Social
             var modifier = ModifierRegistry.GetModifier(modifierId);
             if (modifier == null)
             {
-                Logger.Warn($"SocialManager: Unknown reputation modifier '{modifierId}'");
+                Logger.Warning($"SocialManager: Unknown reputation modifier '{modifierId}'");
                 return;
             }
 

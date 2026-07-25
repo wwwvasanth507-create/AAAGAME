@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using Godot;
 using HeroOfEternia.Core;
 using HeroOfEternia.Gathering;
 using HeroOfEternia.Crafting;

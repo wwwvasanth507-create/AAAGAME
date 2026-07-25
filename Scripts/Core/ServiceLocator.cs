@@ -59,6 +59,17 @@ namespace HeroOfEternia.Core
             }
         }
 
+        public static void Unregister<T>() where T : class
+        {
+            lock (_lock)
+            {
+                Type type = typeof(T);
+                _services.Remove(type);
+                _initialized.Remove(type);
+                Logger.Info($"ServiceLocator: Service '{type.Name}' unregistered.");
+            }
+        }
+
         public static void Clear()
         {
             lock (_lock)

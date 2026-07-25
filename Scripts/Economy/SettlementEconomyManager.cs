@@ -164,8 +164,7 @@ namespace HeroOfEternia.Economy
             // Publish settlement economy change event
             if (settlement.Prosperity != oldProsperity)
             {
-                var eventBus = ServiceLocator.Get<EventBus>();
-                eventBus?.Publish("SettlementEconomyChanged", new SettlementEconomyChangeEvent
+                EventBus.Publish(new SettlementEconomyChangeEvent
                 {
                     SettlementId = settlement.SettlementId,
                     OldProsperity = oldProsperity,

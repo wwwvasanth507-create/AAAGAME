@@ -6,6 +6,7 @@ using HeroOfEternia.Player;
 using HeroOfEternia.Player.Abilities;
 using HeroOfEternia.Player.Resources;
 using HeroOfEternia.Player.Progression;
+using PlayerResourceManager = HeroOfEternia.Player.Resources.ResourceManager;
 
 namespace HeroOfEternia.Tests
 {
@@ -280,7 +281,7 @@ namespace HeroOfEternia.Tests
             // Setup
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -323,7 +324,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -356,7 +357,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -395,7 +396,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -422,7 +423,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -458,7 +459,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -490,7 +491,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -524,7 +525,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -645,7 +646,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();
@@ -735,7 +736,7 @@ namespace HeroOfEternia.Tests
 
             var db = new AbilityDatabase();
             db.Load("Settings");
-            var resourceManager = new ResourceManager();
+            var resourceManager = new PlayerResourceManager();
             var progression = new PlayerProgression();
             var effectsManager = new EffectsManager();
             var loadoutManager = new LoadoutManager();

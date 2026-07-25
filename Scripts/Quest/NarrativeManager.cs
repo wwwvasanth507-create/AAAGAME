@@ -419,7 +419,7 @@ namespace HeroOfEternia.Quest
                         return _regionalFlags.TryGetValue(regionId, out var flags) &&
                                flags.TryGetValue(flagName, out var val) && val == expectedValue;
                     }
-                    return _regionalFlags.TryGetValue(regionId, out var flags) && flags.ContainsKey(flagPart);
+                    return _regionalFlags.TryGetValue(regionId, out var regFlags) && regFlags.ContainsKey(flagPart);
                 }
                 return false;
             }

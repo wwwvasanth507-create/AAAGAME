@@ -61,7 +61,7 @@ namespace HeroOfEternia.UI
 
             Logger.Info("NotificationManager: Initializing...");
 
-            _gameWindow = Engine.GetMainLoop() as Window ?? new Window();
+            _gameWindow = (Engine.GetMainLoop() as SceneTree)?.Root ?? new Window();
 
             _notificationLayer = new CanvasLayer
             {
@@ -87,7 +87,7 @@ namespace HeroOfEternia.UI
             _active.Clear();
             _history.Clear();
 
-            if (_notificationLayer != null && Godot.Object.IsInstanceValid(_notificationLayer))
+            if (_notificationLayer != null && GodotObject.IsInstanceValid(_notificationLayer))
             {
                 _notificationLayer.QueueFree();
             }
@@ -296,14 +296,14 @@ namespace HeroOfEternia.UI
         {
             _active.Remove(active);
 
-            if (active.Panel != null && Godot.Object.IsInstanceValid(active.Panel))
+            if (active.Panel != null && GodotObject.IsInstanceValid(active.Panel))
             {
                 // Fade out animation
                 var tween = active.Panel.CreateTween();
                 tween.TweenProperty(active.Panel, "modulate", new Color(1, 1, 1, 0), 0.3f);
                 tween.Finished += () =>
                 {
-                    if (active.Panel != null && Godot.Object.IsInstanceValid(active.Panel))
+                    if (active.Panel != null && GodotObject.IsInstanceValid(active.Panel))
                     {
                         _notificationContainer.RemoveChild(active.Panel);
                         active.Panel.QueueFree();
@@ -409,7 +409,7 @@ namespace HeroOfEternia.UI
                 _ => new Color(0.3f, 0.3f, 0.4f)
             };
 
-            theme.SetStyleBox("panel", "Panel", style);
+            theme.SetStylebox("panel", "Panel", style);
             return theme;
         }
 

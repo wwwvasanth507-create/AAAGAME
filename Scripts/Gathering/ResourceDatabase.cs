@@ -160,7 +160,6 @@ namespace HeroOfEternia.Gathering
         // Corrupted
         CorruptedEssence,
         CorruptedCrystal,
-        CorruptedWood,
         
         // Seasonal
         Spring,

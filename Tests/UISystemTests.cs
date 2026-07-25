@@ -16,7 +16,7 @@ namespace HeroOfEternia.Tests
     /// Tests navigation, screen transitions, HUD updates, notification queue,
     /// responsive layouts, accessibility, localization, save/load, and stress tests.
     /// </summary>
-    public static class UISystemTests
+    public static partial class UISystemTests
     {
         private static int _passed = 0;
         private static int _failed = 0;
@@ -983,8 +983,8 @@ namespace HeroOfEternia.Tests
         // ---------------------------------------------------------------
         // Test Helper Classes
         // ---------------------------------------------------------------
-        private class TestScreen : UIScreen { }
-        private class TestModal : UIModal { }
+        private partial class TestScreen : UIScreen { }
+        private partial class TestModal : UIModal { }
         private class TestPlugin : IUIPlugin
         {
             public void OnRegistered(UIManager manager) { }

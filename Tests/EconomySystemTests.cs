@@ -777,14 +777,14 @@ namespace HeroOfEternia.Tests
             foreach (var region in regions)
             {
                 var prices = market.GetRegionalPrices(region);
-                foreach (var price in prices)
+                foreach (var itemPrice in prices)
                 {
-                    if (price.BasePrice < 0) return false;
-                    if (price.CurrentPrice < 0) return false;
-                    if (price.SupplyRating < 0) return false;
-                    if (price.DemandRating < 0) return false;
-                    if (price.SupplyRating > 1) return false;
-                    if (price.DemandRating > 1) return false;
+                    if (itemPrice.BasePrice < 0) return false;
+                    if (itemPrice.CurrentPrice < 0) return false;
+                    if (itemPrice.SupplyRating < 0) return false;
+                    if (itemPrice.DemandRating < 0) return false;
+                    if (itemPrice.SupplyRating > 1) return false;
+                    if (itemPrice.DemandRating > 1) return false;
                 }
             }
 

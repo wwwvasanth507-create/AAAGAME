@@ -216,8 +216,7 @@ namespace HeroOfEternia.Settlement
             }
 
             // Economy integration via EventBus
-            var eventBus = ServiceLocator.Get<EventBus>();
-            eventBus?.Publish("SettlementDailyUpdate", new SettlementStateChangedEvent
+            EventBus.Publish(new SettlementStateChangedEvent
             {
                 SettlementId = id,
                 PropertyName = "daily_update",
@@ -265,12 +264,11 @@ namespace HeroOfEternia.Settlement
 
             if (settlement.Prosperity != oldLevel)
             {
-                var eventBus = ServiceLocator.Get<EventBus>();
-                eventBus?.Publish("SettlementEconomyChanged", new Economy.SettlementEconomyChangeEvent
+                EventBus.Publish(new Economy.SettlementEconomyChangeEvent
                 {
                     SettlementId = id,
-                    OldProsperity = oldLevel,
-                    NewProsperity = settlement.Prosperity,
+                    OldProsperity = (HeroOfEternia.Economy.ProsperityLevel)oldLevel,
+                    NewProsperity = (HeroOfEternia.Economy.ProsperityLevel)settlement.Prosperity,
                     Event = Economy.EconomicEventType.None
                 });
             }
@@ -510,8 +508,7 @@ namespace HeroOfEternia.Settlement
                 var oldState = buildingState.State;
                 buildingState.State = state;
 
-                var eventBus = ServiceLocator.Get<EventBus>();
-                eventBus?.Publish("BuildingStateChanged", new BuildingStateChangedEvent
+                EventBus.Publish(new BuildingStateChangedEvent
                 {
                     BuildingId = buildingId,
                     SettlementId = settlementId,

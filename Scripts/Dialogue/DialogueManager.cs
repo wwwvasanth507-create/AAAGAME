@@ -251,7 +251,7 @@ namespace HeroOfEternia.Dialogue
             // Prevent infinite loops
             if (_visitedDialogues.Contains(dialogueId))
             {
-                Godot.GD.PrintWarning($"[DialogueManager] Loop detected: {dialogueId} already visited");
+                Godot.GD.PushWarning($"[DialogueManager] Loop detected: {dialogueId} already visited");
                 EndConversation();
                 return null;
             }

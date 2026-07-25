@@ -174,8 +174,7 @@ namespace HeroOfEternia.Economy
             _merchantAI.MerchantSellItems(merchant, itemId, quantity, totalPrice);
 
             // Publish trade event
-            var eventBus = ServiceLocator.Get<EventBus>();
-            eventBus?.Publish("TradeCompleted", new TradeEvent
+            EventBus.Publish(new TradeEvent
             {
                 MerchantId = merchantId,
                 ItemId = itemId,
@@ -247,8 +246,7 @@ namespace HeroOfEternia.Economy
             _merchantAI.MerchantBuyItems(merchant, itemId, quantity, totalPrice);
 
             // Publish trade event
-            var eventBus = ServiceLocator.Get<EventBus>();
-            eventBus?.Publish("TradeCompleted", new TradeEvent
+            EventBus.Publish(new TradeEvent
             {
                 MerchantId = merchantId,
                 ItemId = itemId,

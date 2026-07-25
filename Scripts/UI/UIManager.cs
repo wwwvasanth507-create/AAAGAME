@@ -85,7 +85,7 @@ namespace HeroOfEternia.UI
             Logger.Info("UIManager: Initializing UI framework...");
 
             // Create UI root
-            _gameWindow = Engine.GetMainLoop() as Window ?? new Window();
+            _gameWindow = (Engine.GetMainLoop() as SceneTree)?.Root ?? new Window();
             _uiRoot = new CanvasLayer { Layer = 0, Name = "UIRoot" };
             _gameWindow.AddChild(_uiRoot);
 
@@ -191,7 +191,7 @@ namespace HeroOfEternia.UI
 
             // Add to screen layer
             var screenLayer = _layers[UILayer.Screens];
-            if (screen.Parent != screenLayer)
+            if (screen.GetParent() != screenLayer)
             {
                 screenLayer.AddChild(screen);
             }
@@ -241,13 +241,13 @@ namespace HeroOfEternia.UI
                 AnimateScreenOut(closingScreen, () =>
                 {
                     closingScreen.Visible = false;
-                    if (closingScreen.Parent == _layers[UILayer.Screens])
+                    if (closingScreen.GetParent() == _layers[UILayer.Screens])
                         _layers[UILayer.Screens].RemoveChild(closingScreen);
                 });
             else
             {
                 closingScreen.Visible = false;
-                if (closingScreen.Parent == _layers[UILayer.Screens])
+                if (closingScreen.GetParent() == _layers[UILayer.Screens])
                     _layers[UILayer.Screens].RemoveChild(closingScreen);
             }
 
@@ -337,12 +337,12 @@ namespace HeroOfEternia.UI
             if (animated)
                 AnimateModalOut(modal, () =>
                 {
-                    if (modal.Parent == _layers[UILayer.Modals])
+                    if (modal.GetParent() == _layers[UILayer.Modals])
                         _layers[UILayer.Modals].RemoveChild(modal);
                 });
             else
             {
-                if (modal.Parent == _layers[UILayer.Modals])
+                if (modal.GetParent() == _layers[UILayer.Modals])
                     _layers[UILayer.Modals].RemoveChild(modal);
             }
 
@@ -518,24 +518,9 @@ namespace HeroOfEternia.UI
         {
             try
             {
-                string json = JSON.Stringify(new Dictionary<string, Variant>
-                {
-                    ["hud_enabled"] = Preferences.HUDEnabled,
-                    ["ui_scale"] = Preferences.UIScale,
-                    ["text_size"] = Preferences.TextSize,
-                    ["high_contrast"] = Preferences.HighContrast,
-                    ["reduced_motion"] = Preferences.ReducedMotion,
-                    ["last_screen"] = Preferences.LastOpenedScreen ?? "",
-                    ["notifications_enabled"] = Preferences.NotificationsEnabled,
-                    ["accessibility_font"] = Preferences.AccessibilityFont,
-                    ["color_blind_mode"] = Preferences.ColorBlindMode,
-                    ["subtitle_enabled"] = Preferences.SubtitleEnabled,
-                    ["haptic_feedback"] = Preferences.HapticFeedback,
-                    ["show_fps"] = Preferences.ShowFPS
-                });
-
-                var settings = ServiceLocator.Get<SettingsManager>();
-                settings?.SetSetting(UIPrefsKey, json);
+                string json = System.Text.Json.JsonSerializer.Serialize(Preferences);
+                string path = System.IO.Path.Combine(Godot.OS.GetUserDataDir(), "ui_preferences.json");
+                System.IO.File.WriteAllText(path, json);
                 Logger.Info("UIManager: Preferences saved.");
             }
             catch (Exception ex)
@@ -548,39 +533,15 @@ namespace HeroOfEternia.UI
         {
             try
             {
-                var settings = ServiceLocator.Get<SettingsManager>();
-                string json = settings?.GetSetting(UIPrefsKey) as string;
-                if (string.IsNullOrEmpty(json)) return;
-
-                var dict = JSON.ParseString(json) as Godot.Collections.Dictionary;
-                if (dict == null) return;
-
-                if (dict.ContainsKey("hud_enabled"))
-                    Preferences.HUDEnabled = (bool)dict["hud_enabled"];
-                if (dict.ContainsKey("ui_scale"))
-                    Preferences.UIScale = (float)(double)dict["ui_scale"];
-                if (dict.ContainsKey("text_size"))
-                    Preferences.TextSize = (float)(double)dict["text_size"];
-                if (dict.ContainsKey("high_contrast"))
-                    Preferences.HighContrast = (bool)dict["high_contrast"];
-                if (dict.ContainsKey("reduced_motion"))
-                    Preferences.ReducedMotion = (bool)dict["reduced_motion"];
-                if (dict.ContainsKey("last_screen"))
-                    Preferences.LastOpenedScreen = (string)dict["last_screen"];
-                if (dict.ContainsKey("notifications_enabled"))
-                    Preferences.NotificationsEnabled = (bool)dict["notifications_enabled"];
-                if (dict.ContainsKey("accessibility_font"))
-                    Preferences.AccessibilityFont = (string)dict["accessibility_font"];
-                if (dict.ContainsKey("color_blind_mode"))
-                    Preferences.ColorBlindMode = (string)dict["color_blind_mode"];
-                if (dict.ContainsKey("subtitle_enabled"))
-                    Preferences.SubtitleEnabled = (bool)dict["subtitle_enabled"];
-                if (dict.ContainsKey("haptic_feedback"))
-                    Preferences.HapticFeedback = (bool)dict["haptic_feedback"];
-                if (dict.ContainsKey("show_fps"))
-                    Preferences.ShowFPS = (bool)dict["show_fps"];
-
-                Logger.Info("UIManager: Preferences loaded.");
+                string path = System.IO.Path.Combine(Godot.OS.GetUserDataDir(), "ui_preferences.json");
+                if (!System.IO.File.Exists(path)) return;
+                string json = System.IO.File.ReadAllText(path);
+                var loaded = System.Text.Json.JsonSerializer.Deserialize<UIPreferences>(json);
+                if (loaded != null)
+                {
+                    Preferences = loaded;
+                    Logger.Info("UIManager: Preferences loaded.");
+                }
             }
             catch (Exception ex)
             {
@@ -609,7 +570,7 @@ namespace HeroOfEternia.UI
 
         private bool IsInstanceValid(Node node)
         {
-            return node != null && Godot.Object.IsInstanceValid(node);
+            return node != null && GodotObject.IsInstanceValid(node);
         }
     }
 

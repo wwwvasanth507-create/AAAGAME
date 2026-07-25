@@ -103,7 +103,7 @@ namespace HeroOfEternia.Tests
                 db.Load();
                 var inn = db.GetBuilding("inn_01");
                 Assert(inn != null, "Expected building 'inn_01'");
-                Assert(inn?.Services.Contains(ServiceType.InnRest), "Expected inn to provide InnRest service");
+                Assert(inn?.Services.Contains(ServiceType.InnRest) ?? false, "Expected inn to provide InnRest service");
             });
 
             Test("S10 Building: Get buildings by category", () =>

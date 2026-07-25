@@ -781,7 +781,7 @@ namespace HeroOfEternia.UI.HUD
         {
             var theme = new Theme();
             var style = new StyleBoxFlat { BgColor = new Color(0.1f, 0.1f, 0.15f, 0.8f), BorderWidthBottom = 2, BorderColor = new Color(0.3f, 0.3f, 0.4f) };
-            theme.SetStyleBox("panel", "Panel", style);
+            theme.SetStylebox("panel", "Panel", style);
             return theme;
         }
 
@@ -908,7 +908,7 @@ namespace HeroOfEternia.UI.HUD
         {
             var theme = new Theme();
             var style = new StyleBoxFlat { BgColor = new Color(0, 0.5f, 0, 0.7f) };
-            theme.SetStyleBox("panel", "Panel", style);
+            theme.SetStylebox("panel", "Panel", style);
             return theme;
         }
 
@@ -1062,7 +1062,7 @@ namespace HeroOfEternia.UI.HUD
             if (_bossHpBar != null) _bossHpBar.Value = current;
             if (_bossPercentLabel != null && _bossHpBar != null)
             {
-                float pct = _bossHpBar.MaxValue > 0 ? (current / _bossHpBar.MaxValue) * 100 : 0;
+                float pct = (float)(_bossHpBar.MaxValue > 0 ? (current / _bossHpBar.MaxValue) * 100 : 0);
                 _bossPercentLabel.Text = $"{pct:F0}%";
             }
         }
@@ -1113,11 +1113,14 @@ namespace HeroOfEternia.UI.HUD
             _updateTimer = 0;
 
             if (_fpsLabel != null)
-                _fpsLabel.Text = $"FPS: {Performance.GetMonitor(Performance.Monitor.TimeFps):F0}";
+            {
+                float fps = (float)Performance.GetMonitor(Performance.Monitor.TimeFps);
+                _fpsLabel.Text = $"FPS: {fps:F0}";
+            }
 
             if (_memoryLabel != null)
             {
-                float memMB = Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024f * 1024f);
+                float memMB = (float)(Performance.GetMonitor(Performance.Monitor.MemoryStatic) / (1024.0 * 1024.0));
                 _memoryLabel.Text = $"MEM: {memMB:F1} MB";
             }
         }
@@ -1129,6 +1132,9 @@ namespace HeroOfEternia.UI.HUD
     public record HudHealthChangedEvent(float Current, float Max);
     public record HudManaChangedEvent(float Current, float Max);
     public record HudStaminaChangedEvent(float Current, float Max);
+    public record HudWeaponChangedEvent(string WeaponName);
+    public record HudComboHitEvent();
+    public record HudWaveChangedEvent(int Wave, int MaxWaves);
     public record HudExperienceChangedEvent(float Current, float Max, int Level);
     public record HudLevelUpEvent(int NewLevel);
     public record HudInteractPromptEvent(bool Show, string Text = "");

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.21.0] - 2026-07-25
+
+### Added — Complete Audio Framework (Prompt 21)
+*   **AudioManager**: Central `IInitializable` audio orchestrator with 2D channel pooling (32 channels) and 3D spatial emitter pooling (16 positional sources), category volume gain controls, dynamic range profiles, and Save V16 profile integration.
+*   **AudioCategory & AudioPriority**: 14 dynamic audio categories (`Master`, `Music`, `Ambient`, `Environment`, `Combat`, `UI`, `Dialogue`, `NPC`, `Creatures`, `Weather`, `Footsteps`, `Abilities`, `VoiceOver`, `DeveloperDebug`) with 4-tier priority preemption (`Low`, `Medium`, `High`, `Critical`).
+*   **MusicManager**: Adaptive music engine with state machine (`Exploration`, `Settlement`, `Combat`, `Boss`, `Dungeon`, `Victory`, `Defeat`), dual-player linear power crossfading, intensity scaling, and default track bindings.
+*   **AmbientAudioManager**: Multi-layered ambient zone blending framework supporting environmental soundscapes and weather modulation.
+*   **PositionalAudioPlayer**: 3D spatial audio emitter supporting distance attenuation models (`Linear`, `Inverse`, `Exponential`), unit distance scaling, max distance bounds, and occlusion hooks.
+*   **VoiceFramework**: NPC and player dialogue barks, quest speech hooks, subtitle line queueing with HSV speaker color hashing, and voice over volume gain scaling.
+*   **AudioSettings & Save V16**: Comprehensive audio preferences model integrated into `SaveProfile` version 16.
+*   **SoundEventSystem**: Decoupled EventBus audio trigger system for footsteps, ability activates, hits, and UI clicks.
+*   **AudioSystemTests**: Unit test suite validating category scaling, muting, music transitions, ambient blending, 3D attenuation, voice barks, and Save V16 integration.
+*   **Documentation**: Added `AUDIO_SYSTEM.md`, `MUSIC_SYSTEM.md`, `AMBIENT_AUDIO.md`, `VOICE_FRAMEWORK.md`, and `AUDIO_SETTINGS.md`.
+
 ## [0.20.0] - 2026-07-25
 
 ### Audit — Prompts 0–20 Complete Foundation & UI/UX Framework Audit

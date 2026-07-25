@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using HeroOfEternia.Core;
+using HeroOfEternia.Player.Abilities;
 
 namespace HeroOfEternia.Player.Resources
 {

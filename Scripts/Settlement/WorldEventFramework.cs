@@ -103,8 +103,7 @@ namespace HeroOfEternia.Settlement
             _cooldowns[cooldownKey] = template.CooldownDays;
 
             // Publish event
-            var eventBus = ServiceLocator.Get<EventBus>();
-            eventBus?.Publish("WorldEventTriggered", new WorldEventTriggeredEvent
+            EventBus.Publish(new WorldEventTriggeredEvent
             {
                 EventId = instance.EventId,
                 Type = instance.Type,

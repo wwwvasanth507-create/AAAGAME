@@ -64,7 +64,7 @@ namespace HeroOfEternia.UI.Accessibility
             Logger.Info("AccessibilityManager: Initializing...");
 
             // Create subtitle layer
-            var window = Engine.GetMainLoop() as Window ?? new Window();
+            var window = (Engine.GetMainLoop() as SceneTree)?.Root ?? new Window();
             _subtitleLayer = new CanvasLayer
             {
                 Layer = 70, // Above notifications
@@ -94,7 +94,7 @@ namespace HeroOfEternia.UI.Accessibility
         {
             SaveSettings();
 
-            if (_subtitleLayer != null && Godot.Object.IsInstanceValid(_subtitleLayer))
+            if (_subtitleLayer != null && GodotObject.IsInstanceValid(_subtitleLayer))
             {
                 _subtitleLayer.QueueFree();
             }
@@ -109,20 +109,22 @@ namespace HeroOfEternia.UI.Accessibility
         {
             try
             {
-                var settings = ServiceLocator.Get<SettingsManager>();
-                if (settings == null) return;
-
-                settings.SetSetting("accessibility_text_scale", TextScale);
-                settings.SetSetting("accessibility_high_contrast", HighContrast);
-                settings.SetSetting("accessibility_color_blind_mode", (int)ColorBlindMode);
-                settings.SetSetting("accessibility_subtitle", SubtitleEnabled);
-                settings.SetSetting("accessibility_subtitle_size", SubtitleSize);
-                settings.SetSetting("accessibility_ui_scale", UIScale);
-                settings.SetSetting("accessibility_reduced_motion", ReducedMotion);
-                settings.SetSetting("accessibility_screen_reader", ScreenReaderEnabled);
-                settings.SetSetting("accessibility_haptic", HapticFeedback);
-                settings.SetSetting("accessibility_voice_nav", VoiceNavigation);
-
+                var payload = new Dictionary<string, object>
+                {
+                    ["text_scale"] = TextScale,
+                    ["high_contrast"] = HighContrast,
+                    ["color_blind_mode"] = (int)ColorBlindMode,
+                    ["subtitle"] = SubtitleEnabled,
+                    ["subtitle_size"] = SubtitleSize,
+                    ["ui_scale"] = UIScale,
+                    ["reduced_motion"] = ReducedMotion,
+                    ["screen_reader"] = ScreenReaderEnabled,
+                    ["haptic"] = HapticFeedback,
+                    ["voice_nav"] = VoiceNavigation
+                };
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                string path = System.IO.Path.Combine(Godot.OS.GetUserDataDir(), "accessibility_settings.json");
+                System.IO.File.WriteAllText(path, json);
                 Logger.Info("AccessibilityManager: Settings saved.");
             }
             catch (Exception ex)
@@ -135,19 +137,22 @@ namespace HeroOfEternia.UI.Accessibility
         {
             try
             {
-                var settings = ServiceLocator.Get<SettingsManager>();
-                if (settings == null) return;
+                string path = System.IO.Path.Combine(Godot.OS.GetUserDataDir(), "accessibility_settings.json");
+                if (!System.IO.File.Exists(path)) return;
+                string json = System.IO.File.ReadAllText(path);
+                var dict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(json);
+                if (dict == null) return;
 
-                TextScale = settings.GetSetting<float>("accessibility_text_scale", 1.0f);
-                HighContrast = settings.GetSetting<bool>("accessibility_high_contrast", false);
-                ColorBlindMode = (ColorBlindMode)settings.GetSetting<int>("accessibility_color_blind_mode", 0);
-                SubtitleEnabled = settings.GetSetting<bool>("accessibility_subtitle", true);
-                SubtitleSize = settings.GetSetting<float>("accessibility_subtitle_size", 1.0f);
-                UIScale = settings.GetSetting<float>("accessibility_ui_scale", 1.0f);
-                ReducedMotion = settings.GetSetting<bool>("accessibility_reduced_motion", false);
-                ScreenReaderEnabled = settings.GetSetting<bool>("accessibility_screen_reader", false);
-                HapticFeedback = settings.GetSetting<bool>("accessibility_haptic", true);
-                VoiceNavigation = settings.GetSetting<bool>("accessibility_voice_nav", false);
+                if (dict.TryGetValue("text_scale", out var ts)) TextScale = ts.GetSingle();
+                if (dict.TryGetValue("high_contrast", out var hc)) HighContrast = hc.GetBoolean();
+                if (dict.TryGetValue("color_blind_mode", out var cb)) ColorBlindMode = (ColorBlindMode)cb.GetInt32();
+                if (dict.TryGetValue("subtitle", out var sub)) SubtitleEnabled = sub.GetBoolean();
+                if (dict.TryGetValue("subtitle_size", out var ss)) SubtitleSize = ss.GetSingle();
+                if (dict.TryGetValue("ui_scale", out var us)) UIScale = us.GetSingle();
+                if (dict.TryGetValue("reduced_motion", out var rm)) ReducedMotion = rm.GetBoolean();
+                if (dict.TryGetValue("screen_reader", out var sr)) ScreenReaderEnabled = sr.GetBoolean();
+                if (dict.TryGetValue("haptic", out var hap)) HapticFeedback = hap.GetBoolean();
+                if (dict.TryGetValue("voice_nav", out var vn)) VoiceNavigation = vn.GetBoolean();
 
                 Logger.Info("AccessibilityManager: Settings loaded.");
             }
@@ -218,7 +223,7 @@ namespace HeroOfEternia.UI.Accessibility
             if (_worldEnvironment == null)
             {
                 // Find or create WorldEnvironment
-                _worldEnvironment = GetTree()?.Root?.GetNodeOrNull<WorldEnvironment>("WorldEnvironment");
+                _worldEnvironment = GetTree()?.GetNodeOrNull<WorldEnvironment>("WorldEnvironment");
                 if (_worldEnvironment == null)
                 {
                     _worldEnvironment = new WorldEnvironment();
@@ -316,9 +321,6 @@ namespace HeroOfEternia.UI.Accessibility
         {
             if (control == null) return;
 
-            // Godot 4 supports AccessibilityTree API
-            control.Accessible = true;
-            // control.AccessibilityLabel = label; // Godot 4.3+ property if available
             control.TooltipText = label;
         }
 
@@ -386,9 +388,9 @@ namespace HeroOfEternia.UI.Accessibility
         // ---------------------------------------------------------------
         // Utility
         // ---------------------------------------------------------------
-        private Window GetTree()
+        private Window? GetTree()
         {
-            return Engine.GetMainLoop() as Window;
+            return (Engine.GetMainLoop() as SceneTree)?.Root;
         }
     }
 

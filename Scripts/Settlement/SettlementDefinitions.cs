@@ -56,6 +56,18 @@ namespace HeroOfEternia.Settlement
         Anarchy
     }
 
+    /// <summary>Prosperity level of a settlement.</summary>
+    public enum ProsperityLevel
+    {
+        Collapsed,
+        Poor,
+        Struggling,
+        Stable,
+        Prosperous,
+        Wealthy,
+        Booming
+    }
+
     /// <summary>Building category classification.</summary>
     public enum BuildingCategory
     {
@@ -516,6 +528,7 @@ namespace HeroOfEternia.Settlement
         public float TriggerWeight { get; set; } = 1.0f;
         public bool RequiresPlayerNearby { get; set; } = false;
         public float CooldownDays { get; set; } = 7f;
+        public bool IsRecurring { get; set; } = false;
         public Dictionary<string, float> DefaultEffects { get; set; } = new();
         public string DialogueHook { get; set; } = "";
 

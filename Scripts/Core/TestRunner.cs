@@ -9,6 +9,7 @@ using HeroOfEternia.Combat;
 using HeroOfEternia.Player;
 using HeroOfEternia.Player.States;
 using HeroOfEternia.Enemies;
+using HeroOfEternia.UI;
 
 namespace HeroOfEternia.Core
 {

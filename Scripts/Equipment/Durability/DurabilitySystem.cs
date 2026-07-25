@@ -38,6 +38,9 @@ namespace HeroOfEternia.Equipment.Durability
             CurrentDurability = Math.Clamp(currentDurability, 0f, MaxDurability);
         }
 
+        public void NotifyDurabilityChanged(float oldVal, float newVal) => OnDurabilityChanged?.Invoke(ItemId, oldVal, newVal);
+        public void NotifyItemBroken() => OnItemBroken?.Invoke(ItemId);
+
         /// <summary>
         /// Applies durability damage. Returns the actual amount of damage applied.
         /// </summary>
@@ -274,9 +277,9 @@ namespace HeroOfEternia.Equipment.Durability
                 _durabilityComponents[kvp.Key] = comp;
 
                 // Re-fire events on load
-                comp.OnDurabilityChanged?.Invoke(kvp.Key, 0f, comp.CurrentDurability);
+                comp.NotifyDurabilityChanged(0f, comp.CurrentDurability);
                 if (comp.IsBroken)
-                    comp.OnItemBroken?.Invoke(kvp.Key);
+                    comp.NotifyItemBroken();
             }
         }
 

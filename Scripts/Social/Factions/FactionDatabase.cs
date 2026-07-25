@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using HeroOfEternia.Core;
-using Newtonsoft.Json;
 
 namespace HeroOfEternia.Social.Factions
 {
@@ -37,7 +38,7 @@ namespace HeroOfEternia.Social.Factions
                 var file = Godot.FileAccess.Open(jsonPath, Godot.FileAccess.ModeFlags.Read);
                 if (file == null)
                 {
-                    Logger.Warn($"FactionDatabase: Could not open {jsonPath} — loading defaults.");
+                    Logger.Warning($"FactionDatabase: Could not open {jsonPath} — loading defaults.");
                     LoadDefaults();
                     _initialized = true;
                     return;
@@ -46,10 +47,12 @@ namespace HeroOfEternia.Social.Factions
                 string json = file.GetAsText();
                 file.Close();
 
-                var definitions = JsonConvert.DeserializeObject<List<FactionDefinition>>(json);
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                options.Converters.Add(new JsonStringEnumConverter());
+                var definitions = JsonSerializer.Deserialize<List<FactionDefinition>>(json, options);
                 if (definitions == null || definitions.Count == 0)
                 {
-                    Logger.Warn("FactionDatabase: Empty or invalid JSON — loading defaults.");
+                    Logger.Warning("FactionDatabase: Empty or invalid JSON — loading defaults.");
                     LoadDefaults();
                 }
                 else
@@ -81,7 +84,7 @@ namespace HeroOfEternia.Social.Factions
         {
             if (faction == null || string.IsNullOrEmpty(faction.FactionId))
             {
-                Logger.Warn("FactionDatabase: Attempted to register null/empty faction.");
+                Logger.Warning("FactionDatabase: Attempted to register null/empty faction.");
                 return;
             }
 

@@ -75,7 +75,7 @@ namespace HeroOfEternia.Social.Reputation
         {
             if (tiers == null || tiers.Count == 0)
             {
-                Logger.Warn("ReputationManager: Cannot set empty tier list. Using defaults.");
+                Logger.Warning("ReputationManager: Cannot set empty tier list. Using defaults.");
                 return;
             }
 

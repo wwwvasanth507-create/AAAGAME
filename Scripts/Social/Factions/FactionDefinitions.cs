@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HeroOfEternia.Social.Factions
 {
@@ -38,6 +39,7 @@ namespace HeroOfEternia.Social.Factions
         ChaoticGood,
         LawfulNeutral,
         TrueNeutral,
+        Neutral = TrueNeutral,
         ChaoticNeutral,
         LawfulEvil,
         NeutralEvil,

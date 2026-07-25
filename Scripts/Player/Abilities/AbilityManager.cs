@@ -4,6 +4,7 @@ using System.Linq;
 using HeroOfEternia.Core;
 using HeroOfEternia.Player.Resources;
 using HeroOfEternia.Player.Progression;
+using PlayerResourceManager = HeroOfEternia.Player.Resources.ResourceManager;
 
 namespace HeroOfEternia.Player.Abilities
 {
@@ -145,7 +146,7 @@ namespace HeroOfEternia.Player.Abilities
         // Dependencies
         // ----------------------------------------------------------------
         private readonly AbilityDatabase _abilityDatabase;
-        private readonly ResourceManager _resourceManager;
+        private readonly PlayerResourceManager _resourceManager;
         private readonly PlayerProgression _progression;
         private readonly EffectsManager _effectsManager;
         private readonly LoadoutManager _loadoutManager;
@@ -179,7 +180,7 @@ namespace HeroOfEternia.Player.Abilities
         // ----------------------------------------------------------------
         public AbilityManager(
             AbilityDatabase abilityDatabase,
-            ResourceManager resourceManager,
+            PlayerResourceManager resourceManager,
             PlayerProgression progression,
             EffectsManager effectsManager,
             LoadoutManager loadoutManager)

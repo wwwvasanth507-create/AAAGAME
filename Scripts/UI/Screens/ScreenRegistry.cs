@@ -220,9 +220,9 @@ namespace HeroOfEternia.UI.Screens
             theme.SetColor("font_color", "Button", Colors.White);
             theme.SetColor("font_hover_color", "Button", new Color(1, 0.84f, 0));
             theme.SetColor("font_pressed_color", "Button", new Color(0.8f, 0.7f, 0));
-            theme.SetStyleBox("normal", "Button", new StyleBoxEmpty());
-            theme.SetStyleBox("hover", "Button", new StyleBoxEmpty());
-            theme.SetStyleBox("pressed", "Button", new StyleBoxEmpty());
+            theme.SetStylebox("normal", "Button", new StyleBoxEmpty());
+            theme.SetStylebox("hover", "Button", new StyleBoxEmpty());
+            theme.SetStylebox("pressed", "Button", new StyleBoxEmpty());
             return theme;
         }
     }
@@ -745,7 +745,7 @@ namespace HeroOfEternia.UI.Screens
         {
             var theme = new Theme();
             var style = new StyleBoxFlat { BgColor = new Color(0.1f, 0.1f, 0.15f), BorderWidthBottom = 1, BorderColor = new Color(0.3f, 0.3f, 0.4f) };
-            theme.SetStyleBox("panel", "Panel", style);
+            theme.SetStylebox("panel", "Panel", style);
             return theme;
         }
     }
@@ -997,7 +997,7 @@ namespace HeroOfEternia.UI.Screens
             _questList.AddItem("Daily: Resource Collection");
             AddChild(_questList);
 
-            _questDetail = new RichTextLayout
+            _questDetail = new RichTextLabel
             {
                 Position = new Vector2I(650, 100),
                 Size = new Vector2I(600, 800)

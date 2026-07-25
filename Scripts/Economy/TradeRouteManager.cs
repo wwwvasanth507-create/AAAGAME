@@ -177,8 +177,7 @@ namespace HeroOfEternia.Economy
                     Logger.Info($"TradeRouteManager: Caravan '{caravan.CaravanId}' arrived at '{arrivalSettlement}'.");
 
                     // Publish arrival event
-                    var eventBus = ServiceLocator.Get<EventBus>();
-                    eventBus?.Publish("CaravanArrived", new CaravanArrivalEvent
+                    EventBus.Publish(new CaravanArrivalEvent
                     {
                         RouteId = caravan.RouteId,
                         SettlementId = arrivalSettlement,

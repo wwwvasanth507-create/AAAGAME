@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HeroOfEternia.Social.Reputation
 {
@@ -69,7 +70,9 @@ namespace HeroOfEternia.Social.Reputation
                 string json = file.GetAsText();
                 file.Close();
 
-                var loaded = JsonConvert.DeserializeObject<List<ReputationModifier>>(json);
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                options.Converters.Add(new JsonStringEnumConverter());
+                var loaded = JsonSerializer.Deserialize<List<ReputationModifier>>(json, options);
                 if (loaded == null || loaded.Count == 0)
                 {
                     LoadDefaults();
