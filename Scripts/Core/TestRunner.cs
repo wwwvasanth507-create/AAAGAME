@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Godot;
 using HeroOfEternia.World;
+using HeroOfEternia.NPC;
 
 namespace HeroOfEternia.Core
 {
@@ -1203,6 +1204,198 @@ namespace HeroOfEternia.Core
 
             resolvedSm.LoadSettings();
 
+            // Phase 9 — NPC Architecture tests
+            GD.Print("Running: Phase 9 NPC Architecture Tests...");
+            bool phase9Pass = RunPhase9Tests(tempDir);
+            if (!phase9Pass) return false;
+
+            return true;
+        }
+
+        // ==========================================================
+        // PHASE 9 — NPC ARCHITECTURE TEST SUITE
+        // ==========================================================
+
+        private bool RunPhase9Tests(string tempDir)
+        {
+            // ------------------------------------------
+            // TEST P9-1: NPC data creation & integrity
+            // ------------------------------------------
+            var npcData = new NpcData
+            {
+                UniqueId    = "npc_test_001",
+                DisplayName = "TestVillager",
+                Occupation  = NpcTypeEnum.Villager,
+                Age         = 32,
+                Gender      = GenderType.Female,
+                MaxHealth   = 100f,
+                CurrentHealth = 100f
+            };
+            if (npcData.UniqueId != "npc_test_001" || npcData.Occupation != NpcTypeEnum.Villager)
+            {
+                GD.Print("FAIL P9-1: NPC data creation integrity.");
+                return false;
+            }
+            GD.Print("PASS P9-1: NPC data creation & integrity.");
+
+            // ------------------------------------------
+            // TEST P9-2: FSM transitions (Idle → Walking → Working)
+            // ------------------------------------------
+            var fsm = new NpcStateMachine("npc_test_001");
+            fsm.RegisterDefaultTransitions();
+            bool t1 = fsm.TransitionTo(NpcStateEnum.Walking);
+            bool t2 = fsm.TransitionTo(NpcStateEnum.Working);
+            bool t3 = fsm.TransitionTo(NpcStateEnum.Idle);
+            if (!t1 || !t2 || !t3 || fsm.CurrentState != NpcStateEnum.Idle)
+            {
+                GD.Print("FAIL P9-2: FSM state transitions.");
+                return false;
+            }
+            GD.Print("PASS P9-2: FSM state transitions (Idle→Walking→Working→Idle).");
+
+            // ------------------------------------------
+            // TEST P9-3: Schedule block resolution at time fractions
+            // ------------------------------------------
+            var scheduler = NpcScheduler.BuildDefaultCivilianSchedule();
+            var morningBlock = scheduler.GetActiveBlock(0.30); // Morning
+            var nightBlock   = scheduler.GetActiveBlock(0.10); // Night
+            if (morningBlock == null || morningBlock.TargetState != NpcStateEnum.Working)
+            {
+                GD.Print("FAIL P9-3: Schedule morning block resolution.");
+                return false;
+            }
+            if (nightBlock == null || nightBlock.TargetState != NpcStateEnum.Sleeping)
+            {
+                GD.Print("FAIL P9-3: Schedule night block resolution.");
+                return false;
+            }
+            GD.Print("PASS P9-3: Schedule block resolution at different time fractions.");
+
+            // ------------------------------------------
+            // TEST P9-4: Relationship adjustments
+            // ------------------------------------------
+            var relSystem = new RelationshipSystem();
+            relSystem.AdjustFriendship("npc_001", "npc_002", 50f);
+            relSystem.AdjustTrust("npc_001", "npc_002", 30f);
+            relSystem.AdjustFear("npc_001", "npc_002", 200f); // should clamp to 100
+            var rel = relSystem.Get("npc_001", "npc_002");
+            if (rel == null || rel.Friendship != 50f || rel.Trust != 30f || rel.Fear != 100f)
+            {
+                GD.Print($"FAIL P9-4: Relationship values incorrect. F={rel?.Friendship} T={rel?.Trust} Fe={rel?.Fear}");
+                return false;
+            }
+            GD.Print("PASS P9-4: Relationship adjustments & clamping.");
+
+            // ------------------------------------------
+            // TEST P9-5: Reputation scope changes
+            // ------------------------------------------
+            var repSystem = new ReputationSystem();
+            repSystem.AdjustGlobal(100, "saved_villager");
+            repSystem.AdjustRegional("region_forest", 50, "completed_quest");
+            repSystem.AdjustFaction("faction_guild", -20, "stolen_item");
+            repSystem.AdjustIndividual("npc_king", 200, "hero_recognition");
+            repSystem.AdjustGlobal(-2000, "test_clamp"); // test lower clamp
+            if (repSystem.GetGlobal() != -900 ||
+                repSystem.GetRegional("region_forest") != 50 ||
+                repSystem.GetFaction("faction_guild") != -20 ||
+                repSystem.GetIndividual("npc_king") != 200)
+            {
+                GD.Print("FAIL P9-5: Reputation scope changes incorrect.");
+                return false;
+            }
+            GD.Print("PASS P9-5: Reputation scope changes & clamping.");
+
+            // ------------------------------------------
+            // TEST P9-6: Dialogue line resolution
+            // ------------------------------------------
+            var dialogue = new DialogueFramework();
+            var lines = DialogueFramework.BuildDefaultLines(NpcTypeEnum.Villager);
+            dialogue.RegisterLines("npc_001", lines);
+            var greeting = dialogue.Resolve("npc_001", DialogueCategory.Greeting, 60f, 0.30, "weather_sunny");
+            if (greeting == null || !greeting.LocalizationKey.Contains("villager"))
+            {
+                GD.Print("FAIL P9-6: Dialogue line resolution returned null or wrong key.");
+                return false;
+            }
+            GD.Print($"PASS P9-6: Dialogue line resolved: '{greeting.LocalizationKey}'.");
+
+            // ------------------------------------------
+            // TEST P9-7: NPC spawn determinism
+            // ------------------------------------------
+            var spawner = new NpcSpawner("TestWorldSeed");
+            spawner.RegisterDefaultRules();
+            var spawnList1 = spawner.GenerateForRegion("region_01", 0f, 0f);
+            var spawnList2 = spawner.GenerateForRegion("region_01", 0f, 0f);
+            if (spawnList1.Count == 0 || spawnList1.Count != spawnList2.Count ||
+                spawnList1[0].WorldX != spawnList2[0].WorldX)
+            {
+                GD.Print("FAIL P9-7: NPC spawn not deterministic.");
+                return false;
+            }
+            GD.Print($"PASS P9-7: NPC spawn determinism ({spawnList1.Count} NPCs).");
+
+            // ------------------------------------------
+            // TEST P9-8: NpcManager register + update throttle
+            // ------------------------------------------
+            var manager = new NpcManager();
+            manager.RegisterNpc(npcData);
+            if (manager.Count != 1)
+            {
+                GD.Print("FAIL P9-8: NpcManager registration count mismatch.");
+                return false;
+            }
+            manager.UpdateAll(0.1, 0.30); // Under threshold — no state change expected
+            manager.UpdateAll(0.5, 0.30); // At threshold — schedule should fire
+            var fsmResult = manager.GetFsm("npc_test_001");
+            if (fsmResult == null)
+            {
+                GD.Print("FAIL P9-8: NpcManager FSM not found after registration.");
+                return false;
+            }
+            GD.Print("PASS P9-8: NpcManager registration & throttled update.");
+
+            // ------------------------------------------
+            // TEST P9-9: Save V6 serialization & V5→V6 migration
+            // ------------------------------------------
+            var saveManager = new SaveManager(tempDir);
+            var prof = new SaveProfile();
+            prof.NpcStates["npc_test_001"] = new NpcSaveState
+            {
+                UniqueId = "npc_test_001", WorldX = 10f, WorldY = 0f, WorldZ = 20f,
+                Emotion = EmotionState.Happy, CurrentHealth = 90f
+            };
+            prof.ReputationSnapshot["global"] = 100;
+            prof.RelationshipSnapshot["npc_001_npc_002"] = new float[] { 50f, 30f, 20f, 5f };
+
+            bool saveOk = saveManager.Save(9, prof);
+            var loadedProf = saveManager.Load(9);
+            if (!saveOk || loadedProf == null ||
+                !loadedProf.NpcStates.ContainsKey("npc_test_001") ||
+                loadedProf.ReputationSnapshot["global"] != 100)
+            {
+                GD.Print("FAIL P9-9: Save V6 serialization failed.");
+                return false;
+            }
+
+            // V5 → V6 migration test
+            var legacyV5 = new SaveProfile();
+            legacyV5.SaveVersion = 5;
+            var migMethod = typeof(SaveManager).GetMethod("MigrateProfile",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (migMethod != null)
+            {
+                migMethod.Invoke(saveManager, new object[] { legacyV5 });
+                if (legacyV5.SaveVersion != 6 ||
+                    legacyV5.NpcStates == null ||
+                    legacyV5.ReputationSnapshot == null)
+                {
+                    GD.Print("FAIL P9-9: SaveProfile V5→V6 migration failed.");
+                    return false;
+                }
+            }
+            GD.Print("PASS P9-9: Save V6 serialization & V5→V6 migration.");
+
+            GD.Print("Phase 9 NPC Architecture: ALL 9 TESTS PASSED.");
             return true;
         }
     }

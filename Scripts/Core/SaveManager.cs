@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HeroOfEternia.NPC;
 
 namespace HeroOfEternia.Core
 {
@@ -88,6 +89,14 @@ namespace HeroOfEternia.Core
         public HashSet<string> DiscoveredNavRegions { get; set; } = new();
         public Dictionary<string, string> PopulatedLandmarks { get; set; } = new();
 
+        // NPC Systems (Save V6)
+        /// <summary>NPC runtime states keyed by NPC unique ID.</summary>
+        public Dictionary<string, NpcSaveState> NpcStates { get; set; } = new();
+        /// <summary>Flat reputation snapshot: "global", "reg:regionId", "fac:factionId", "ind:npcId".</summary>
+        public Dictionary<string, int> ReputationSnapshot { get; set; } = new();
+        /// <summary>Relationship snapshot keyed by "npcA_npcB" → float[4] (Friendship, Trust, Respect, Fear).</summary>
+        public Dictionary<string, float[]> RelationshipSnapshot { get; set; } = new();
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();
@@ -109,7 +118,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 5;
+        private const int CurrentSaveVersion = 6;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.
@@ -318,6 +327,12 @@ namespace HeroOfEternia.Core
                 profile.ModifiedDecorations = new Dictionary<string, List<string>>();
                 profile.DiscoveredNavRegions = new HashSet<string>();
                 profile.PopulatedLandmarks = new Dictionary<string, string>();
+            }
+            if (profile.SaveVersion < 6)
+            {
+                profile.NpcStates            = new Dictionary<string, NpcSaveState>();
+                profile.ReputationSnapshot   = new Dictionary<string, int>();
+                profile.RelationshipSnapshot = new Dictionary<string, float[]>();
             }
             profile.SaveVersion = CurrentSaveVersion;
         }

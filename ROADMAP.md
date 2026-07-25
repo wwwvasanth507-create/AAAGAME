@@ -20,7 +20,8 @@ gantt
     Phase 7: Procedural World & Streaming (P7)      :done,   p7,  after p6,   2d
     Phase 8: Procedural Terrain & Navigation (P8)    :done,   p8,  after p7,   2d
     section Database & World
-    Phase 9: Offline Storage & Database (P9-P11)    :active, p9,  after p8,   5d
+    Phase 9: NPC Architecture (P9)                    :done,   p9a, after p8,   2d
+    Phase 10: World Systems Audit (P9-Audit)           :active, p9b, after p9a,  1d
     section Rendering
     Phase 10: 3D Shaders & Presets (P12-P30)         :        p10, after p9,   10d
     section Mechanics

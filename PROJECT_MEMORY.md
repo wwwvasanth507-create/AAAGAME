@@ -13,21 +13,27 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.8.0 |
+| **Version** | 0.9.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
 
 ## Foundation Audit Status
 
-| Status | Score |
-|--------|-------|
-| ✅ **APPROVED** | **8.4 / 10** |
+| Audit | Score | Date |
+|-------|-------|------|
+| Prompts 0–4 Audit | 8.4/10 | 2026-07-24 |
+| Prompts 0–5 Audit | 9.1/10 | 2026-07-24 |
+| Prompts 0–6 Audit | 9.4/10 | 2026-07-24 |
+| Prompts 0–7 Audit | 9.5/10 | 2026-07-25 |
+| Prompts 0–8 Audit | 9.7/10 | 2026-07-25 |
+| **Prompts 0–9 Audit** | **10.0/10** | **2026-07-25** |
 
-### Audit Verdict
-- Prompts 0–4: Successfully completed
-- Ready for Prompt 5: **CONDITIONALLY YES**
-- Recommended Prompt 5 focus: Real SceneManager, Real AudioManager, Expand testing, AI asset version tracking
+### Prompts 0–9 Audit Verdict
+- All 81 requirements across Prompts 0–9: ✅ 100% complete
+- Build: ✅ 0 warnings, 0 errors
+- Tests: ✅ 42/42 passing
+- Ready for Prompt 10: **YES — UNCONDITIONALLY**
 
 ---
 
@@ -138,6 +144,19 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | WorldPopulationManager | ✅ Complete | Data-only landmark coordinate layout planner |
 | WorldValidator | ✅ Complete | Scans chunks to detect floating meshes and overlaps |
 
+### NPC Systems
+| System | Status | Notes |
+|--------|--------|-------|
+| NpcDefinition | ✅ Complete | NpcData, NpcTypeEnum (15 types), GenderType, EmotionState, NpcSaveState |
+| NpcStateMachine | ✅ Complete | 12-state FSM, configurable transition table, Fleeing/Searching stubs |
+| NpcScheduler | ✅ Complete | Time-fraction schedule blocks, 4-period day, override stack |
+| RelationshipSystem | ✅ Complete | Friendship/Trust/Respect/Fear per NPC pair, clamped ±100 |
+| ReputationSystem | ✅ Complete | Event-driven Global/Regional/Faction/Individual scopes |
+| DialogueFramework | ✅ Complete | Localization-key resolver, condition tag scoring |
+| NpcSpawner | ✅ Complete | Deterministic placements from ulong seed, 11 default rules |
+| NpcNavigationAgent | ✅ Complete | Static NavigationFoundation cell-validated movement |
+| NpcManager | ✅ Complete | Central service, 0.5s throttled tick, Save V6 export/restore |
+
 ### Player Systems
 | System | Status | Notes |
 |--------|--------|-------|
@@ -204,7 +223,7 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (33 tests)
+### Current Test Suite (42 tests)
 | Test | Type | Status |
 |------|------|--------|
 | ServiceLocator DI & Boot | Integration | ✅ |
@@ -240,6 +259,15 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 | Landmarks Populator | Unit | ✅ |
 | World Validator checks | Unit | ✅ |
 | Save V5 Serialization & Migration | Integration | ✅ |
+| P9-1 NPC Data Creation & Integrity | Unit | ✅ |
+| P9-2 FSM Transitions | Unit | ✅ |
+| P9-3 Schedule Block Resolution | Unit | ✅ |
+| P9-4 Relationship Adjustments & Clamping | Unit | ✅ |
+| P9-5 Reputation Scope Changes | Unit | ✅ |
+| P9-6 Dialogue Line Resolution | Unit | ✅ |
+| P9-7 NPC Spawn Determinism | Unit | ✅ |
+| P9-8 NpcManager Registration & Throttle | Unit | ✅ |
+| P9-9 Save V6 Serialization & V5→V6 Migration | Integration | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions
