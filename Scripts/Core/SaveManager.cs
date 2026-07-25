@@ -57,7 +57,7 @@ namespace HeroOfEternia.Core
     /// </summary>
     public class SaveProfile
     {
-        public int SaveVersion { get; set; } = 10;
+        public int SaveVersion { get; set; } = 13;
         public string GameVersion { get; set; } = "1.0.0";
         public PlayerStats Stats { get; set; } = new PlayerStats();
         public InventoryData Inventory { get; set; } = new InventoryData();
@@ -153,6 +153,24 @@ namespace HeroOfEternia.Core
         /// <summary>Active craft queue items.</summary>
         public List<Crafting.CraftQueueItem> CraftQueueItems { get; set; } = new();
 
+        // Economy Systems (Save V13)
+        /// <summary>Complete economy system save data.</summary>
+        public Economy.EconomySaveData? EconomyData { get; set; }
+
+        // Settlement Systems (Save V14)
+        /// <summary>Complete settlement system save data.</summary>
+        public Settlement.SettlementSaveData? SettlementData { get; set; }
+
+        // Quest & Dialogue Systems (Save V15)
+        /// <summary>Complete quest system save data.</summary>
+        public Quest.QuestSaveData? QuestData { get; set; }
+        /// <summary>Complete journal system save data.</summary>
+        public Quest.JournalSaveData? JournalData { get; set; }
+        /// <summary>Complete narrative system save data.</summary>
+        public Quest.NarrativeSaveData? NarrativeData { get; set; }
+        /// <summary>Dialogue manager runtime state.</summary>
+        public Dialogue.DialogueManagerSaveData? DialogueData { get; set; }
+
         // Custom dictionary for future-proofing, plugins, or DLC variables
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; } = new Dictionary<string, object>();
@@ -174,7 +192,7 @@ namespace HeroOfEternia.Core
 
     public class SaveManager
     {
-        private const int CurrentSaveVersion = 12;
+        private const int CurrentSaveVersion = 15;
         private const string GameVersionStr = "1.0.0";
 
         // Application-level salt — combined with device unique ID at runtime.

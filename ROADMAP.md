@@ -180,11 +180,48 @@ gantt
     *   `Test suite` — 17 new tests covering all systems (attribute engine, modifiers, enchantments, durability, gear sets, quality, upgrades, save/load, version migration, stress testing)
     *   `Documentation` — ATTRIBUTE_ENGINE.md, EQUIPMENT_PROGRESSION.md, MODIFIER_SYSTEM.md, ENCHANTMENT_SYSTEM.md, DURABILITY_SYSTEM.md
 
-### 🔲 Phase 15: Crafting, Gathering, Professions & Economy (Next — Prompt 15)
-*   **Planned Features:** Crafting system with recipes, gathering/harvesting mechanics, profession system, merchant economy, item enhancement through crafting, resource management.
+### ✅ Phase 15: Gathering & Crafting (Completed — Prompt 15)
+*   **Features:** Resource Database (27 resources), Profession System (14 professions), Gathering Manager, Recipe Database (20 recipes), Crafting Manager (instant/queue/batch), Workstation Framework (16 workstations), Resource Regeneration, Save V12 integration.
 
-### 🔲 Phase 16: UI/UX & Audio (Prompts 71–110)
+### ✅ Phase 16: Settlement Simulation (Completed — Prompt 16)
+*   **Features:** Settlement Database (6 settlements, 15 types), Building Database (25+ buildings), NPC Schedule Expansion (6 profession schedules, weather/festival/emergency overrides), World Event Framework (8 event templates), Settlement Manager (orchestrator), Public Services (20 service types), Save V14 integration, 40 tests.
+
+### ✅ Phase 19: Quest & Dialogue Framework (Completed — Prompt 19)
+*   **Features:**
+    *   **QuestDatabase** — Data-driven quest registry with 18 categories, O(1) lookups, indexed by category/giver/faction. Thread-safe. JSON loadable. Supports thousands of quests.
+    *   **QuestDefinition** — Complete data model with 40+ fields including QuestId, InternalName, DisplayName, Description, Category, RecommendedLevel, QuestGiver, RequiredFaction, RequiredReputation, Prerequisites, Branches, Objectives, Rewards, FailureConditions, TimeLimits, Repeatability, LocalizationKeys, DLC fields, co-op support.
+    *   **ObjectiveManager** — 16 objective types (TalkToNpc, ReachLocation, DefeatEnemy, DefeatBoss, CollectItem, CraftItem, GatherResource, DeliverItem, Interact, EscortNpc, Survive, UseAbility, VisitSettlement, ExploreArea, TriggerEvent, Custom). Unlimited objective chains. Prerequisite-based activation. Branching on complete/fail. Optional objectives.
+    *   **QuestManager** — Full lifecycle management (Accept, Complete, Fail, Abandon, Retry). Prerequisite evaluation. Repeatability/schedule checks. Time limit tracking. Reward distribution. Quest history. Full save/load.
+    *   **QuestBranch** — Branching quest paths with conditions, objectives, and transition hooks.
+    *   **DialogueDatabase** — Data-driven conversation registry. O(1) lookups. NPC-indexed. JSON loadable. Thread-safe.
+    *   **DialogueManager** — Branching dialogue execution engine. Conversation flow. Choice selection with condition filtering. Quest hooks. Flag setting. Decision recording. Merchant/service hooks. Cinematic hooks. Loop prevention. Full save/load.
+    *   **NarrativeManager** — Central narrative state tracker. Global/regional flags. World/NPC/dialogue variables. Player decisions. Story chapters. Condition evaluation engine. Full save/load.
+    *   **JournalManager** — Quest journal (active/completed/failed). Lore entries. Dialogue log. Discovery log. Future bestiary/codex hooks. Full save/load.
+    *   **Save Integration** — SaveProfile V15 with QuestData, JournalData, NarrativeData, DialogueData.
+    *   **Data Files** — Settings/quest_database.json (3 example quests). Settings/dialogue_database.json (1 example conversation).
+    *   **Tests** — 55 tests covering all systems + stress + edge cases.
+    *   **Documentation** — QUEST_SYSTEM.md, DIALOGUE_SYSTEM.md, OBJECTIVE_SYSTEM.md, JOURNAL_SYSTEM.md, NARRATIVE_SYSTEM.md.
+
+### ✅ Phase 17: Social Simulation Framework (Completed — Prompt 18)
+*   **Features:** Faction Database (9 factions, 16 types), Reputation Manager (5 scopes, 8 tiers), Reputation Modifier Registry (25 modifiers), Crime Manager (7 crime types, 5 severities, witness detection, bounties), Guard AI System (12 states, 4 alert levels, reinforcement calling), Diplomacy Framework (7 relations, allies/enemies queries), NPC Reaction System (10-factor evaluation), SocialManager orchestrator with full save/load, 98 tests.
+
+### ✅ Phase 20: UI/UX Framework (Completed — Prompt 20)
+*   **Features:**
+    *   **UIManager** — Complete rewrite with screen lifecycle, navigation stack (max depth 20), modal dialog system, 10-layer management, focus management, Tween-based transition animations, input routing, UI state persistence (UIPreferences), and plugin system (IUIPlugin). Registered in ServiceLocator as IInitializable.
+    *   **Screen Framework** — 20 reusable screen types via ScreenRegistry — MainMenu, PauseMenu, Settings (tabs: Audio/Graphics/Controls/Accessibility), Inventory (grid + detail panel), Equipment (10 slots), Character (stats display), Abilities (ability list), QuestJournal (list + detail), Map (full-screen placeholder), Crafting (recipe list), Trading (merchant + player inventories), Dialogue (speaker + text + choices), Notifications (history), Loading (progress + tips), GameOver (retry/load/quit), SaveLoad (10 slots), Bestiary, Codex, Achievements, and DLCPlaceholder. All support lazy loading via OnLazyLoad().
+    *   **HUD System** — Modular HUDController with 14 independently enabled/disabled widgets — Health, Mana, Stamina, Experience (progress bars + labels), Compass (N/NE/E/etc. direction), MiniMap (hook), QuestTracker (add/remove/clear), AbilityBar (6 slots), InteractionPrompt (show/hide), BuffDebuff (add/clear), StatusEffect (add/clear), TargetInfo (name/level/HP), BossHealth (show/update/hide with percentage), FPSDebug (FPS + memory, 0.5s update, dev-only). All widgets implement IAccessibleWidget for text scale and high contrast. EventBus-driven updates.
+    *   **Notification System** — NotificationManager with priority queue (Low/Normal/High/Critical), max 5 visible, max 50 queued, color-coded priority styling, fade-out animation, history tracking, convenience methods (QuestUpdated, LevelUp, ItemAcquired, AchievementUnlocked, CraftComplete, SystemMessage, Warning, Error), handler system (INotificationHandler), and full persistence.
+    *   **Input Integration** — UIInputHandler with touch, mouse, keyboard, and gamepad (future) support. Gesture hooks for long press (0.5s), double tap (0.3s interval), drag & drop (10px threshold), pinch, and swipe. Input rebinding framework with 8 default actions (accept/cancel/pause/inventory/character/journal/map/abilities). IGestureHandler interface for extensible gesture processing.
+    *   **Responsive Layout** — ResponsiveLayout with 4 device categories (Phone ≤480dp, SmallTablet ≤768dp, LargeTablet ≤1024dp, Desktop >1024dp), DPI-aware scaling (160 base DPI), safe areas (status bar + nav bar), orientation detection with events, foldable device hooks, and per-category layout presets (grid columns, sidebar, bottom nav, padding, font scale).
+    *   **Accessibility** — AccessibilityManager with adjustable text scale (0.5x–2.0x), high contrast mode, color-blind friendly hooks (Protanopia/Deuteranopia/Tritanopia shader hooks), subtitle framework (show/hide, auto-fade, adjustable size), reduced motion mode (70% shorter tweens), screen reader labels (Accessible + TooltipText), haptic feedback toggle (Light/Medium/Heavy), future voice navigation hooks, and full settings persistence via SettingsManager.
+    *   **Tests** — UISystemTests with 100+ test cases covering UIManager, all 20 screen types, all 14 HUD widgets, notification system, responsive layout, accessibility, input, save/load persistence, and stress tests.
+    *   **Documentation** — UI_SYSTEM.md, HUD_SYSTEM.md, NOTIFICATION_SYSTEM.md, ACCESSIBILITY.md, RESPONSIVE_LAYOUT.md created.
+
+### 🔲 Phase 21: Story Content & Data Integration (Prompts 21–30)
+*   **Planned Features:** Screen-to-data integration (connect UI to game systems), responsive screen layouts, SaveLoadScreen integration, color blind shader, minimap implementation, main storyline quests, side quest content, dialogue writing, player housing, kingdom politics.
+
+### 🔲 Phase 22: UI/UX & Audio (Prompts 31–70)
 *   **Planned Features:** Glassmorphic HUD overlay screens, settings, volume sliders.
 
-### 🔲 Phase 17: Security & QA Release (Prompts 111–150)
+### 🔲 Phase 23: Security & QA Release (Prompts 71–150)
 *   **Planned Features:** OBX profiling, Google Play Store signed release APK.

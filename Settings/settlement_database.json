@@ -1,0 +1,450 @@
+[
+    {
+        "SettlementId": "village_harmony",
+        "DisplayName": "Harmony Village",
+        "LocalizationKey": "settlement_village_harmony",
+        "Type": 2,
+        "Region": "eternia_valley",
+        "Biome": "temperate_forest",
+        "Population": 120,
+        "MaxPopulation": 300,
+        "Prosperity": 3,
+        "Security": 2,
+        "Government": 0,
+        "PrimaryIndustries": [
+            "farming",
+            "woodcutting"
+        ],
+        "PrimaryExports": [
+            "food_grain",
+            "material_wood"
+        ],
+        "PrimaryImports": [
+            "material_iron_ore",
+            "pot_minor_health"
+        ],
+        "Faction": "neutral",
+        "ClimateModifier": 1.0,
+        "SettlementServices": [
+            0,
+            12,
+            3
+        ],
+        "BuildingIds": [
+            "house_01",
+            "house_02",
+            "inn_01",
+            "farm_01",
+            "farm_02",
+            "blacksmith_01",
+            "market_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.6,
+                "Merchant": 0.15,
+                "Guard": 0.1,
+                "Noble": 0.05,
+                "Child": 0.08,
+                "Traveler": 0.02
+            },
+            "ProfessionWeights": {
+                "Farmer": 0.4,
+                "Merchant": 0.15,
+                "Blacksmith": 0.1,
+                "Guard": 0.1,
+                "Innkeeper": 0.05,
+                "Baker": 0.05,
+                "Child": 0.1,
+                "Elder": 0.05
+            },
+            "MaxActiveNpcs": 50,
+            "RespawnDelay": 30.0,
+            "SpawnChildren": true,
+            "SpawnElderly": true
+        },
+        "MusicProfile": "village",
+        "WorldPositionX": 100.0,
+        "WorldPositionZ": 200.0
+    },
+    {
+        "SettlementId": "town_haven",
+        "DisplayName": "Haven Town",
+        "LocalizationKey": "settlement_town_haven",
+        "Type": 3,
+        "Region": "eternia_valley",
+        "Biome": "temperate_forest",
+        "Population": 450,
+        "MaxPopulation": 1200,
+        "Prosperity": 4,
+        "Security": 3,
+        "Government": 1,
+        "PrimaryIndustries": [
+            "crafting",
+            "ironworking",
+            "trade"
+        ],
+        "PrimaryExports": [
+            "armor_leather",
+            "weapon_sword"
+        ],
+        "PrimaryImports": [
+            "food_fish",
+            "gem_ruby",
+            "pot_minor_health"
+        ],
+        "Faction": "eternia_crown",
+        "ClimateModifier": 1.0,
+        "SettlementServices": [
+            0,
+            1,
+            12,
+            17,
+            11,
+            7
+        ],
+        "BuildingIds": [
+            "house_01",
+            "house_02",
+            "house_03",
+            "inn_01",
+            "blacksmith_01",
+            "merchant_01",
+            "market_01",
+            "temple_01",
+            "guard_barracks_01",
+            "stables_01",
+            "town_hall_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.5,
+                "Merchant": 0.2,
+                "Guard": 0.15,
+                "Noble": 0.08,
+                "Child": 0.05,
+                "Traveler": 0.02
+            },
+            "ProfessionWeights": {
+                "Merchant": 0.2,
+                "Blacksmith": 0.15,
+                "Guard": 0.15,
+                "Farmer": 0.1,
+                "Priest": 0.1,
+                "Carpenter": 0.05,
+                "Tailor": 0.05,
+                "Alchemist": 0.05,
+                "Baker": 0.05,
+                "Innkeeper": 0.05,
+                "Child": 0.03,
+                "Elder": 0.02
+            },
+            "MaxActiveNpcs": 100,
+            "RespawnDelay": 25.0,
+            "SpawnChildren": true,
+            "SpawnElderly": true
+        },
+        "MusicProfile": "town",
+        "WorldPositionX": 300.0,
+        "WorldPositionZ": 150.0
+    },
+    {
+        "SettlementId": "city_eternia",
+        "DisplayName": "Eternia City",
+        "LocalizationKey": "settlement_city_eternia",
+        "Type": 4,
+        "Region": "eternia_valley",
+        "Biome": "temperate_forest",
+        "Population": 2500,
+        "MaxPopulation": 8000,
+        "Prosperity": 5,
+        "Security": 4,
+        "Government": 1,
+        "PrimaryIndustries": [
+            "magic",
+            "crafting",
+            "trade",
+            "governance"
+        ],
+        "PrimaryExports": [
+            "scroll_teleport",
+            "gem_ruby",
+            "potion_ultimate",
+            "enchanted_weapon"
+        ],
+        "PrimaryImports": [
+            "food_grain",
+            "material_wood",
+            "material_iron_ore",
+            "material_crystal"
+        ],
+        "Faction": "eternia_crown",
+        "ClimateModifier": 0.9,
+        "SettlementServices": [
+            0,
+            1,
+            2,
+            12,
+            13,
+            14,
+            3,
+            11,
+            7,
+            15,
+            18
+        ],
+        "BuildingIds": [
+            "house_01",
+            "house_02",
+            "house_03",
+            "inn_01",
+            "inn_02",
+            "blacksmith_01",
+            "blacksmith_02",
+            "merchant_01",
+            "merchant_02",
+            "market_01",
+            "market_02",
+            "temple_01",
+            "temple_02",
+            "guard_barracks_01",
+            "guard_barracks_02",
+            "stables_01",
+            "town_hall_01",
+            "workshop_01",
+            "library_01",
+            "hospital_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.4,
+                "Merchant": 0.25,
+                "Guard": 0.15,
+                "Noble": 0.1,
+                "Child": 0.05,
+                "Traveler": 0.05
+            },
+            "ProfessionWeights": {
+                "Merchant": 0.2,
+                "Blacksmith": 0.1,
+                "Guard": 0.1,
+                "Mage": 0.1,
+                "Priest": 0.08,
+                "Scholar": 0.08,
+                "Tailor": 0.05,
+                "Alchemist": 0.05,
+                "Enchanter": 0.05,
+                "Jeweler": 0.03,
+                "Artisan": 0.05,
+                "Builder": 0.03,
+                "Trader": 0.03,
+                "Noble": 0.03,
+                "Child": 0.02
+            },
+            "MaxActiveNpcs": 200,
+            "RespawnDelay": 20.0,
+            "SpawnChildren": true,
+            "SpawnElderly": true
+        },
+        "MusicProfile": "city",
+        "WorldPositionX": 500.0,
+        "WorldPositionZ": 300.0
+    },
+    {
+        "SettlementId": "port_brinewall",
+        "DisplayName": "Brinewall Port",
+        "LocalizationKey": "settlement_port_brinewall",
+        "Type": 8,
+        "Region": "coastal_plains",
+        "Biome": "coastal",
+        "Population": 800,
+        "MaxPopulation": 2000,
+        "Prosperity": 3,
+        "Security": 3,
+        "Government": 5,
+        "PrimaryIndustries": [
+            "fishing",
+            "shipbuilding",
+            "trade"
+        ],
+        "PrimaryExports": [
+            "food_fish",
+            "material_rope",
+            "material_lumber"
+        ],
+        "PrimaryImports": [
+            "armor_leather",
+            "weapon_sword",
+            "gem_ruby"
+        ],
+        "Faction": "neutral",
+        "ClimateModifier": 1.5,
+        "SettlementServices": [
+            0,
+            3,
+            18,
+            11
+        ],
+        "BuildingIds": [
+            "house_01",
+            "house_02",
+            "inn_01",
+            "merchant_01",
+            "market_01",
+            "dock_01",
+            "dock_02",
+            "stables_01",
+            "guard_barracks_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.5,
+                "Merchant": 0.2,
+                "Guard": 0.12,
+                "Noble": 0.03,
+                "Child": 0.05,
+                "Traveler": 0.1
+            },
+            "ProfessionWeights": {
+                "Sailor": 0.25,
+                "Fisherman": 0.2,
+                "Merchant": 0.15,
+                "Dockworker": 0.1,
+                "Guard": 0.1,
+                "Innkeeper": 0.05,
+                "Carpenter": 0.05,
+                "Child": 0.05,
+                "Elder": 0.05
+            },
+            "MaxActiveNpcs": 80,
+            "RespawnDelay": 25.0,
+            "SpawnChildren": true,
+            "SpawnElderly": true
+        },
+        "MusicProfile": "port",
+        "WorldPositionX": 800.0,
+        "WorldPositionZ": 100.0
+    },
+    {
+        "SettlementId": "mine_shadowpeak",
+        "DisplayName": "Shadowpeak Mining Camp",
+        "LocalizationKey": "settlement_mine_shadowpeak",
+        "Type": 9,
+        "Region": "shadow_mountains",
+        "Biome": "mountain",
+        "Population": 60,
+        "MaxPopulation": 150,
+        "Prosperity": 2,
+        "Security": 1,
+        "Government": 5,
+        "PrimaryIndustries": [
+            "mining",
+            "quarrying"
+        ],
+        "PrimaryExports": [
+            "material_iron_ore",
+            "material_crystal_shard",
+            "material_stone"
+        ],
+        "PrimaryImports": [
+            "food_grain",
+            "material_wood"
+        ],
+        "Faction": "miners_guild",
+        "ClimateModifier": 1.3,
+        "SettlementServices": [
+            0,
+            3
+        ],
+        "BuildingIds": [
+            "house_01",
+            "inn_01",
+            "merchant_01",
+            "farm_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.6,
+                "Merchant": 0.1,
+                "Guard": 0.05,
+                "Noble": 0.0,
+                "Child": 0.05,
+                "Traveler": 0.2
+            },
+            "ProfessionWeights": {
+                "Miner": 0.6,
+                "Merchant": 0.1,
+                "Guard": 0.05,
+                "Blacksmith": 0.1,
+                "Innkeeper": 0.1,
+                "Child": 0.03,
+                "Elder": 0.02
+            },
+            "MaxActiveNpcs": 30,
+            "RespawnDelay": 35.0,
+            "SpawnChildren": false,
+            "SpawnElderly": false
+        },
+        "MusicProfile": "mine",
+        "WorldPositionX": 700.0,
+        "WorldPositionZ": 600.0
+    },
+    {
+        "SettlementId": "camp_wanderer",
+        "DisplayName": "Wanderer's Camp",
+        "LocalizationKey": "settlement_camp_wanderer",
+        "Type": 0,
+        "Region": "eternia_valley",
+        "Biome": "grasslands",
+        "Population": 25,
+        "MaxPopulation": 50,
+        "Prosperity": 2,
+        "Security": 0,
+        "Government": 0,
+        "PrimaryIndustries": [
+            "hunting",
+            "gathering"
+        ],
+        "PrimaryExports": [
+            "food_meat",
+            "material_hide"
+        ],
+        "PrimaryImports": [
+            "pot_minor_health",
+            "material_wood"
+        ],
+        "Faction": "neutral",
+        "ClimateModifier": 1.0,
+        "SettlementServices": [
+            0,
+            3
+        ],
+        "BuildingIds": [
+            "inn_01"
+        ],
+        "SpawnRules": {
+            "NpcTypeWeights": {
+                "Civilian": 0.5,
+                "Merchant": 0.1,
+                "Guard": 0.0,
+                "Noble": 0.0,
+                "Child": 0.1,
+                "Traveler": 0.3
+            },
+            "ProfessionWeights": {
+                "Hunter": 0.4,
+                "Trader": 0.1,
+                "Innkeeper": 0.2,
+                "Child": 0.1,
+                "Elder": 0.2
+            },
+            "MaxActiveNpcs": 15,
+            "RespawnDelay": 40.0,
+            "SpawnChildren": true,
+            "SpawnElderly": true
+        },
+        "MusicProfile": "camp",
+        "WorldPositionX": 50.0,
+        "WorldPositionZ": 50.0
+    }
+]

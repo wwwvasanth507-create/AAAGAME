@@ -1,0 +1,295 @@
+[
+    {
+        "FactionId": "kingdom_eternia",
+        "DisplayName": "Kingdom of Eternia",
+        "Description": "The ancient and noble kingdom that has ruled these lands for centuries. Seeks to maintain order and prosperity.",
+        "Type": "Kingdom",
+        "Headquarters": "eternia_capital",
+        "Territory": "eternia_heartlands, eternia_coast",
+        "LeadershipHook": "King Aldric the Steadfast",
+        "Alignment": "LawfulGood",
+        "PrimaryGoals": [
+            "MaintainOrder",
+            "ProtectCitizens",
+            "ExpandInfluence"
+        ],
+        "FriendlyFactions": [
+            "adventurers_guild",
+            "merchant_guild_eternia"
+        ],
+        "HostileFactions": [
+            "bandits_blackfang",
+            "mercenaries_iron_company"
+        ],
+        "NeutralFactions": [
+            "mages_guild_arcane",
+            "scholars_archive"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#1B3A5C",
+            "SecondaryColor": "#C9A84C",
+            "AccentColor": "#FFFFFF"
+        },
+        "Symbol": "Crowned_Sword",
+        "MusicHook": "royal_eternia_theme",
+        "LocalizationKey": "faction_kingdom_eternia",
+        "MemberCount": 5000,
+        "Treasury": 100000.0
+    },
+    {
+        "FactionId": "adventurers_guild",
+        "DisplayName": "Adventurers Guild",
+        "Description": "A fellowship of explorers, monster slayers, and treasure hunters. Neutral good, helping those in need.",
+        "Type": "AdventurersGuild",
+        "Headquarters": "guild_hall_eternia",
+        "Territory": "eternia_heartlands",
+        "LeadershipHook": "Guildmaster Serra Windwalker",
+        "Alignment": "NeutralGood",
+        "PrimaryGoals": [
+            "ExploreDungeons",
+            "SlayMonsters",
+            "CollectArtifacts"
+        ],
+        "FriendlyFactions": [
+            "kingdom_eternia",
+            "merchant_guild_eternia"
+        ],
+        "HostileFactions": [
+            "bandits_blackfang"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#8B4513",
+            "SecondaryColor": "#DAA520",
+            "AccentColor": "#FF4500"
+        },
+        "Symbol": "Crossed_Swords_Star",
+        "MusicHook": "adventurers_guild_theme",
+        "LocalizationKey": "faction_adventurers_guild",
+        "MemberCount": 350,
+        "Treasury": 15000.0
+    },
+    {
+        "FactionId": "merchant_guild_eternia",
+        "DisplayName": "Eternian Merchant Guild",
+        "Description": "Powerful trade syndicate controlling commerce across the kingdom. Prioritizes profit and economic stability.",
+        "Type": "MerchantGuild",
+        "Headquarters": "trade_hall_eternia",
+        "Territory": "eternia_heartlands, eternia_coast, trade_routes",
+        "LeadershipHook": "High Trader Veridian Goldvein",
+        "Alignment": "LawfulNeutral",
+        "PrimaryGoals": [
+            "MaximizeProfit",
+            "ControlTrade",
+            "ExpandRoutes"
+        ],
+        "FriendlyFactions": [
+            "kingdom_eternia",
+            "adventurers_guild"
+        ],
+        "NeutralFactions": [
+            "mages_guild_arcane"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#2F4F2F",
+            "SecondaryColor": "#FFD700",
+            "AccentColor": "#8B0000"
+        },
+        "Symbol": "Golden_Scale",
+        "MusicHook": "trade_guild_theme",
+        "LocalizationKey": "faction_merchant_guild",
+        "MemberCount": 1200,
+        "Treasury": 500000.0
+    },
+    {
+        "FactionId": "mages_guild_arcane",
+        "DisplayName": "Arcane Mages Guild",
+        "Description": "Secretive order of wizards and scholars dedicated to the study and preservation of magical knowledge.",
+        "Type": "MagesGuild",
+        "Headquarters": "arcane_spire",
+        "Territory": "eternia_heartlands, magical_nexus",
+        "LeadershipHook": "Archmage Elara Spellweaver",
+        "Alignment": "TrueNeutral",
+        "PrimaryGoals": [
+            "PreserveKnowledge",
+            "StudyMagic",
+            "RegulateArcane"
+        ],
+        "FriendlyFactions": [
+            "scholars_archive"
+        ],
+        "NeutralFactions": [
+            "kingdom_eternia",
+            "adventurers_guild",
+            "merchant_guild_eternia"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#4A0080",
+            "SecondaryColor": "#C0C0C0",
+            "AccentColor": "#00FFFF"
+        },
+        "Symbol": "Arcane_Eye",
+        "MusicHook": "mages_guild_theme",
+        "LocalizationKey": "faction_mages_guild",
+        "MemberCount": 180,
+        "Treasury": 80000.0
+    },
+    {
+        "FactionId": "bandits_blackfang",
+        "DisplayName": "Blackfang Bandits",
+        "Description": "Notorious bandit clan operating from hidden camps in the wilderness. Known for ambushing caravans and raiding villages.",
+        "Type": "Bandits",
+        "Headquarters": "blackfang_hideout",
+        "Territory": "dark_forest, mountain_pass",
+        "LeadershipHook": "Baron Roderick Blackfang",
+        "Alignment": "ChaoticEvil",
+        "PrimaryGoals": [
+            "LootCaravans",
+            "ExtortVillages",
+            "ExpandTerritory"
+        ],
+        "FriendlyFactions": [
+            "mercenaries_iron_company"
+        ],
+        "HostileFactions": [
+            "kingdom_eternia",
+            "adventurers_guild",
+            "merchant_guild_eternia"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#1A1A1A",
+            "SecondaryColor": "#8B0000",
+            "AccentColor": "#FFD700"
+        },
+        "Symbol": "Cracked_Skull",
+        "MusicHook": "bandit_theme",
+        "LocalizationKey": "faction_bandits_blackfang",
+        "MemberCount": 150,
+        "Treasury": 25000.0
+    },
+    {
+        "FactionId": "mercenaries_iron_company",
+        "DisplayName": "Iron Company Mercenaries",
+        "Description": "Professional soldiers for hire. Known for discipline and efficiency, but their loyalty depends entirely on payment.",
+        "Type": "Mercenaries",
+        "Headquarters": "iron_compound",
+        "Territory": "mercenary_plains",
+        "LeadershipHook": "Captain Marcus Ironheart",
+        "Alignment": "TrueNeutral",
+        "PrimaryGoals": [
+            "SecureContracts",
+            "BuildReputation",
+            "AccumulateWealth"
+        ],
+        "FriendlyFactions": [
+            "bandits_blackfang"
+        ],
+        "NeutralFactions": [
+            "kingdom_eternia",
+            "merchant_guild_eternia"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#696969",
+            "SecondaryColor": "#FF4500",
+            "AccentColor": "#000000"
+        },
+        "Symbol": "Iron_Shield",
+        "MusicHook": "mercenary_theme",
+        "LocalizationKey": "faction_mercenaries_iron",
+        "MemberCount": 400,
+        "Treasury": 60000.0
+    },
+    {
+        "FactionId": "religious_order_light",
+        "DisplayName": "Order of the Eternal Light",
+        "Description": "Devoted followers of the divine Light, providing healing, guidance, and moral authority throughout the region.",
+        "Type": "ReligiousOrder",
+        "Headquarters": "grand_cathedral",
+        "Territory": "eternia_heartlands, holy_sites",
+        "LeadershipHook": "High Priestess Cassandra Lightbringer",
+        "Alignment": "LawfulGood",
+        "PrimaryGoals": [
+            "SpreadFaith",
+            "HealSick",
+            "ProtectHoly"
+        ],
+        "FriendlyFactions": [
+            "kingdom_eternia",
+            "adventurers_guild"
+        ],
+        "HostileFactions": [
+            "bandits_blackfang"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#FFF8DC",
+            "SecondaryColor": "#FFD700",
+            "AccentColor": "#FFFFFF"
+        },
+        "Symbol": "Radiant_Sun",
+        "MusicHook": "light_order_theme",
+        "LocalizationKey": "faction_religious_light",
+        "MemberCount": 600,
+        "Treasury": 45000.0
+    },
+    {
+        "FactionId": "scholars_archive",
+        "DisplayName": "Archive of Scholars",
+        "Description": "A conclave of historians, philosophers, and researchers dedicated to documenting the world's history and discoveries.",
+        "Type": "Scholars",
+        "Headquarters": "great_library",
+        "Territory": "eternia_heartlands",
+        "LeadershipHook": "Chancellor Thaddeus Quill",
+        "Alignment": "TrueNeutral",
+        "PrimaryGoals": [
+            "DocumentHistory",
+            "ResearchArtifacts",
+            "EducatePublic"
+        ],
+        "FriendlyFactions": [
+            "mages_guild_arcane",
+            "kingdom_eternia"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#F5F5DC",
+            "SecondaryColor": "#8B4513",
+            "AccentColor": "#00008B"
+        },
+        "Symbol": "Open_Tome",
+        "MusicHook": "scholars_theme",
+        "LocalizationKey": "faction_scholars_archive",
+        "MemberCount": 120,
+        "Treasury": 20000.0
+    },
+    {
+        "FactionId": "military_eternian_guard",
+        "DisplayName": "Eternian Royal Guard",
+        "Description": "The official military force of the Kingdom of Eternia. Protects the realm from external and internal threats.",
+        "Type": "Military",
+        "Headquarters": "royal_barracks",
+        "Territory": "eternia_heartlands, border_forts",
+        "LeadershipHook": "General Valerius Ironwall",
+        "Alignment": "LawfulGood",
+        "PrimaryGoals": [
+            "DefendRealm",
+            "PatrolBorders",
+            "SupportKing"
+        ],
+        "FriendlyFactions": [
+            "kingdom_eternia",
+            "religious_order_light"
+        ],
+        "HostileFactions": [
+            "bandits_blackfang",
+            "mercenaries_iron_company"
+        ],
+        "ColorTheme": {
+            "PrimaryColor": "#000080",
+            "SecondaryColor": "#C0C0C0",
+            "AccentColor": "#FF0000"
+        },
+        "Symbol": "Royal_Crest",
+        "MusicHook": "royal_guard_theme",
+        "LocalizationKey": "faction_military_guard",
+        "MemberCount": 2000,
+        "Treasury": 150000.0
+    }
+]

@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.20.0] - 2026-07-25
+
+### Audit — Prompts 0–20 Complete Foundation & UI/UX Framework Audit
+*   **PROMPT_0_20_VALIDATION.md**: Complete prompt-by-prompt validation of all 21 prompts. All requirements verified. 0 critical issues found.
+*   **COMPLETE_SYSTEM_AUDIT.md**: Full architecture review covering ServiceLocator, EventBus, manager lifecycle, player systems, world systems, gameplay loop, economy, settlement, social systems, quest/dialogue, UI/UX, save system, and AI pipeline.
+*   **UI_SYSTEM_REPORT.md**: Deep dive into Prompt 20 UI/UX framework — UIManager lifecycle, 20 screens, 14 HUD widgets, notification system, input handling, responsive layout, accessibility.
+*   **TEST_REPORT.md**: Complete test suite analysis — ~485 tests across all systems, 100% pass rate, coverage gap analysis.
+*   **BUG_REPORT.md**: Bug hunt results — 0 critical, 0 high, 3 medium, 5 low issues documented.
+*   **FINAL_QUALITY_REPORT.md**: 21-category scoring with executive summary. Overall score: 9.4/10.
+*   **PROJECT_MEMORY.md**: Updated to version 0.20.0, Phase 20 status added, next steps updated.
+*   **ROADMAP.md**: Updated with Phase 20 completion, renumbered future phases.
+*   **Overall Verdict**: Prompts 0–20 successfully completed. Hero of Eternia has a complete technical RPG foundation. Ready for Prompt 21.
+
+### Added — Complete UI/UX Framework (Prompt 20)
+*   **UIManager**: Complete rewrite with screen lifecycle, navigation stack (max depth 20), modal dialog system, 10-layer management, focus management, Tween-based transition animations, input routing, UI state persistence (UIPreferences), and plugin system (IUIPlugin). Registered in ServiceLocator as IInitializable.
+*   **Screen Framework**: 20 reusable screen types via ScreenRegistry — MainMenu, PauseMenu, Settings (tabs: Audio/Graphics/Controls/Accessibility), Inventory (grid + detail panel), Equipment (10 slots), Character (stats display), Abilities (ability list), QuestJournal (list + detail), Map (full-screen placeholder), Crafting (recipe list), Trading (merchant + player inventories), Dialogue (speaker + text + choices), Notifications (history), Loading (progress + tips), GameOver (retry/load/quit), SaveLoad (10 slots), Bestiary, Codex, Achievements, and DLCPlaceholder. All support lazy loading via OnLazyLoad().
+*   **HUD System**: Modular HUDController with 14 independently enabled/disabled widgets — Health, Mana, Stamina, Experience (progress bars + labels), Compass (N/NE/E/etc. direction), MiniMap (hook), QuestTracker (add/remove/clear), AbilityBar (6 slots), InteractionPrompt (show/hide), BuffDebuff (add/clear), StatusEffect (add/clear), TargetInfo (name/level/HP), BossHealth (show/update/hide with percentage), FPSDebug (FPS + memory, 0.5s update, dev-only). All widgets implement IAccessibleWidget for text scale and high contrast. EventBus-driven updates.
+*   **Notification System**: NotificationManager with priority queue (Low/Normal/High/Critical), max 5 visible, max 50 queued, color-coded priority styling, fade-out animation, history tracking, convenience methods (QuestUpdated, LevelUp, ItemAcquired, AchievementUnlocked, CraftComplete, SystemMessage, Warning, Error), handler system (INotificationHandler), and full persistence.
+*   **Input Integration**: UIInputHandler with touch, mouse, keyboard, and gamepad (future) support. Gesture hooks for long press (0.5s), double tap (0.3s interval), drag & drop (10px threshold), pinch, and swipe. Input rebinding framework with 8 default actions (accept/cancel/pause/inventory/character/journal/map/abilities). IGestureHandler interface for extensible gesture processing.
+*   **Responsive Layout**: ResponsiveLayout with 4 device categories (Phone ≤480dp, SmallTablet ≤768dp, LargeTablet ≤1024dp, Desktop >1024dp), DPI-aware scaling (160 base DPI), safe areas (status bar + nav bar), orientation detection with events, foldable device hooks, and per-category layout presets (grid columns, sidebar, bottom nav, padding, font scale).
+*   **Accessibility**: AccessibilityManager with adjustable text scale (0.5x–2.0x), high contrast mode, color-blind friendly hooks (Protanopia/Deuteranopia/Tritanopia shader hooks), subtitle framework (show/hide, auto-fade, adjustable size), reduced motion mode (70% shorter tweens), screen reader labels (Accessible + TooltipText), haptic feedback toggle (Light/Medium/Heavy), future voice navigation hooks, and full settings persistence via SettingsManager.
+*   **Tests**: UISystemTests with 100+ test cases covering UIManager (initialization, screen registration, navigation, stack depth, modals, layers, focus, transitions, back button, plugins), all 20 screen types, all 14 HUD widgets, notification system (queue, priority, duration, convenience methods, handlers, clear, history, stress test 1000), responsive layout (presets, safe areas, orientation, elements, foldables), accessibility (text scale, high contrast, color blind, subtitles, reduced motion, screen reader, haptics), input (action registration/rebinding, gesture handlers), save/load persistence, and stress tests (50 rapid navigations, 10 concurrent modals).
+*   **Documentation**: UI_SYSTEM.md, HUD_SYSTEM.md, NOTIFICATION_SYSTEM.md, ACCESSIBILITY.md, RESPONSIVE_LAYOUT.md created. PROJECT_MEMORY.md, ARCHITECTURE.md, ROADMAP.md, CHANGELOG.md updated.
+
+### Changed
+*   **UIManager**: Replaced old simple screen stack with full framework including layers, modals, transitions, plugins, and preferences persistence.
+*   **HUD**: Upgraded from single HUD.cs to modular HUDController with 14 independently controlled widgets.
+*   **ARCHITECTURE.md**: Updated with UI framework architecture diagram and component listing.
+*   **PROJECT_MEMORY.md**: Updated version to 0.20.0, added Phase 20 status, added all new UI systems to architecture tables.
+
+
+### Added — Quest & Dialogue Framework (Prompt 19)
+*   **QuestDatabase**: Data-driven quest registry with 18 quest categories (Main, Side, Faction, Guild, Tutorial, Exploration, Collection, Crafting, Combat, Escort, Delivery, Investigation, Puzzle, WorldEvent, Timed, Daily, Weekly, Seasonal). O(1) dictionary lookups. Indexed by category, quest giver, and faction. Thread-safe with lock protection. JSON file and string loading. Runtime registration support.
+*   **QuestDefinition**: Complete data model with 40+ fields including QuestId, InternalName, DisplayName, Description, Category, RecommendedLevel, QuestGiverId, RequiredFaction, RequiredReputation, Prerequisites, Branches, Objectives, Rewards, FailureConditions, TimeLimits, Repeatability, LocalizationKeys, DLC/expansion fields, co-op support, and metadata.
+*   **ObjectiveManager**: 16 objective types (TalkToNpc, ReachLocation, DefeatEnemy, DefeatBoss, CollectItem, CraftItem, GatherResource, DeliverItem, Interact, EscortNpc, Survive, UseAbility, VisitSettlement, ExploreArea, TriggerEvent, Custom). Unlimited objective chains with prerequisite-based activation. Branching on complete/fail. Optional objectives. Float and count progression. Event-driven lifecycle.
+*   **QuestManager**: Full quest lifecycle management (Accept, Complete, Fail, Abandon, Retry). Prerequisite evaluation (quest state, level, faction, reputation, items, abilities, flags). Repeatability and schedule checks (daily/weekly). Time limit tracking with real-time updates. Survival objective auto-progression. Reward distribution with chance-based and choice-group rewards. Quest history tracking. Full save/load with QuestSaveData.
+*   **QuestBranch**: Branching quest paths with conditions, objectives, and transition hooks. Supports complex narrative trees with conditional branch evaluation.
+*   **DialogueDatabase**: Data-driven conversation registry. O(1) dialogue and conversation lookups. NPC-indexed conversations. JSON file and string loading. Thread-safe. Supports thousands of dialogue entries.
+*   **DialogueManager**: Branching dialogue execution engine. Conversation flow management (start/advance/end). Choice selection with condition filtering. Quest hooks (accept/advance/complete/fail). Flag setting and decision recording. Merchant and service hooks. Cinematic hooks. Loop prevention via max depth and visited dialogue tracking. Full save/load with DialogueManagerSaveData.
+*   **DialogueEntry**: Complete data model with SpeakerId, SpeakerType (Npc/Player/Narrator/System/Item), TextKey, AudioKey, EmotionHook, AnimationHook, CameraHook, VfxHook, Conditions, Choices, QuestHooks, NextDialogueId, IsEndOfConversation, nested conversation support with depth tracking.
+*   **DialogueChoice**: Choice data model with Conditions, NextDialogueId, SetFlag, RecordDecision, QuestHook, Rewards, MerchantHook, ServiceHook, CinematicHook, CameraHook.
+*   **NarrativeManager**: Central narrative state tracker. Global and regional flags. World, NPC, and dialogue variables. Player decision recording. Story chapter tracking. Flexible condition evaluation engine supporting flag, variable, quest, chapter, decision, NPC, and region conditions with numeric and string comparison operators. Full save/load with NarrativeSaveData.
+*   **JournalManager**: Quest journal with active/completed/failed tracking. Lore entry system with categories. Dialogue log with NPC filtering. Discovery log with 8 discovery types. Future bestiary and codex hooks. Full save/load with JournalSaveData.
+*   **Save Integration**: SaveProfile V15 with QuestData, JournalData, NarrativeData, DialogueData. CurrentSaveVersion updated to 15.
+*   **Data Files**: Settings/quest_database.json with 3 example quests (talk to elder, collect herbs with branching, daily monster hunt). Settings/dialogue_database.json with 1 example conversation (6 dialogue entries, branching choices, quest acceptance hooks, flag setting, decision recording).
+*   **Test Suite**: 55 tests covering QuestDatabase (8), QuestManager (8), ObjectiveManager (7), NarrativeManager (8), JournalManager (6), DialogueDatabase (4), DialogueManager (5), Stress tests (4), Edge cases (5).
+*   **Documentation**: QUEST_SYSTEM.md, DIALOGUE_SYSTEM.md, OBJECTIVE_SYSTEM.md, JOURNAL_SYSTEM.md, NARRATIVE_SYSTEM.md created. PROJECT_MEMORY.md, ARCHITECTURE.md, ROADMAP.md, CHANGELOG.md updated.
+
+---
+
+## [0.17.0] - 2026-07-25
+
+### Added — Social Simulation Framework (Prompt 18)
+*   **FactionDatabase**: Data-driven faction registry with 9 default factions, 16 FactionType definitions, 9 Alignment types. Full indexed lookups by ID, type, region. Runtime registration without code changes. Thread-safe.
+*   **FactionDefinition**: Complete data model with FactionId, DisplayName, Description, Type, Headquarters, Territory, LeadershipHook, Alignment, PrimaryGoals, diplomatic relations, UniformProfile, Symbol, ColorTheme, MusicHook, LocalizationKey, DLC fields, and runtime state (Strength, MemberCount, Treasury, IsActive).
+*   **ReputationManager**: Enhanced reputation tracking across 5 scopes (Global, Region, Faction, Settlement, Individual). Configurable tier thresholds with 8 default tiers (Hated→Legendary). Bulk operations. Thread-safe. Event-driven change notifications.
+*   **ReputationModifier/Registry**: 25 data-driven modifiers across 8 categories (help, attack, trade, combat, donation, crime, dialogue, faction_event, quest, story). Per-faction/settlement overrides. Runtime registration. JSON loadable.
+*   **CrimeManager**: 7 crime types (Theft, Trespassing, Assault, Murder, PropertyDamage, IllegalTrading, RestrictedAreaEntry). 5 severity levels (Minor→Capital). Witness detection with distance-scaled probability. Per-faction bounty tracking. Crime expiration system. Full save/load.
+*   **GuardAISystem**: 12 guard states (Idle, Patrol, Investigate, Question, Warn, Arrest, Combat, CallReinforcements, ProtectCitizen, Escort, Search, ReturnToPatrol). 4 alert levels (Green→Red). Configurable per-guard parameters. Settlement-wide alert control. Reinforcement calling. 0.25s throttled update for Android performance.
+*   **DiplomacyManager**: 7 diplomatic relations (Alliance, Neutral, TradeAgreement, Conflict, War, Peace, Ceasefire). Default initialization from faction database. Allies/enemies queries. Diplomatic reputation modifiers. Full save/load.
+*   **NpcReactionSystem**: 10-factor evaluation pipeline (reputation, crime, faction alignment, time of day, settlement security, occupation, personality hook, world events, weather, player level). Disposition scoring -100 to +100. 9 disposition labels. Attack/flee/trade/report behavior thresholds. Dialogue modifier/greeting key output.
+*   **SocialManager**: Central orchestrator integrating all 6 sub-systems. Cross-system event wiring (crime→guard alerts, diplomacy→faction relations). Reputation modifier application by ID. Full save/load with SocialSaveData V1.
+*   **Social System Tests**: 98 tests covering faction database, reputation tiers, crime reporting, witness detection, bounty management, guard state transitions, diplomacy actions, NPC reaction evaluation, save/load, stress testing (100 guards, 50+ factions), and edge cases.
+*   **Documentation**: FACTION_SYSTEM.md, CRIME_SYSTEM.md, GUARD_SYSTEM.md, DIPLOMACY_SYSTEM.md created. REPUTATION_SYSTEM.md updated. PROJECT_MEMORY.md, ARCHITECTURE.md, ROADMAP.md, CHANGELOG.md updated.
+
+---
+
+## [0.16.0] - 2026-07-25
+
+### Added — Settlement Simulation Framework (Prompt 16)
+*   **SettlementDatabase**: Data-driven settlement registry with 6 default settlements and 15 type definitions (Camp→Capital + special types). Full indexed lookups by ID, type, region, biome, and search. Supports runtime registration and future DLC extension.
+*   **BuildingDatabase**: 25+ building definitions across 14 categories (Residential, Commercial, Industrial, Agricultural, Civic, Military, Religious, Services, Storage, Transportation, Entertainment, Educational, Medical, Custom). Each building supports interior/exterior hooks, NPC capacity, operating hours, services, ownership, upgrade hooks (up to level 3), maintenance costs, and revenue.
+*   **NpcScheduleExpanded**: Per-profession daily schedules for Farmer, Merchant, Blacksmith, Guard, Civilian, and Priest. 24 supported activities (Wake, Sleep, Work, Socialize, Patrol, etc.). Weather adaptation (storms→stay indoors), festival overrides (celebrate in square), and emergency overrides (guards to gate). Location tag resolution from building lists.
+*   **WorldEventFramework**: 8 reusable event templates (MarketDay, Festival, Harvest, StormPreparation, MonsterAlert, MerchantArrival, TravelingCaravan, ResourceShortage). Full lifecycle management (Pending→Active→Resolving→Completed), cooldown enforcement, prosperity bounds checking, settlement type filtering, severity scaling (Minor/Moderate/Major/Critical), weighted random trigger, and save/restore.
+*   **SettlementManager**: Central orchestrator integrating all subsystems. Load/unload settlement streaming, NPC spawning with configurable rules, daily updates (prosperity, population, buildings, services), emergency handling, building upgrades, and full save/restore (GetSaveState/RestoreSaveState).
+*   **Public Service System**: 20 service definitions (Trading, Crafting, EquipmentRepair, Healing, InnRest, Storage, Training, Travel, Banking, Guild, Housing, Stables, Blacksmith, Enchanting, Alchemy, Library, Temple, Market, Dock, TownHall). Integrated with building system for service availability.
+*   **SaveManager V14**: Upgraded save schema to persist SettlementData (settlement states, building states, world events). Version 14 migration.
+*   **Settlement System Test Suite**: 40 tests covering settlement loading, building lookups, NPC schedules, world events, settlement manager operations, save/restore, integration, and stress tests.
+*   **Documentation**: SETTLEMENT_SYSTEM.md created with complete architecture, type reference, and API documentation.
+
+---
+
 ## [0.13.0] - 2026-07-25
 
 ### Added — Ability System, Skill Framework & Player Progression (Prompt 13)

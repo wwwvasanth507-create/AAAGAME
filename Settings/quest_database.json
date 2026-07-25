@@ -1,23 +1,354 @@
-{
-  "Version": "1.0",
-  "Quests": [
-    {
-      "Id": "quest_goblin_cull",
-      "Title": "Cull the Goblin Horde",
-      "Description": "Defeat 10 Goblins terrorizing the outskirts of Eternia.",
-      "TargetCount": 10,
-      "TargetType": "goblin_warrior",
-      "GoldReward": 300,
-      "XpReward": 500
+[
+  {
+    "questId": "example_talk_to_elder",
+    "internalName": "Talk to the Village Elder",
+    "displayName": "The Elder's Request",
+    "description": "Speak with the village elder to receive your first task.",
+    "category": "Main",
+    "recommendedLevel": 1,
+    "questGiverId": "npc_village_elder",
+    "requiredFactionId": "",
+    "requiredReputation": 0,
+    "requiredFactionStanding": "",
+    "repeatable": false,
+    "maxRepeatCount": -1,
+    "repeatSchedule": "never",
+    "prerequisites": [],
+    "branches": [
+      {
+        "branchId": "branch_intro",
+        "displayName": "Introduction",
+        "descriptionKey": "quest.example_talk_to_elder.branch_intro.desc",
+        "conditions": [],
+        "objectives": [
+          {
+            "objectiveId": "obj_talk_to_elder",
+            "internalName": "Talk to Elder",
+            "type": "TalkToNpc",
+            "initialState": "Active",
+            "isOptional": false,
+            "targetId": "npc_village_elder",
+            "requiredCount": 1,
+            "currentCount": 0,
+            "requiredFloat": 0,
+            "currentFloat": 0,
+            "descriptionKey": "quest.example_talk_to_elder.obj_talk_to_elder.desc",
+            "locationKey": "settlement_village",
+            "completionCheckId": "",
+            "customData": {},
+            "onCompleteBranchId": "branch_complete",
+            "onFailBranchId": "",
+            "prerequisiteObjectiveIds": []
+          }
+        ],
+        "onCompleteBranchId": "branch_complete",
+        "onFailBranchId": ""
+      },
+      {
+        "branchId": "branch_complete",
+        "displayName": "Completion",
+        "descriptionKey": "quest.example_talk_to_elder.branch_complete.desc",
+        "conditions": [],
+        "objectives": [],
+        "onCompleteBranchId": "",
+        "onFailBranchId": ""
+      }
+    ],
+    "failureConditions": [],
+    "timeLimit": {
+      "hasTimeLimit": false,
+      "totalSeconds": 0,
+      "remainingSeconds": 0,
+      "pausesWhenOffline": true,
+      "failOnExpire": true,
+      "onExpireBranchId": ""
     },
-    {
-      "Id": "quest_titan_downfall",
-      "Title": "The Awakening Titan",
-      "Description": "Confront and defeat the Golem Titan in the ancient arena.",
-      "TargetCount": 1,
-      "TargetType": "boss_golem_titan",
-      "GoldReward": 2500,
-      "XpReward": 5000
-    }
-  ]
-}
+    "completionRewards": [
+      {
+        "type": "Experience",
+        "rewardId": "xp",
+        "quantity": 0,
+        "floatValue": 100,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      },
+      {
+        "type": "Gold",
+        "rewardId": "gold",
+        "quantity": 50,
+        "floatValue": 0,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      }
+    ],
+    "optionalObjectiveRewards": [],
+    "failurePenalties": [],
+    "titleKey": "quest.example_talk_to_elder.title",
+    "descriptionKey": "quest.example_talk_to_elder.desc",
+    "progressKey": "quest.example_talk_to_elder.progress",
+    "completionKey": "quest.example_talk_to_elder.complete",
+    "failureKey": "quest.example_talk_to_elder.fail",
+    "abandonKey": "quest.example_talk_to_elder.abandon",
+    "dlcRequirement": "",
+    "expansionFlag": "",
+    "contentVersion": 1,
+    "isSeasonal": false,
+    "seasonId": "",
+    "author": "System",
+    "notes": "Example quest - replace with actual content",
+    "isEnabled": true,
+    "isGroupQuest": false,
+    "minGroupSize": 1,
+    "maxGroupSize": 4,
+    "scaleWithGroupSize": true
+  },
+  {
+    "questId": "example_collect_herbs",
+    "internalName": "Collect Herbs for the Apothecary",
+    "displayName": "Herb Gathering",
+    "description": "Collect 5 medicinal herbs for the village apothecary.",
+    "category": "Side",
+    "recommendedLevel": 1,
+    "questGiverId": "npc_apothecary",
+    "requiredFactionId": "",
+    "requiredReputation": 0,
+    "requiredFactionStanding": "",
+    "repeatable": false,
+    "maxRepeatCount": -1,
+    "repeatSchedule": "never",
+    "prerequisites": [],
+    "branches": [
+      {
+        "branchId": "branch_gather",
+        "displayName": "Gathering",
+        "descriptionKey": "quest.example_collect_herbs.branch_gather.desc",
+        "conditions": [],
+        "objectives": [
+          {
+            "objectiveId": "obj_gather_herbs",
+            "internalName": "Gather Herbs",
+            "type": "CollectItem",
+            "initialState": "Active",
+            "isOptional": false,
+            "targetId": "item_medicinal_herb",
+            "requiredCount": 5,
+            "currentCount": 0,
+            "requiredFloat": 0,
+            "currentFloat": 0,
+            "descriptionKey": "quest.example_collect_herbs.obj_gather_herbs.desc",
+            "locationKey": "region_forest",
+            "completionCheckId": "",
+            "customData": {
+              "gatherTool": "hands",
+              "gatherNode": "node_herb"
+            },
+            "onCompleteBranchId": "branch_deliver",
+            "onFailBranchId": "",
+            "prerequisiteObjectiveIds": []
+          }
+        ],
+        "onCompleteBranchId": "branch_deliver",
+        "onFailBranchId": ""
+      },
+      {
+        "branchId": "branch_deliver",
+        "displayName": "Delivery",
+        "descriptionKey": "quest.example_collect_herbs.branch_deliver.desc",
+        "conditions": [],
+        "objectives": [
+          {
+            "objectiveId": "obj_deliver_herbs",
+            "internalName": "Deliver Herbs",
+            "type": "DeliverItem",
+            "initialState": "Active",
+            "isOptional": false,
+            "targetId": "npc_apothecary",
+            "requiredCount": 1,
+            "currentCount": 0,
+            "requiredFloat": 0,
+            "currentFloat": 0,
+            "descriptionKey": "quest.example_collect_herbs.obj_deliver_herbs.desc",
+            "locationKey": "settlement_village",
+            "completionCheckId": "",
+            "customData": {
+              "deliverItem": "item_medicinal_herb",
+              "deliverCount": 5
+            },
+            "onCompleteBranchId": "branch_complete",
+            "onFailBranchId": "",
+            "prerequisiteObjectiveIds": [
+              "obj_gather_herbs"
+            ]
+          }
+        ],
+        "onCompleteBranchId": "branch_complete",
+        "onFailBranchId": ""
+      },
+      {
+        "branchId": "branch_complete",
+        "displayName": "Complete",
+        "descriptionKey": "",
+        "conditions": [],
+        "objectives": [],
+        "onCompleteBranchId": "",
+        "onFailBranchId": ""
+      }
+    ],
+    "failureConditions": [],
+    "timeLimit": {
+      "hasTimeLimit": false,
+      "totalSeconds": 0,
+      "remainingSeconds": 0,
+      "pausesWhenOffline": true,
+      "failOnExpire": true,
+      "onExpireBranchId": ""
+    },
+    "completionRewards": [
+      {
+        "type": "Experience",
+        "rewardId": "xp",
+        "quantity": 0,
+        "floatValue": 250,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      },
+      {
+        "type": "Item",
+        "rewardId": "item_health_potion",
+        "quantity": 2,
+        "floatValue": 0,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      }
+    ],
+    "optionalObjectiveRewards": [],
+    "failurePenalties": [],
+    "titleKey": "quest.example_collect_herbs.title",
+    "descriptionKey": "quest.example_collect_herbs.desc",
+    "progressKey": "quest.example_collect_herbs.progress",
+    "completionKey": "quest.example_collect_herbs.complete",
+    "failureKey": "quest.example_collect_herbs.fail",
+    "abandonKey": "quest.example_collect_herbs.abandon",
+    "dlcRequirement": "",
+    "expansionFlag": "",
+    "contentVersion": 1,
+    "isSeasonal": false,
+    "seasonId": "",
+    "author": "System",
+    "notes": "Example quest with branching objectives",
+    "isEnabled": true,
+    "isGroupQuest": false,
+    "minGroupSize": 1,
+    "maxGroupSize": 4,
+    "scaleWithGroupSize": true
+  },
+  {
+    "questId": "example_daily_quest",
+    "internalName": "Daily Monster Hunt",
+    "displayName": "Monster Hunt",
+    "description": "Defeat 3 monsters near the village to earn rewards.",
+    "category": "Daily",
+    "recommendedLevel": 1,
+    "questGiverId": "npc_village_guard",
+    "requiredFactionId": "",
+    "requiredReputation": 0,
+    "requiredFactionStanding": "",
+    "repeatable": true,
+    "maxRepeatCount": 1,
+    "repeatSchedule": "daily",
+    "prerequisites": [],
+    "branches": [
+      {
+        "branchId": "branch_hunt",
+        "displayName": "Hunt",
+        "descriptionKey": "quest.daily_hunt.branch_hunt.desc",
+        "conditions": [],
+        "objectives": [
+          {
+            "objectiveId": "obj_defeat_monsters",
+            "internalName": "Defeat Monsters",
+            "type": "DefeatEnemy",
+            "initialState": "Active",
+            "isOptional": false,
+            "targetId": "enemy_goblin",
+            "requiredCount": 3,
+            "currentCount": 0,
+            "requiredFloat": 0,
+            "currentFloat": 0,
+            "descriptionKey": "quest.daily_hunt.obj_defeat_monsters.desc",
+            "locationKey": "region_plains",
+            "completionCheckId": "",
+            "customData": {},
+            "onCompleteBranchId": "branch_complete",
+            "onFailBranchId": "",
+            "prerequisiteObjectiveIds": []
+          }
+        ],
+        "onCompleteBranchId": "branch_complete",
+        "onFailBranchId": ""
+      },
+      {
+        "branchId": "branch_complete",
+        "displayName": "Complete",
+        "descriptionKey": "",
+        "conditions": [],
+        "objectives": [],
+        "onCompleteBranchId": "",
+        "onFailBranchId": ""
+      }
+    ],
+    "failureConditions": [],
+    "timeLimit": {
+      "hasTimeLimit": false,
+      "totalSeconds": 0,
+      "remainingSeconds": 0,
+      "pausesWhenOffline": true,
+      "failOnExpire": true,
+      "onExpireBranchId": ""
+    },
+    "completionRewards": [
+      {
+        "type": "Experience",
+        "rewardId": "xp",
+        "quantity": 0,
+        "floatValue": 150,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      },
+      {
+        "type": "Gold",
+        "rewardId": "gold",
+        "quantity": 75,
+        "floatValue": 0,
+        "guaranteed": true,
+        "chance": 1.0,
+        "choiceGroup": []
+      }
+    ],
+    "optionalObjectiveRewards": [],
+    "failurePenalties": [],
+    "titleKey": "quest.daily_hunt.title",
+    "descriptionKey": "quest.daily_hunt.desc",
+    "progressKey": "quest.daily_hunt.progress",
+    "completionKey": "quest.daily_hunt.complete",
+    "failureKey": "quest.daily_hunt.fail",
+    "abandonKey": "quest.daily_hunt.abandon",
+    "dlcRequirement": "",
+    "expansionFlag": "",
+    "contentVersion": 1,
+    "isSeasonal": false,
+    "seasonId": "",
+    "author": "System",
+    "notes": "Example daily quest",
+    "isEnabled": true,
+    "isGroupQuest": false,
+    "minGroupSize": 1,
+    "maxGroupSize": 4,
+    "scaleWithGroupSize": true
+  }
+]

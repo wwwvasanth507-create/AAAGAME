@@ -1,7 +1,7 @@
 # Project Memory — Hero of Eternia
 
 > Central knowledge base for all development decisions, architecture rules, and project state.  
-> Last Updated: 2026-07-25 (Phase 15)
+> Last Updated: 2026-07-25 (Phase 20 — Complete UI/UX Framework)
 
 ---
 
@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.15.0 |
+| **Version** | 0.20.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -32,6 +32,38 @@
 | **Phase 13 (Ability System)** | **Complete** | **2026-07-25** |
 | **Phase 14 (Equipment/Progression)** | **Complete** | **2026-07-25** |
 | **Phase 15 (Gathering & Crafting)** | **Complete** | **2026-07-25** |
+| **Phase 16 (Settlement Simulation)** | **Complete** | **2026-07-25** |
+| **Phase 17 (Social Simulation)** | **Complete** | **2026-07-25** |
+| **Phase 19 (Quest & Dialogue Framework)** | **Complete** | **2026-07-25** |
+| **Phase 20 (UI/UX Framework)** | **Complete** | **2026-07-25** |
+
+### Phase 20 Status (Complete) — UI/UX Framework
+- **UIManager**: Complete rewrite with screen lifecycle, navigation stack (max depth 20), modal dialog system, 10-layer management, focus management, Tween-based transition animations, input routing, UI state persistence (UIPreferences), and plugin system (IUIPlugin). Registered in ServiceLocator as IInitializable.
+- **Screen Framework**: 20 reusable screen types via ScreenRegistry — MainMenu, PauseMenu, Settings (tabs: Audio/Graphics/Controls/Accessibility), Inventory (grid + detail panel), Equipment (10 slots), Character (stats display), Abilities (ability list), QuestJournal (list + detail), Map (full-screen placeholder), Crafting (recipe list), Trading (merchant + player inventories), Dialogue (speaker + text + choices), Notifications (history), Loading (progress + tips), GameOver (retry/load/quit), SaveLoad (10 slots), Bestiary, Codex, Achievements, and DLCPlaceholder. All support lazy loading via OnLazyLoad().
+- **HUD System**: Modular HUDController with 14 independently enabled/disabled widgets — Health, Mana, Stamina, Experience (progress bars + labels), Compass (N/NE/E/etc. direction), MiniMap (hook), QuestTracker (add/remove/clear), AbilityBar (6 slots), InteractionPrompt (show/hide), BuffDebuff (add/clear), StatusEffect (add/clear), TargetInfo (name/level/HP), BossHealth (show/update/hide with percentage), FPSDebug (FPS + memory, 0.5s update, dev-only). All widgets implement IAccessibleWidget for text scale and high contrast. EventBus-driven updates.
+- **Notification System**: NotificationManager with priority queue (Low/Normal/High/Critical), max 5 visible, max 50 queued, color-coded priority styling, fade-out animation, history tracking, convenience methods (QuestUpdated, LevelUp, ItemAcquired, AchievementUnlocked, CraftComplete, SystemMessage, Warning, Error), handler system (INotificationHandler), and full persistence.
+- **Input Integration**: UIInputHandler with touch, mouse, keyboard, and gamepad (future) support. Gesture hooks for long press (0.5s), double tap (0.3s interval), drag & drop (10px threshold), pinch, and swipe. Input rebinding framework with 8 default actions (accept/cancel/pause/inventory/character/journal/map/abilities). IGestureHandler interface for extensible gesture processing.
+- **Responsive Layout**: ResponsiveLayout with 4 device categories (Phone ≤480dp, SmallTablet ≤768dp, LargeTablet ≤1024dp, Desktop >1024dp), DPI-aware scaling (160 base DPI), safe areas (status bar + nav bar), orientation detection with events, foldable device hooks, and per-category layout presets (grid columns, sidebar, bottom nav, padding, font scale).
+- **Accessibility**: AccessibilityManager with adjustable text scale (0.5x–2.0x), high contrast mode, color-blind friendly hooks (Protanopia/Deuteranopia/Tritanopia shader hooks), subtitle framework (show/hide, auto-fade, adjustable size), reduced motion mode (70% shorter tweens), screen reader labels (Accessible + TooltipText), haptic feedback toggle (Light/Medium/Heavy), future voice navigation hooks, and full settings persistence via SettingsManager.
+- **Tests**: UISystemTests with 100+ test cases covering UIManager (initialization, screen registration, navigation, stack depth, modals, layers, focus, transitions, back button, plugins), all 20 screen types, all 14 HUD widgets, notification system (queue, priority, duration, convenience methods, handlers, clear, history, stress test 1000), responsive layout (presets, safe areas, orientation, elements, foldables), accessibility (text scale, high contrast, color blind, subtitles, reduced motion, screen reader, haptics), input (action registration/rebinding, gesture handlers), save/load persistence, and stress tests (50 rapid navigations, 10 concurrent modals).
+- **Documentation**: UI_SYSTEM.md, HUD_SYSTEM.md, NOTIFICATION_SYSTEM.md, ACCESSIBILITY.md, RESPONSIVE_LAYOUT.md created. PROJECT_MEMORY.md, ARCHITECTURE.md, ROADMAP.md, CHANGELOG.md updated.
+
+### Phase 19 Status (Complete) — Quest & Dialogue Framework
+- **QuestDatabase**: Data-driven quest registry with 18 quest categories, O(1) lookups, indexed by category/giver/faction. Thread-safe. JSON loadable. Supports thousands of quests.
+- **QuestDefinition**: Complete data model with QuestId, InternalName, DisplayName, Description, Category, RecommendedLevel, QuestGiver, RequiredFaction, RequiredReputation, Prerequisites, Branches, Objectives, Rewards, FailureConditions, TimeLimits, Repeatability, LocalizationKeys, DLC fields, co-op support.
+- **ObjectiveManager**: 16 objective types (TalkToNpc, ReachLocation, DefeatEnemy, DefeatBoss, CollectItem, CraftItem, GatherResource, DeliverItem, Interact, EscortNpc, Survive, UseAbility, VisitSettlement, ExploreArea, TriggerEvent, Custom). Unlimited objective chains. Prerequisite-based activation. Branching on complete/fail. Optional objectives. Float/count progression.
+- **QuestManager**: Full lifecycle management (Accept, Complete, Fail, Abandon, Retry). Prerequisite evaluation. Repeatability/schedule checks. Time limit tracking. Survival objective updates. Reward distribution. Quest history tracking. Full save/load.
+- **QuestBranch**: Branching quest paths with conditions, objectives, and transition hooks. Supports complex narrative trees.
+- **DialogueDatabase**: Data-driven conversation registry. O(1) dialogue/conversation lookups. NPC-indexed conversations. JSON loadable. Thread-safe.
+- **DialogueManager**: Branching dialogue execution engine. Conversation flow (start/advance/end). Choice selection with condition filtering. Quest hooks (accept/advance/complete/fail). Flag setting. Decision recording. Merchant/service hooks. Cinematic hooks. Loop prevention (max depth + visited set). Full save/load.
+- **DialogueEntry**: Complete data model with SpeakerId, SpeakerType, TextKey, AudioKey, EmotionHook, AnimationHook, CameraHook, VfxHook, Conditions, Choices, QuestHooks, NextDialogueId, IsEndOfConversation, nested conversation support.
+- **DialogueChoice**: Choice data model with Conditions, NextDialogueId, SetFlag, RecordDecision, QuestHook, Rewards, MerchantHook, ServiceHook, CinematicHook.
+- **NarrativeManager**: Central narrative state tracker. Global/regional flags. World/NPC/dialogue variables. Player decisions. Story chapter tracking. Condition evaluation engine (flag, variable, quest, chapter, decision, npc, region). Full save/load.
+- **JournalManager**: Quest journal (active/completed/failed). Lore entry system. Dialogue log. Discovery log. Future bestiary/codex hooks. Full save/load.
+- **Save Integration**: SaveProfile V15 with QuestData, JournalData, NarrativeData, DialogueData. Version 15 migration.
+- **Data Files**: Settings/quest_database.json (3 example quests with branching). Settings/dialogue_database.json (1 example conversation with 6 dialogue entries, branching choices, quest hooks).
+- **Tests**: 55 tests covering QuestDatabase (8), QuestManager (8), ObjectiveManager (7), NarrativeManager (8), JournalManager (6), DialogueDatabase (4), DialogueManager (5), Stress tests (4), Edge cases (5).
+- **Documentation**: QUEST_SYSTEM.md, DIALOGUE_SYSTEM.md, OBJECTIVE_SYSTEM.md, JOURNAL_SYSTEM.md, NARRATIVE_SYSTEM.md created. PROJECT_MEMORY.md, ARCHITECTURE.md, ROADMAP.md, CHANGELOG.md updated.
 
 ### Phase 13 Status (Complete)
 - Ability Database: ✅ 10 abilities with full data fields
@@ -71,7 +103,34 @@
 - Tests: ✅ 20 tests covering all systems with stress testing
 - Documentation: ✅ RESOURCE_SYSTEM.md, CRAFTING_SYSTEM.md, PROFESSION_SYSTEM.md, WORKSTATION_SYSTEM.md
 - Build: ✅ 0 warnings, 0 errors
-- Ready for Prompt 16: **YES**
+
+### Phase 16 Status (Complete)
+- Settlement Database: ✅ 6 settlements with full data fields, indexed lookups
+- Settlement Types: ✅ 15 type definitions (Camp→Capital + special types)
+- Building Database: ✅ 25+ building definitions with 14 categories
+- NPC Schedules: ✅ 6 per-profession schedules with weather/festival/emergency adaptation
+- World Event Framework: ✅ 8 event templates with lifecycle, cooldowns, severity scaling
+- Settlement Manager: ✅ Central orchestrator with load/unload, NPC spawning, daily updates
+- Public Services: ✅ 20 service definitions integrated with buildings
+- Save Integration: ✅ Save V14 with settlement states, building states, world events
+- Tests: ✅ 40 tests covering all systems with stress testing
+- Documentation: ✅ SETTLEMENT_SYSTEM.md
+- Build: ✅ 0 warnings, 0 errors
+
+### Phase 17 Status (Complete) — Social Simulation Framework
+- Faction Database: ✅ 9 default factions with full data fields, 16 FactionType definitions, 9 Alignment types. JSON data-driven with runtime registration.
+- Faction Lookups: ✅ By ID, type, region. Lightweight FactionReference for UI. Thread-safe. Event-driven change notifications.
+- Reputation Manager: ✅ 5 scopes (Global, Region, Faction, Settlement, Individual). Configurable tier thresholds (8 default tiers: Hated→Legendary). Bulk operations. Thread-safe. Event-driven.
+- Reputation Modifier Registry: ✅ 25 data-driven modifiers across 8 categories (help, attack, trade, combat, donation, crime, dialogue, faction_event). Runtime registration. Per-faction/settlement overrides.
+- Crime Manager: ✅ 7 crime types, 5 severity levels. Witness detection with distance/scaling. Bounty management (per-faction + global). Crime expiration. Full save/load.
+- Guard AI System: ✅ 12 guard states (Patrol→ReturnToPatrol). Configurable per-guard parameters. Settlement alert levels. Reinforcement calling. Crime-triggered investigation. 0.25s throttled updates.
+- Diplomacy Framework: ✅ 7 diplomatic relations (Alliance→Ceasefire). Default initialization from faction data. Allies/enemies queries. Diplomatic reputation modifiers.
+- NPC Reaction System: ✅ 10 factor evaluation (reputation, crime, faction, time, security, occupation, personality, world events, weather, player level). Disposition scoring -100 to +100. Attack/flee/trade/report thresholds.
+- SocialManager Orchestrator: ✅ Central service integrating all subsystems. Cross-system event wiring (crime→guard, diplomacy→faction). Apply reputation modifiers by ID. Full save/load with SocialSaveData V1.
+- Performance: ✅ Throttled guard AI (0.25s tick). O(1) dictionary lookups. Thread-safe locks. Stress tested with 100 guards, 50+ factions.
+- Documentation: ✅ FACTION_SYSTEM.md, REPUTATION_SYSTEM.md (updated), CRIME_SYSTEM.md, GUARD_SYSTEM.md, DIPLOMACY_SYSTEM.md
+- Tests: ✅ 98 tests covering all systems + stress testing + edge cases
+- Build: ✅ No code compilation errors
 
 ---
 
@@ -154,7 +213,7 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | ServiceLocator | ✅ Complete | Thread-safe DI with IInitializable |
 | EventBus | ✅ Complete | Thread-safe (lock-protected) |
 | GameManager | ✅ Complete | 6-state lifecycle machine |
-| SaveManager | ✅ Complete | AES-256 + SHA-256 + backups, Save V12 |
+| SaveManager | ✅ Complete | AES-256 + SHA-256 + backups, Save V15 |
 | SettingsManager | ✅ Complete | Auto-persisted JSON |
 | ConfigManager | ✅ Complete | Hot-reload, templates |
 | DeviceDetector | ✅ Complete | Hardware heuristics |
@@ -181,6 +240,17 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | VegetationSystem | ✅ Complete | Dynamic plant density scaling based on presets |
 | WorldPopulationManager | ✅ Complete | Data-only landmark coordinate layout planner |
 | WorldValidator | ✅ Complete | Scans chunks to detect floating meshes and overlaps |
+
+### Phase 19 Systems (Quest & Dialogue)
+| System | Status | Notes |
+|--------|--------|-------|
+| QuestDatabase | ✅ Complete | Data-driven quest registry, O(1) lookups, 18 categories |
+| QuestManager | ✅ Complete | Full lifecycle, branching, rewards, save/load |
+| ObjectiveManager | ✅ Complete | 16 objective types, chains, prerequisites, branching |
+| NarrativeManager | ✅ Complete | Flags, variables, decisions, chapters, condition eval |
+| JournalManager | ✅ Complete | Quest journal, lore, dialogue log, discoveries |
+| DialogueDatabase | ✅ Complete | Data-driven conversation registry, O(1) lookups |
+| DialogueManager | ✅ Complete | Branching dialogue, conditions, quest hooks, loop prevention |
 
 ### Phase 15 Systems
 | System | Status | Notes |
@@ -284,9 +354,24 @@ SaveProfile (JSON) → AES-256 Encrypt → SHA-256 Checksum → File (.sav + .ba
 - Automatic backup recovery on corruption
 
 ### Schema Migration
-- SaveVersion field enables forward-compatible migrations (current: V12)
+- SaveVersion field enables forward-compatible migrations (current: V15)
 - MigrateProfile() hook prepared for version transitions
 - JsonExtensionData preserves unknown fields
+
+### Save V15 (Phase 19)
+- All Save V14 content
+- QuestSaveData (active instances, completion records, history)
+- JournalSaveData (active/completed/failed entries, lore, dialogue log, discoveries)
+- NarrativeSaveData (global/regional flags, world/npc variables, player decisions, story chapters)
+- DialogueManagerSaveData (active conversation state, depth tracking, visited dialogues)
+
+### Save V14 (Phase 16)
+- All Save V13 content
+- SettlementSaveData (settlement states, building states, world events)
+
+### Save V13 (Phase 15 Economy)
+- All Save V12 content
+- EconomySaveData (economy system state)
 
 ### Save V12 (Phase 15)
 - All Save V11 content
@@ -294,7 +379,6 @@ SaveProfile (JSON) → AES-256 Encrypt → SHA-256 Checksum → File (.sav + .ba
 - ResourceNodeStates (depletion, respawn timers per node)
 - KnownRecipeIds (unlocked recipe list)
 - CraftQueueItems (active queue for resume)
-- V11→V12 migration initializes empty collections
 
 ### Save V11 (Phase 14)
 - All Save V10 content
@@ -329,29 +413,65 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (190 tests)
+### Current Test Suite (245 tests)
 | Test | Type | Status |
 |------|------|--------|
-| ... (170 previous tests) | ... | ✅ |
-| P15-1 Resource Database Load | Unit | ✅ |
-| P15-2 Resource Database Lookups | Unit | ✅ |
-| P15-3 Profession System Init | Unit | ✅ |
-| P15-4 Profession Leveling | Unit | ✅ |
-| P15-5 Profession XP Requirements | Unit | ✅ |
-| P15-6 Gathering Validation | Unit | ✅ |
-| P15-7 Gathering Execution | Unit | ✅ |
-| P15-8 Recipe Database Load | Unit | ✅ |
-| P15-9 Recipe Database Lookups | Unit | ✅ |
-| P15-10 Crafting Validation | Unit | ✅ |
-| P15-11 Crafting Instant | Unit | ✅ |
-| P15-12 Crafting Queue | Unit | ✅ |
-| P15-13 Crafting Batch | Unit | ✅ |
-| P15-14 Workstation Definitions | Unit | ✅ |
-| P15-15 Workstation Bonuses | Unit | ✅ |
-| P15-16 Resource Regeneration | Unit | ✅ |
-| P15-17 Save Integration | Unit | ✅ |
-| P15-18 Stress Resource Lookups | Unit | ✅ |
-| P15-19 Stress Recipe Lookups | Unit | ✅ |
+| ... (190 previous tests) | ... | ✅ |
+| P19-1 QuestDB Empty Init | Unit | ✅ |
+| P19-2 QuestDB Register Single | Unit | ✅ |
+| P19-3 QuestDB Register Multiple | Unit | ✅ |
+| P19-4 QuestDB Get By Category | Unit | ✅ |
+| P19-5 QuestDB Get By Giver | Unit | ✅ |
+| P19-6 QuestDB Search | Unit | ✅ |
+| P19-7 QuestDB Clear | Unit | ✅ |
+| P19-8 QuestDB Stress Lookup | Unit | ✅ |
+| P19-9 QuestMgr Accept | Unit | ✅ |
+| P19-10 QuestMgr Complete | Unit | ✅ |
+| P19-11 QuestMgr Fail | Unit | ✅ |
+| P19-12 QuestMgr Abandon | Unit | ✅ |
+| P19-13 QuestMgr Retry | Unit | ✅ |
+| P19-14 QuestMgr Active Quests | Unit | ✅ |
+| P19-15 QuestMgr History | Unit | ✅ |
+| P19-16 QuestMgr Save/Load | Unit | ✅ |
+| P19-17 ObjMgr Init | Unit | ✅ |
+| P19-18 ObjMgr Advance | Unit | ✅ |
+| P19-19 ObjMgr Complete | Unit | ✅ |
+| P19-20 ObjMgr Fail | Unit | ✅ |
+| P19-21 ObjMgr Branching | Unit | ✅ |
+| P19-22 ObjMgr Optional | Unit | ✅ |
+| P19-23 ObjMgr Prerequisite Chain | Unit | ✅ |
+| P19-24 NarrMgr Global Flags | Unit | ✅ |
+| P19-25 NarrMgr Regional Flags | Unit | ✅ |
+| P19-26 NarrMgr World Variables | Unit | ✅ |
+| P19-27 NarrMgr NPC Variables | Unit | ✅ |
+| P19-28 NarrMgr Decisions | Unit | ✅ |
+| P19-29 NarrMgr Condition Eval | Unit | ✅ |
+| P19-30 NarrMgr Story Chapters | Unit | ✅ |
+| P19-31 NarrMgr Save/Load | Unit | ✅ |
+| P19-32 JourMgr Add Quest | Unit | ✅ |
+| P19-33 JourMgr Complete Quest | Unit | ✅ |
+| P19-34 JourMgr Lore | Unit | ✅ |
+| P19-35 JourMgr Dialogue Log | Unit | ✅ |
+| P19-36 JourMgr Discoveries | Unit | ✅ |
+| P19-37 JourMgr Save/Load | Unit | ✅ |
+| P19-38 DlgDB Register | Unit | ✅ |
+| P19-39 DlgDB Get By NPC | Unit | ✅ |
+| P19-40 DlgDB Starting Dialogue | Unit | ✅ |
+| P19-41 DlgDB Stress | Unit | ✅ |
+| P19-42 DlgMgr Start | Unit | ✅ |
+| P19-43 DlgMgr Choice | Unit | ✅ |
+| P19-44 DlgMgr Conditional | Unit | ✅ |
+| P19-45 DlgMgr End | Unit | ✅ |
+| P19-46 DlgMgr Loop Prevention | Unit | ✅ |
+| P19-47 Stress 1000 Quests | Stress | ✅ |
+| P19-48 Stress 1000 Dialogues | Stress | ✅ |
+| P19-49 Stress Concurrent | Stress | ✅ |
+| P19-50 Stress Memory | Stress | ✅ |
+| P19-51 Edge Empty DB | Edge | ✅ |
+| P19-52 Edge Duplicate | Edge | ✅ |
+| P19-53 Edge Invalid Accept | Edge | ✅ |
+| P19-54 Edge Max Depth | Edge | ✅ |
+| P19-55 Edge Serialization | Edge | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions
@@ -365,19 +485,26 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Known Limitations
 
-1. UIManager handles basic screen stacks — HUD is fully integrated; custom panel bindings will expand in Phase 16
-2. Boss, Elite AI, and quest frameworks are complete; specific quest-lines and story encounters will be added in Phase 16
-3. No final visual/audio assets imported yet — README prompt specifications exist for all 10 categories
-4. Ability system is framework-only — no skill trees, class restrictions, or balance implemented yet
-5. Gathering and crafting systems are framework-only — no UI, merchant integration, or quest integration yet
+1. UIManager handles basic screen stacks — HUD is fully integrated; custom panel bindings will expand in future phases.
+2. Quest and dialogue frameworks are complete; specific quest-lines, story content, and dialogue writing will be added in Prompt 20.
+3. No final visual/audio assets imported yet — README prompt specifications exist for all 10 categories.
+4. Ability system is framework-only — no skill trees, class restrictions, or balance implemented yet.
+5. Gathering and crafting systems are framework-only — no UI, merchant integration, or quest integration yet.
 
 ---
 
-## Next Steps (Prompt 16)
+## Next Steps (Prompt 21+)
 
-1. **Merchant & Economy System** — Build NPC merchants, buy/sell mechanics, gold economy, and item pricing.
-2. **Quest Crafting Integration** — Quest-specific recipes, gathering objectives, and profession-based quest rewards.
-3. **Player Housing & Building** — Building placement, furniture crafting, and player-owned property system.
+1. **Screen-to-Data Integration** — Connect all 20 UI screens to real game data systems (Inventory→ItemDatabase, Equipment→EquipmentManager, etc.)
+2. **Responsive Screen Layouts** — Integrate screens with ResponsiveLayout for dynamic sizing instead of hardcoded 1920x1080
+3. **SaveLoadScreen Integration** — Wire SaveLoadScreen to SaveManager
+4. **Color Blind Shader** — Implement actual color blindness simulation shader
+5. **MiniMap Implementation** — Replace placeholder with actual minimap rendering
+6. **Main Storyline Implementation** — Create the main story quests using the quest framework
+7. **Side Quest Content** — Populate the world with side quests, faction quests, and daily quests
+8. **Dialogue Writing** — Write dialogue content for NPCs using the dialogue framework
+9. **Player Housing** — Building placement, furniture crafting, and player-owned property system
+10. **Kingdom Politics** — Faction relationships, territory control, and governance mechanics
 
 ---
 
