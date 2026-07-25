@@ -117,6 +117,10 @@ esac
 
 
 # Determine the Java command to use to start the JVM.
+if [ -z "$JAVA_HOME" ] && [ -d "$APP_HOME/jdk/jdk-26.0.2" ] ; then
+    JAVA_HOME="$APP_HOME/jdk/jdk-26.0.2"
+fi
+
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
         # IBM's JDK on AIX uses strange locations for the executables

@@ -10,6 +10,7 @@
 .dotnet/
 .gradle/
 .kotlin/
+jdk/
 godot-templates-temp/
 
 # C# / Mono Build Artifacts
