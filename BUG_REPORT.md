@@ -1,4 +1,4 @@
-# Bug Report — Hero of Eternia (v0.5.0)
+# Bug Report — Hero of Eternia (v0.6.0)
 
 This report tracks and documents issue resolution status across all systems.
 
@@ -16,23 +16,22 @@ This report tracks and documents issue resolution status across all systems.
 | **B6** | Info | Android Manifest | Package name mismatch (`voidodyssey`) | ✅ RESOLVED (Manifest update) |
 | **B7** | Info | Root Docs | Redundant AI Pipeline documentation | ✅ RESOLVED (Merged manifests) |
 | **B8** | Low | `ResourceManager.cs`| ResourceManager cache was mocked | ✅ FIXED (Real resource loads) |
+| **P6-E1** | Low | `InventoryContainer.cs`| Unused local variable `ordered` warning | ✅ FIXED (Removed variable) |
+| **P6-E2** | Low | `EquipmentManager.cs` | Missing `using Godot;` import for Material loader | ✅ FIXED (Added import) |
+| **P6-E3** | Medium| `EquipmentManager.cs` | RemoveModifier expecting string ID, got StatModifier | ✅ FIXED (Passed `modifier.Id`) |
 
 ---
 
-## 2. Fixed Issue Details
+## 2. Fixed Issue Details (Phase 6)
 
-### B3 — SceneManager Async Loading Mocked
-- **Issue:** `SimulateAsyncLoad()` simulated resource packages.
-- **Fix:** Refactored `SceneManager` to inherit from `Godot.Node`, added dynamically to the active scene root, and integrated with `ResourceLoader.LoadThreadedRequest` and `LoadThreadedGetStatus`. Transitions are executed using `ChangeSceneToPacked`.
+### P6-E1 — Unused Variable Warning
+- **Issue:** Compiler warning CS0168 declared `IOrderedEnumerable<System.Dynamic.ExpandoObject> ordered` but never used.
+- **Fix:** Deleted the declaration to keep the build warning-free.
 
-### B4 — AudioManager Playback Stubbed
-- **Issue:** All playback methods logged messages without generating sound.
-- **Fix:** Refactored `AudioManager` to manage `AudioStreamPlayer` and `AudioStreamPlayer3D` pools, sync volume levels to Godot buses, and loop/fade tracks with Tweens.
+### P6-E2 — Missing Namespace Import in EquipmentManager
+- **Issue:** `GD.Load<Material>` and `Material` references caused compiler errors because `using Godot;` was not imported.
+- **Fix:** Added `using Godot;` to the top of `EquipmentManager.cs`.
 
-### B8 — ResourceManager Cache Mocked
-- **Issue:** Preload cache instantiated generic `new object()` instances.
-- **Fix:** Integrated real `ResourceLoader.Load<Resource>()` caching and added typed asset retrievals (`GetAsset<T>`).
-
-### B7 — Duplicate AI Documentation
-- **Issue:** Both `AI_PIPELINE_REPORT.md` and `AI_ASSET_PIPELINE_REPORT.md` existed.
-- **Fix:** Merged content into `AI_PIPELINE_REPORT.md` and configured `AI_ASSET_PIPELINE_REPORT.md` to act as a redirect warning.
+### P6-E3 — RemoveModifier Parameter Mismatch
+- **Issue:** `EquipmentManager.cs` passed the `StatModifier` instance directly to `RemoveModifier`, which expects a `string modifierId`.
+- **Fix:** Refactored the call to `player.Data.Attributes.RemoveModifier(pair.Item1, pair.Item2.Id)`.

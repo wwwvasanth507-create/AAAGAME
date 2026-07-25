@@ -16,17 +16,18 @@ gantt
     Phase 3: Core Framework & Save System (P3)      :done,   p3,  2026-07-24, 1d
     Phase 4: Player Controller & Input (P4)         :done,   p4,  after p3,   2d
     Phase 5: Player Character Framework (P5)        :done,   p5,  after p4,   2d
+    Phase 6: Item Ecosystem (P6)                    :done,   p6,  after p5,   2d
     section Database & World
-    Phase 6: Offline Storage & Database (P6-P10)    :active, p6,  after p5,   5d
+    Phase 7: Offline Storage & Database (P7-P10)    :active, p7,  after p6,   5d
     section Rendering
-    Phase 6: 3D Shaders & Presets (P11-P30)         :        p6,  after p5,   10d
+    Phase 8: 3D Shaders & Presets (P11-P30)         :        p8,  after p7,   10d
     section Mechanics
-    Phase 7: Gameplay & Combat (P31-P70)            :        p7,  after p6,   20d
+    Phase 9: Gameplay & Combat (P31-P70)            :        p9,  after p8,   20d
     section Content
-    Phase 8: Dungeons, AI & World (P71-P110)        :        p8,  after p7,   20d
+    Phase 10: Dungeons, AI & World (P71-P110)       :        p10, after p9,   20d
     section Polish
-    Phase 9: UI/UX & Audio (P111-P130)              :        p9,  after p8,   10d
-    Phase 10: Security & QA Release (P131-P150)     :        p10, after p9,   10d
+    Phase 11: UI/UX & Audio (P111-P130)             :        p11, after p10,  10d
+    Phase 12: Security & QA Release (P131-P150)     :        p12, after p11,  10d
 ```
 
 ---
@@ -68,20 +69,31 @@ gantt
     *   `Save Integration` — Equipped parts, base stats, and active effects written to SaveProfile V2 with backwards-compatible migration.
     *   `Test Suite` — Expanded to 14 automated tests covering all Phase 5 modules.
 
-### 🔲 Phase 6: Offline Database & Local Storage (Next — Prompts 6–10)
+### ✅ Phase 6: Item Ecosystem (Completed — Prompt 6)
+*   **Features:**
+    *   `ItemDatabase` — data-driven config schema with extensible string categories, dynamic DLC catch-all properties.
+    *   `Rarity System` — common to divine tiers with color configurations, drop weights, and VFX/SFX hooks.
+    *   `InventoryContainer` — split, merge stack calculations, search filters, lock/favorites, multi-criteria sorting.
+    *   `EquipmentManager` — 12 slots, applies stat modifiers directly to player attribute sets, links visual meshes.
+    *   `LootTable` — roll probabilities resolving item quantities.
+    *   `ItemEffects` — consumable item hook resolvers (healing, mana, buffs).
+    *   `Save Integration` — SaveProfile V3 with version 2-to-3 backward-compatible migration.
+    *   `Test suite` — Expanded from 14 to 21 unit/integration tests passing 100% success.
+
+### 🔲 Phase 7: Offline Database & Local Storage (Next — Prompts 7–10)
 *   **Planned Features:** SQLite schema for items, quests, world states. Data access layer (DAL). Migration runner.
 
-### 🔲 Phase 7: 3D Rendering & Shaders (Prompts 11–30)
-*   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, scalable preset application from ConfigManager data.
+### 🔲 Phase 8: 3D Rendering & Shaders (Prompts 11–30)
+*   **Planned Features:** PBR materials, normal/AO maps, dynamic shadows, LOD system, outline highlights.
 
-### 🔲 Phase 8: Gameplay Systems & Combat (Prompts 31–70)
-*   **Planned Features:** CharacterStats, health/mana/stamina, combat state machine, hitbox detection, damage math, skill tree foundation.
+### 🔲 Phase 9: Gameplay & Combat (Prompts 31–70)
+*   **Planned Features:** Combat states, weapons hitboxes, dynamic attributes multipliers, skill trees.
 
-### 🔲 Phase 8: Dungeons, World & AI (Prompts 71–110)
-*   **Planned Features:** Procedural dungeon seeds, FSM enemy AI (Patrol → Alert → Chase → Attack), NPC dialogue, world time/weather.
+### 🔲 Phase 10: Dungeons, World & AI (Prompts 71–110)
+*   **Planned Features:** Seeded generation, FSM enemy AI, dialogues.
 
-### 🔲 Phase 9: UI/UX & Audio (Prompts 111–130)
-*   **Planned Features:** Glassmorphic HUD overlays, dialogue boxes, inventory UI, settings sliders, multi-bus audio engine, BGM loops.
+### 🔲 Phase 11: UI/UX & Audio (Prompts 111–130)
+*   **Planned Features:** Glassmorphic HUD overlay screens, settings, volume sliders.
 
-### 🔲 Phase 10: Security, Optimization & QA Release (Prompts 131–150)
-*   **Planned Features:** Full security audit, APK compression, GC profiling, obfuscation, Google Play store packaging, production APK.
+### 🔲 Phase 12: Security, Optimization & QA Release (Prompts 131–150)
+*   **Planned Features:** OBX profiling, Google Play Store signed release APK.

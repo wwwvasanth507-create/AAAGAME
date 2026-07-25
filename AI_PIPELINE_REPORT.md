@@ -1,4 +1,4 @@
-# AI Asset Pipeline & Manifest Report — Hero of Eternia (v0.5.0)
+# AI Asset Pipeline & Manifest Report — Hero of Eternia (v0.6.0)
 
 This report details the specifications, export paths, quality formats, and AI prompt templates canonical to all game assets generated via our AI-first production pipeline.
 
@@ -72,13 +72,19 @@ All 2D assets and 3D textures must follow these configurations:
 - **Hair Styles:**
   - *Prompt:* `"concept art of fantasy hair styles, spikes and braids, stylized RPG look, hand-painted albedo texture, isolated"`
   - *Folder:* `Assets/Characters/Hair/`
+- **Weapon (Iron Sword):**
+  - *Prompt:* `"concept art sheet of a stylized high-frequency vibro-sword, glowing cyan lines on the edge, medieval sci-fi hybrid, hand-painted texture, solid grey background, orthographic view"`
+  - *Folder:* `Assets/Characters/Weapon/`
+- **Shield (Off-hand):**
+  - *Prompt:* `"concept sheet of a stylized kite shield, steel trim, glowing blue central crystal, hand-painted, isolated grey background"`
+  - *Folder:* `Assets/Characters/Shield/`
 
 ### 5.2 Environmental Brick (PBR Material)
-- **Prompt:** *"Seamless dark stone brick texture, mossy crevices, high detail PBR, normal map, height map, roughness map, diffuse map, game texture, fantasy castle dungeon floor"*
+- **Prompt:* *"Seamless dark stone brick texture, mossy crevices, high detail PBR, normal map, height map, roughness map, diffuse map, game texture, fantasy castle dungeon floor"*
 - **Folder:** `Assets/Materials/`
 
 ### 5.3 Interface Card Frame (2D UI Glassmorphism)
-- **Prompt:** *"Frosted glass panel, dark blue neon edge glow, RPG game inventory card frame, flat UI element, transparent background, vector graphic, 512x512"*
+- **Prompt:* *"Frosted glass panel, dark blue neon edge glow, RPG game inventory card frame, flat UI element, transparent background, vector graphic, 512x512"*
 - **Folder:** `Assets/UI/`
 
 ### 5.4 Audio Sound Effect (Footsteps / Transitions)

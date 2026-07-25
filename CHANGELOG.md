@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.6.0] - 2026-07-25
+
+### Added
+*   **ItemRecord** (`Scripts/Items/ItemRecord.cs`): Extensible, data-driven item definition record matching 21 categories, tiers, weights, and stat modification parameters. Features dynamic DLC metadata catch-all fields.
+*   **RarityDefinition** (`Scripts/Items/RarityDefinition.cs`): Rarity metadata configuring hex color representations, border paths, drop rates, and VFX/SFX event strings.
+*   **ItemDatabase** (`Scripts/Items/ItemDatabase.cs`): Preloads item configurations from dynamic JSON files on startup. Caches indexes inside an in-memory look-up dictionary.
+*   **InventoryContainer** (`Scripts/Inventory/InventoryContainer.cs`): Container managing slot arrays. Implements split stack, merge stack, lock/favorite flags, search, category filters, and multi-criteria sorting (favorite slots prioritized).
+*   **EquipmentManager** (`Scripts/Inventory/EquipmentManager.cs`): coordinates 12 equipment slots, applying flat or percent stat modifiers directly to player attribute sets and toggling corresponding character model parts meshes.
+*   **LootTable** (`Scripts/Items/LootTable.cs`): Generic loot roller mapping chance rates and quantity ranges.
+*   **ItemEffectsFramework** (`Scripts/Items/ItemEffectsFramework.cs`): Consumables effects resolver stub (healing, mana, buffs).
+*   **Phase 6 Test Suite**: Appended 7 new unit and integration tests executing headlessly on CLI.
+
+### Changed
+*   **SaveManager** (`Scripts/Core/SaveManager.cs`): Incremented Save Version to 3. Expands save profiles schema to persist player inventories, active equipment slots, and chests storage. Implements v2 to v3 backward-compatible migration.
+*   **ConfigManager** (`Scripts/Core/ConfigManager.cs`): Added template support for `item_database.json` and `rarities.json`.
+
+---
+
 ## [0.5.0] - 2026-07-25
 
 ### Added

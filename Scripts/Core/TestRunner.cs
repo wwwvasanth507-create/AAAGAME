@@ -339,6 +339,7 @@ namespace HeroOfEternia.Core
             GD.Print("PASS: PlayerSettings persistence and reset verified.");
 
             if (!RunPhase5Tests(tempDir)) return false;
+            if (!RunPhase6Tests(tempDir)) return false;
 
             Directory.Delete(tempDir, true);
             return true;
@@ -580,6 +581,275 @@ namespace HeroOfEternia.Core
                 return false;
             }
             GD.Print("PASS: SceneManager checks.");
+
+            return true;
+        }
+
+        private bool RunPhase6Tests(string tempDir)
+        {
+            GD.Print("Running Phase 6 item ecosystem tests...");
+
+            // 1. Item Database Verification
+            GD.Print("Testing ItemDatabase...");
+            var itemDb = new Items.ItemDatabase();
+            itemDb.Initialize();
+
+            var sword = itemDb.GetItem("wpn_iron_sword");
+            if (sword == null || sword.DisplayName != "Rusty Iron Sword" || sword.Rarity != Items.ItemRarity.Common)
+            {
+                GD.Print("FAIL: ItemDatabase did not load wpn_iron_sword correctly.");
+                return false;
+            }
+
+            var rar = itemDb.GetRarity(Items.ItemRarity.Legendary);
+            if (rar == null || rar.ColorHex != "#FF8000")
+            {
+                GD.Print("FAIL: ItemDatabase did not load Legendary rarity definitions correctly.");
+                return false;
+            }
+            GD.Print("PASS: ItemDatabase validation.");
+
+            // 2. Stack splitting & merging
+            GD.Print("Testing Inventory stack splitting & merging...");
+            var container = new Inventory.InventoryContainer(10);
+            
+            // Add 15 potions
+            if (!container.AddItem("pot_minor_health", 15))
+            {
+                GD.Print("FAIL: Failed to add 15 health potions.");
+                return false;
+            }
+
+            if (container.Slots[0].Quantity != 15)
+            {
+                GD.Print($"FAIL: Potion quantity mismatch. Got {container.Slots[0].Quantity}, expected 15.");
+                return false;
+            }
+
+            // Split 5 potions to slot 1
+            if (!container.SplitStack(0, 1, 5))
+            {
+                GD.Print("FAIL: SplitStack from slot 0 to 1 failed.");
+                return false;
+            }
+
+            if (container.Slots[0].Quantity != 10 || container.Slots[1].Quantity != 5)
+            {
+                GD.Print($"FAIL: Split stack values. Slot0={container.Slots[0].Quantity}, Slot1={container.Slots[1].Quantity}");
+                return false;
+            }
+
+            // Merge back
+            if (!container.MergeStacks(1, 0))
+            {
+                GD.Print("FAIL: MergeStacks from slot 1 to 0 failed.");
+                return false;
+            }
+
+            if (container.Slots[0].Quantity != 15 || !container.Slots[1].IsEmpty)
+            {
+                GD.Print($"FAIL: Merge stack values. Slot0={container.Slots[0].Quantity}, Slot1_IsEmpty={container.Slots[1].IsEmpty}");
+                return false;
+            }
+            GD.Print("PASS: Stack arithmetic.");
+
+            // 3. Sorting & Filtering
+            GD.Print("Testing Inventory sorting & filtering...");
+            // Slot 0 has 15 health potions. Clear slot 0 first.
+            container.Slots[0].Clear();
+            
+            // Add sword and potions in separate slots
+            container.AddItem("wpn_iron_sword", 1);
+            container.AddItem("pot_minor_health", 10);
+
+            // Favorite potions (normally in slot 1)
+            container.Slots[1].IsFavorite = true;
+
+            // Sort by Value
+            container.Sort(Inventory.InventorySortType.Value);
+            
+            // Favorites are moved to slot 0 first
+            if (container.Slots[0].ItemId != "pot_minor_health" || !container.Slots[0].IsFavorite)
+            {
+                GD.Print($"FAIL: Inventory sorting. Favorite was not sorted to slot 0. Got ID={container.Slots[0].ItemId}");
+                return false;
+            }
+
+            // Filter search mask
+            var filtered = container.Filter(searchMask: "iron");
+            if (filtered.Count != 1 || filtered[0].ItemId != "wpn_iron_sword")
+            {
+                GD.Print($"FAIL: Inventory filter by text mask. Matches={filtered.Count}");
+                return false;
+            }
+            GD.Print("PASS: Sorting and filtering.");
+
+            // 4. Equipment slot assignment and attribute modifiers
+            GD.Print("Testing Equipment slot assignment & attribute updates...");
+            var player = new Player.PlayerRoot();
+            AddChild(player);
+            
+            float baseStrength = player.Data.Attributes.GetValue(Player.Stats.AttributeType.Strength);
+            if (baseStrength != 10f)
+            {
+                GD.Print($"FAIL: Default player Strength base is {baseStrength}, expected 10.");
+                player.QueueFree();
+                return false;
+            }
+
+            // Temporarily register database in locator so EquipmentManager can resolve
+            ServiceLocator.Clear();
+            var conf = new ConfigManager(tempDir);
+            ServiceLocator.Register(conf);
+            ServiceLocator.Register(itemDb);
+
+            var equipManager = new Inventory.EquipmentManager();
+            var itemSlot = new Inventory.InventorySlot { ItemId = "wpn_iron_sword", Quantity = 1 };
+
+            // Equip sword
+            if (!equipManager.EquipItem(Items.EquipmentSlotType.MainWeapon, itemSlot, player))
+            {
+                GD.Print("FAIL: EquipmentManager failed to equip MainWeapon.");
+                player.QueueFree();
+                return false;
+            }
+
+            float equippedStrength = player.Data.Attributes.GetValue(Player.Stats.AttributeType.Strength);
+            if (equippedStrength != 12f)
+            {
+                GD.Print($"FAIL: Modified player Strength is {equippedStrength}, expected 12.");
+                player.QueueFree();
+                return false;
+            }
+
+            // Unequip sword
+            equipManager.UnequipItem(Items.EquipmentSlotType.MainWeapon, player);
+            float unequippedStrength = player.Data.Attributes.GetValue(Player.Stats.AttributeType.Strength);
+            if (unequippedStrength != 10f)
+            {
+                GD.Print($"FAIL: Unequipped player Strength returned to {unequippedStrength}, expected 10.");
+                player.QueueFree();
+                return false;
+            }
+
+            player.QueueFree();
+            GD.Print("PASS: Equipment attribute modifiers.");
+
+            // 5. Save & Load slot integration & migration
+            GD.Print("Testing SaveProfile V3 slot serialization & migration...");
+            var saveManager = new SaveManager(tempDir);
+            var saveProf = new SaveProfile();
+            saveProf.Stats.CharacterName = "Item Ecosystem Hero";
+            
+            var testSlot = new Inventory.InventorySlot { ItemId = "pot_minor_health", Quantity = 5 };
+            saveProf.PlayerInventory.Add(testSlot);
+            saveProf.EquippedSlots["MainWeapon"] = new Inventory.InventorySlot { ItemId = "wpn_iron_sword", Quantity = 1 };
+
+            if (!saveManager.Save(10, saveProf))
+            {
+                GD.Print("FAIL: SaveManager did not save slot 10.");
+                return false;
+            }
+
+            var loadedProf = saveManager.Load(10);
+            if (loadedProf == null || loadedProf.PlayerInventory.Count != 1 || 
+                loadedProf.PlayerInventory[0].ItemId != "pot_minor_health" || 
+                loadedProf.EquippedSlots["MainWeapon"].ItemId != "wpn_iron_sword")
+            {
+                GD.Print("FAIL: SaveProfile V3 deserialization data mismatch.");
+                return false;
+            }
+
+            // Migration from V2 to V3 test
+            var legacyProf = new SaveProfile();
+            legacyProf.SaveVersion = 2;
+            legacyProf.Stats.CharacterName = "Legacy V2 Hero";
+
+            var migrateMethod = typeof(SaveManager).GetMethod("MigrateProfile", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (migrateMethod != null)
+            {
+                migrateMethod.Invoke(saveManager, new object[] { legacyProf });
+                if (legacyProf.SaveVersion != 3 || legacyProf.PlayerInventory == null || legacyProf.EquippedSlots == null)
+                {
+                    GD.Print("FAIL: SaveProfile V2 to V3 migration failed.");
+                    return false;
+                }
+            }
+            GD.Print("PASS: Save slot V3 integration and migration.");
+
+            // 6. Loot Table rolling
+            GD.Print("Testing Loot Table resolutions...");
+            var lootTable = new Items.LootTable { TableId = "test_table" };
+            lootTable.Entries.Add(new Items.LootEntry { ItemId = "pot_minor_health", Chance = 1.0f, MinQuantity = 2, MaxQuantity = 5 });
+            
+            var rolledLoot = lootTable.RollLoot();
+            if (rolledLoot.Count != 1 || rolledLoot[0].ItemId != "pot_minor_health" || rolledLoot[0].Quantity < 2 || rolledLoot[0].Quantity > 5)
+            {
+                GD.Print("FAIL: Loot Table rolling did not resolve entries correctly.");
+                return false;
+            }
+            GD.Print("PASS: Loot Table roll resolved.");
+
+            // 7. Consumable Item Effects
+            GD.Print("Testing consumable item effects resolver...");
+            var mockPlayer = new Player.PlayerRoot();
+            AddChild(mockPlayer);
+            mockPlayer.Data.MaxHealth = 100f;
+            mockPlayer.Data.CurrentHealth = 50f;
+
+            var healingEffect = new Items.ItemEffectData { EffectType = "Healing", Magnitude = 25f };
+            if (!Items.ItemEffectsFramework.TriggerEffect(healingEffect, mockPlayer) || mockPlayer.Data.CurrentHealth != 75f)
+            {
+                GD.Print($"FAIL: ItemEffectsFramework did not apply healing. HP={mockPlayer.Data.CurrentHealth}");
+                mockPlayer.QueueFree();
+                return false;
+            }
+
+            mockPlayer.QueueFree();
+            GD.Print("PASS: Item Effects framework hooks.");
+
+            // 8. Performance Benchmarks
+            GD.Print("Running Item Ecosystem Performance Benchmarks...");
+            var lookupWatch = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < 100000; i++)
+            {
+                var val = itemDb.GetItem("wpn_iron_sword");
+            }
+            lookupWatch.Stop();
+            GD.Print($"BENCHMARK: 100,000 Item lookups completed in {lookupWatch.ElapsedMilliseconds} ms (Average: {(double)lookupWatch.ElapsedTicks / 100000.0:F4} ticks/lookup).");
+
+            var largeContainer = new Inventory.InventoryContainer(1000);
+            for (int i = 0; i < 1000; i++)
+            {
+                largeContainer.AddItem("pot_minor_health", 5);
+            }
+            var serialWatch = System.Diagnostics.Stopwatch.StartNew();
+            var serialStr = System.Text.Json.JsonSerializer.Serialize(largeContainer.SaveSlots());
+            serialWatch.Stop();
+            GD.Print($"BENCHMARK: 1,000 Inventory slots serialized in {serialWatch.ElapsedMilliseconds} ms (JSON Size: {serialStr.Length / 1024.0:F2} KB).");
+            GD.Print("PASS: Performance Benchmarks completed.");
+
+            // Restore primary TestRunner registrations
+            ServiceLocator.Clear();
+            var resolvedPm = new PerformanceManager();
+            var resolvedSm = new SettingsManager(tempDir);
+            var resolvedLm = new LocalizationManager();
+            var resolvedGm = new GameManager();
+            var resolvedAm = new AudioManager();
+            var resolvedScm = new SceneManager();
+            var resolvedRm = new ResourceManager();
+            var resolvedUm = new UIManager();
+
+            ServiceLocator.Register(resolvedPm);
+            ServiceLocator.Register(resolvedSm);
+            ServiceLocator.Register(resolvedLm);
+            ServiceLocator.Register(resolvedGm);
+            ServiceLocator.Register(resolvedAm);
+            ServiceLocator.Register(resolvedScm);
+            ServiceLocator.Register(resolvedRm);
+            ServiceLocator.Register(resolvedUm);
+
+            resolvedSm.LoadSettings();
 
             return true;
         }

@@ -36,6 +36,12 @@ graph TD
         P --> EC[PlayerEffectsController]
         P --> AC[PlayerAnimationController]
     end
+
+    subgraph Item & Inventory Systems
+        E --> IDB[ItemDatabase]
+        P --> EM[EquipmentManager]
+        EM --> IC[InventoryContainer]
+    end
 ```
 
 ---
@@ -69,3 +75,11 @@ System-to-system communications occur asynchronously via a centralized `EventBus
 *   **PlayerInteractionDetector:** Spherical Area3D sweep that detects Layer 4 (Interactables), resolving Single Tap, Hold, and Auto triggers, and highlighting targets.
 *   **PlayerAttributeSet:** Encapsulates RPG modifier calculations using dirty flags to avoid redundant frame calculations.
 *   **PlayerEffectsController:** Status visual effect framework managing particle and shader overlays.
+
+---
+
+## 6. Item & Inventory Ecosystem
+*   **ItemDatabase:** Centralized data-driven index preloading configurations and rarities definitions on startup.
+*   **InventoryContainer:** Coordinates slot collections, implementing stack merging, splitting, sorting (favorited items prioritized), and filters.
+*   **EquipmentManager:** Assigns Helmet, Chest, Weapon, Ring slots and automatically binds/unbinds their attribute modifiers to/from the player's active attribute set.
+*   **LootTable & ItemEffects:** Resolves item drop chances and provides consumable effect execution stubs (healing, mana, teleport).

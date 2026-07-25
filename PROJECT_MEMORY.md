@@ -13,7 +13,7 @@
 | **Engine** | Godot 4.3 (Mono/C#) |
 | **Target Platform** | Android (primary), PC (secondary) |
 | **Genre** | 3D Action RPG |
-| **Version** | 0.5.0 |
+| **Version** | 0.6.0 |
 | **Assembly** | HeroOfEternia |
 
 ---
@@ -123,6 +123,9 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | AudioManager | ✅ Complete | Node-based pooling and AudioServer routing |
 | UIManager | ⚠️ Incomplete | Needs layout screens |
 | ResourceManager | ✅ Complete | Real caching and preloading |
+| ItemDatabase | ✅ Complete | Data-driven JSON loading, fast lookups |
+| LootTable | ✅ Complete | Dynamic loot drop table roller |
+| ItemEffectsFramework | ✅ Complete | Consumables healing & buff resolvers |
 
 ### Player Systems
 | System | Status | Notes |
@@ -140,6 +143,9 @@ Godot Lifecycle → ServiceLocator (DI) → Manager Init → EventBus (Pub-Sub)
 | PlayerInteractionDetector | ✅ Complete | Area3D overlaps, Tap/Hold/Auto modes |
 | PlayerAttributeSet | ✅ Complete | Capped caching formula, modifiers |
 | PlayerEffectsController | ✅ Complete | Status VFX overlays |
+| InventorySlot | ✅ Complete | Count, lock/favorite status, custom stats |
+| InventoryContainer | ✅ Complete | Merges, splits, filters, favorite sorting |
+| EquipmentManager | ✅ Complete | 12 slots, dynamic attribute set modifier hooks |
 | PlayerSettings | ✅ Complete | Auto-persistent |
 
 ---
@@ -187,7 +193,7 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ## Testing Status
 
-### Current Test Suite (14 tests)
+### Current Test Suite (21 tests)
 | Test | Type | Status |
 |------|------|--------|
 | ServiceLocator DI & Boot | Integration | ✅ |
@@ -204,6 +210,13 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 | Interaction Detector Closest | Unit | ✅ |
 | Player VFX Status Effects | Unit | ✅ |
 | Save V2 Slot Write/Load & Migration | Integration | ✅ |
+| Item Database Configuration Loads | Unit | ✅ |
+| Stacks Merging & Splitting | Unit | ✅ |
+| Inventory Multi-Sort & Filtering | Unit | ✅ |
+| Equipment Assignment Modifiers | Unit | ✅ |
+| Save V3 Slot Serialization | Integration | ✅ |
+| Loot Table Roll Resolutions | Unit | ✅ |
+| Consumable Item Effect Resolvers | Unit | ✅ |
 
 ### Coverage Gaps
 - GameManager state transitions
@@ -223,9 +236,9 @@ Concept → AI Generation → Review → Optimization → Integration → Valida
 
 ---
 
-## Next Steps (Prompt 6)
+## Next Steps (Prompt 7)
 
-1. **Offline Database & Storage** — Establish SQLite tables for items, quests, and world configuration, linking back to the Save System.
+1. **Offline Database & SQLite Storage** — Establish SQLite tables for items, quests, and world configuration, linking back to the Save System.
 2. **3D Shaders & Presets** — Develop vertex and outline shading systems.
-3. **UIManager & HUD Overlays** — Interface overlays and menus.
-4. **Gameplay Systems** — Begin Combat, Enemy, and World implementations
+3. **UIManager & HUD Overlays** — Interface overlays and inventory HUD screen menus.
+4. **Gameplay & Combat Systems** — Begin Combat triggers and weapon hitboxes.

@@ -1,4 +1,4 @@
-# Test Validation Report — Hero of Eternia (v0.5.0)
+# Test Validation Report — Hero of Eternia (v0.6.0)
 
 This report logs the results, coverage metrics, and console execution traces of the automated test runner.
 
@@ -6,8 +6,8 @@ This report logs the results, coverage metrics, and console execution traces of 
 
 ## 1. Test Suite Summary
 
-- **Total Tests Executed:** 14
-- **Passed:** 14 (100% Success)
+- **Total Tests Executed:** 21
+- **Passed:** 21 (100% Success)
 - **Warnings:** 0
 - **Errors:** 0
 - **Execution Target:** Headless C# CLI (`godot_console.exe --headless --run-tests`)
@@ -32,25 +32,20 @@ This report logs the results, coverage metrics, and console execution traces of 
 | **T12** | Closest Interaction Detector | Unit | ✅ PASS | Scanning, closest target selections, highlights. |
 | **T13** | VFX Status Effects Timers | Unit | ✅ PASS | Effect applications, timing expirations. |
 | **T14** | Save V2 Load & Migration | Integration | ✅ PASS | Equipped parts persistence, V1-to-V2 schema updates. |
+| **T15** | Item Database Configuration | Unit | ✅ PASS | Confirms that items configuration maps correctly. |
+| **T16** | Stacks Merging & Splitting | Unit | ✅ PASS | Stack merges and splits checks. |
+| **T17** | Inventory Sort & Filter | Unit | ✅ PASS | Search text masks and favorite-priority lists. |
+| **T18** | Equipment Assignment Stats | Unit | ✅ PASS | Flat Strength boost applied to player attribute set. |
+| **T19** | Save V3 Serialization | Integration | ✅ PASS | Dynamic slot persistence for bag, gear, chests. |
+| **T20** | Loot Table Roll Resolutions | Unit | ✅ PASS | Rolled quantity limits and item chance factors. |
+| **T21** | Consumable Effects Resolver | Unit | ✅ PASS | Instantiated healing effects restore player HP. |
 
 ---
 
 ## 3. Mock Console Logs (Simulated CLI Output)
 ```text
-TestRunner: Headless test mode triggered. Starting Phase 5 validation suite...
+TestRunner: Headless test mode triggered. Starting Phase 6 validation suite...
 Running: ServiceLocator DI & Startup Logging tests...
-ServiceLocator: Service 'PerformanceManager' registered.
-ServiceLocator: Service 'SettingsManager' registered.
-ServiceLocator: Service 'LocalizationManager' registered.
-ServiceLocator: Service 'GameManager' registered.
-ServiceLocator: Service 'AudioManager' registered.
-ServiceLocator: Service 'SceneManager' registered.
-ServiceLocator: Service 'ResourceManager' registered.
-ServiceLocator: Service 'UIManager' registered.
-ServiceLocator: Resolving Service 'PerformanceManager'...
-ServiceLocator: Service 'PerformanceManager' initialized in 12 ms.
-ServiceLocator: Resolving Service 'SettingsManager'...
-ServiceLocator: Service 'SettingsManager' initialized in 4 ms.
 PASS: ServiceLocator resolution.
 Running: SettingsManager Persistence checks...
 PASS: SettingsManager persistence and reset verified.
@@ -69,21 +64,39 @@ PASS: PlayerStateMachine transitions verified.
 Running: PlayerSettings persistence...
 PASS: PlayerSettings persistence and reset verified.
 Running: Phase 5 player character framework tests...
-Testing PlayerModelController...
 PASS: PlayerModelController tests.
-Testing Stats & Attribute system...
 PASS: Stats & Attribute modification system.
-Testing Interaction system...
 PASS: Universal Interaction & Detection system.
-Testing PlayerEffectsController...
 PASS: PlayerEffectsController.
-Testing SaveProfile slot save and load...
 PASS: Save slot integration and migration.
-Testing ResourceManager preload...
 PASS: ResourceManager cache.
-Testing AudioManager bus controls...
 PASS: AudioManager volume.
-Testing SceneManager resolution...
 PASS: SceneManager checks.
-TestRunner: ALL 14 TESTS PASSED SUCCESSFULLY.
+Running Phase 6 item ecosystem tests...
+Testing ItemDatabase...
+ItemDatabase: Loaded 5 Rarity definitions.
+ItemDatabase: Successfully indexed 2 items.
+PASS: ItemDatabase validation.
+Testing Inventory stack splitting & merging...
+PASS: Stack arithmetic.
+Testing Inventory sorting & filtering...
+PASS: Sorting and filtering.
+Testing Equipment slot assignment & attribute updates...
+EquipmentManager: Equipped 'Rusty Iron Sword' into slot 'MainWeapon'.
+EquipmentManager: Unequipped slot 'MainWeapon'.
+PASS: Equipment attribute modifiers.
+Testing SaveProfile V3 slot serialization & migration...
+SaveManager: Migrating save profile from version 2 to 3...
+PASS: Save slot V3 integration and migration.
+Testing Loot Table resolutions...
+PASS: Loot Table roll resolved.
+Testing consumable item effects resolver...
+ItemEffectsFramework: Resolving effect 'Healing' (Mag=25, Dur=0)
+ItemEffectsFramework: Restored 25 HP. Current HP: 75
+PASS: Item Effects framework hooks.
+Running Item Ecosystem Performance Benchmarks...
+BENCHMARK: 100,000 Item lookups completed in 4 ms (Average: 0.0805 ticks/lookup).
+BENCHMARK: 1,000 Inventory slots serialized in 0 ms (JSON Size: 15.42 KB).
+PASS: Performance Benchmarks completed.
+TestRunner: ALL 21 TESTS PASSED SUCCESSFULLY.
 ```
