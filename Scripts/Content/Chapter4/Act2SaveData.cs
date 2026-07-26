@@ -12,6 +12,11 @@ namespace HeroOfEternia.Content.Chapter4
         public bool VanguardCaptainDefeated { get; set; } = false;
         public List<string> DiscoveredAct2Regions { get; set; } = new();
         public List<string> UnlockedAct2Recipes { get; set; } = new();
-        public int SaveVersion { get; set; } = 26;
+
+        // Save V31 Expansion: Valenhold City, Faction Politics & Vaults
+        public List<string> UnlockedCityDistricts { get; set; } = new();
+        public Dictionary<string, int> FactionInfluenceScores { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+        public List<string> ClearedExplorationVaults { get; set; } = new();
+        public int SaveVersion { get; set; } = 31;
     }
 }

@@ -27,15 +27,27 @@ gantt
     Phase 13: Boss & Elite Encounters (P12)            :done,   p10c, after p10b, 2d
     section Ability & Progression
     Phase 14: Ability System (P13)                   :done,   p13, after p10c, 1d
-    section Rendering
-    Phase 15: 3D Shaders & Presets (P14-P30)         :active, p14, after p13,  10d
-    section Mechanics
-    Phase 16: Gameplay & Combat (P31-P70)           :        p15, after p14,  20d
-    section Content
-    Phase 17: Dungeons, AI & World (P71-P110)       :        p16, after p15,  20d
-    section Polish
-    Phase 18: UI/UX & Audio (P111-P130)             :        p17, after p16,  10d
-    Phase 19: Security & QA Release (P131-P150)     :        p18, after p17,  10d
+    section Visuals & Audio
+    Phase 15: 3D Shaders & Presets (P21-P25)         :done, p14, 2026-07-25, 2d
+    section Advanced Systems & Finale
+    Phase 16: Dungeon & Act I Finale (P26-P30)       :done, p15, 2026-07-26, 2d
+    Phase 17: Prompts 0–30 System Audit              :done, p16, 2026-07-26, 1d
+    section Act II Mechanics
+    Phase 18: Act II Major Region Expansion (P31)     :done, p17, 2026-07-26, 1d
+    Phase 19: Chapter 5 Branching & Dungeon (P32)    :done, p18, 2026-07-26, 1d
+    Phase 20: Chapter 6 Capital & Guilds (P33)       :done, p19, 2026-07-26, 1d
+    Phase 21: Act II Finale & Siege (P34)            :done, p20, 2026-07-26, 1d
+    section Act III Mechanics
+    Phase 22: Act III Begins: High-Level Region (P35) :done, p21, 2026-07-26, 1d
+    Phase 23: Chapter 9 Corrupted Fortress (P36)     :done, p22, 2026-07-26, 1d
+    Phase 24: Prompts 0–36 System Audit              :done, p23, 2026-07-26, 1d
+    Phase 25: Chapter 10 Ancient Temple (P37)         :done, p24, 2026-07-26, 1d
+    section Act IV Mechanics
+    Phase 26: Act IV Begins: Endgame Region (P38)     :done, p25, 2026-07-26, 1d
+    Phase 27: Chapter 12 Alliance Campaign (P39)     :done, p26, 2026-07-26, 1d
+    Phase 28: Chapter 13 Final Dungeon (P40)         :done, p27, 2026-07-26, 1d
+    Phase 29: Prompts 0–40 System Audit              :done, p28, 2026-07-26, 1d
+    Phase 30: Final Boss Encounter (P41-P70)         :active, p29, after p28, 20d
 ```
 
 ---

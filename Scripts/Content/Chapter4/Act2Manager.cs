@@ -13,8 +13,8 @@ namespace HeroOfEternia.Content.Chapter4
 
     /// <summary>
     /// Central Act II orchestrator implementing <see cref="IInitializable"/>.
-    /// Coordinates Eastern Ridgeline and Mirkwood Swamps regions, companion registration,
-    /// Act II quest chain, enemy roster, advanced crafting, NPC roster, and presentation.
+    /// Coordinates Eastern Ridgeline and Mirkwood Swamps regions, Valenhold City, Faction Politics,
+    /// Advanced Exploration, companion registration, quest chain, enemy roster, crafting, and presentation.
     /// </summary>
     public partial class Act2Manager : Node, IInitializable
     {
@@ -26,6 +26,9 @@ namespace HeroOfEternia.Content.Chapter4
         public Act2EnemyDefinitions Enemies { get; private set; } = new();
         public Act2NpcDefinitions Npcs { get; private set; } = new();
         public Act2CraftingContent Crafting { get; private set; } = new();
+        public ValenholdCityContent ValenholdCity { get; private set; } = new();
+        public FactionPoliticsManager PoliticsManager { get; private set; } = new();
+        public AdvancedExplorationManager ExplorationManager { get; private set; } = new();
 
         private readonly List<IAct2Plugin> _plugins = new();
 
@@ -38,7 +41,7 @@ namespace HeroOfEternia.Content.Chapter4
             if (_initialized) return;
             _initialized = true;
 
-            Logger.Info("Act2Manager: Initializing Act II — Eastern Ridgeline & Mirkwood Swamps...");
+            Logger.Info("Act2Manager: Initializing Act II — Eastern Ridgeline, Mirkwood Swamps & Valenhold Metropolis...");
 
             Regions.InitializeRegions();
             Companions.RegisterCompanions();
@@ -46,6 +49,9 @@ namespace HeroOfEternia.Content.Chapter4
             Enemies.RegisterEnemies();
             Npcs.RegisterNpcs();
             Crafting.RegisterCraftingContent();
+            ValenholdCity.InitializeDistricts();
+            PoliticsManager.Initialize();
+            ExplorationManager.Initialize();
 
             ServiceLocator.Register(this);
 
@@ -57,6 +63,8 @@ namespace HeroOfEternia.Content.Chapter4
             if (!_initialized) return;
             Logger.Info("Act2Manager: Shutting down Act II framework...");
             _plugins.Clear();
+            PoliticsManager.Shutdown();
+            ExplorationManager.Shutdown();
             ServiceLocator.Unregister<Act2Manager>();
             _initialized = false;
         }
@@ -69,7 +77,7 @@ namespace HeroOfEternia.Content.Chapter4
 
         public void OnAct2Opened()
         {
-            Logger.Info("Act2Manager: Act II opened — unlocking Eastern Ridgeline...");
+            Logger.Info("Act2Manager: Act II opened — unlocking Eastern Ridgeline & Valenhold...");
             Regions.UnlockRegion("region_eastern_ridgeline");
             foreach (var plugin in _plugins)
                 plugin.OnAct2Opened();

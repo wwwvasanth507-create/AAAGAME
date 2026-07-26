@@ -30,7 +30,10 @@ namespace HeroOfEternia.Tests
             TestEnemies();
             TestNpcs();
             TestCrafting();
-            TestSaveV26();
+            TestValenholdCity();
+            TestFactionPolitics();
+            TestAdvancedExploration();
+            TestSaveV31();
 
             Logger.Info($"ACT II TESTS COMPLETED: {_passed} Passed, {_failed} Failed.");
             if (_failed > 0)
@@ -124,16 +127,68 @@ namespace HeroOfEternia.Tests
             Assert(crafting.AllStations.Count >= 2, $"2+ crafting stations registered (found {crafting.AllStations.Count})");
         }
 
-        private static void TestSaveV26()
+        private static void TestValenholdCity()
+        {
+            var city = new ValenholdCityContent();
+            Assert(city.GetAllDistricts().Count == 6, "Valenhold city has 6 major districts");
+            Assert(city.GetDistrict("district_valenhold_government") != null, "Found High Council Heights district");
+            Assert(city.GetDistrict("district_valenhold_market") != null, "Found Silver Bay Market & Harbor district");
+            Assert(city.GetDistrict("district_valenhold_crafting") != null, "Found Iron Foundry Quarter district");
+        }
+
+        private static void TestFactionPolitics()
+        {
+            var politics = new FactionPoliticsManager();
+            politics.Initialize();
+
+            var vanguard = politics.GetFaction("faction_iron_vanguard");
+            Assert(vanguard != null, "Found Iron Vanguard faction");
+            Assert(vanguard?.InfluenceScore == 65, "Iron Vanguard initial influence score is 65");
+
+            bool modified = politics.ModifyInfluence("faction_iron_vanguard", 10);
+            Assert(modified, "Modified Iron Vanguard influence");
+            Assert(vanguard?.InfluenceScore == 75, "Iron Vanguard influence increased to 75");
+
+            bool allied = politics.FormAlliance("faction_iron_vanguard");
+            Assert(allied, "Formed alliance with Iron Vanguard");
+            Assert(vanguard?.IsAlliedWithPlayer == true, "Iron Vanguard allied state is true");
+
+            politics.Shutdown();
+        }
+
+        private static void TestAdvancedExploration()
+        {
+            var exp = new AdvancedExplorationManager();
+            exp.Initialize();
+
+            var vault = exp.GetVault("vault_ridgeline_01");
+            Assert(vault != null, "Found Vault of the Whispering Ridgeline");
+            Assert(vault?.IsCleared == false, "Vault initially uncleared");
+
+            bool cleared = exp.ClearVault("vault_ridgeline_01");
+            Assert(cleared, "Cleared Vault of the Whispering Ridgeline");
+            Assert(vault?.IsCleared == true, "Vault status updated to cleared");
+
+            exp.Shutdown();
+        }
+
+        private static void TestSaveV31()
         {
             var data = new Act2SaveData
             {
                 RidgelineUnlocked = true,
                 SeraphineJoined = true,
-                WatchtowerLiberated = true
+                WatchtowerLiberated = true,
+                SaveVersion = 31
             };
-            Assert(data.SaveVersion == 26, "Act2SaveData is Save V26");
-            Assert(data.SeraphineJoined, "SeraphineJoined persists correctly");
+            data.UnlockedCityDistricts.Add("district_valenhold_government");
+            data.FactionInfluenceScores["faction_iron_vanguard"] = 75;
+            data.ClearedExplorationVaults.Add("vault_ridgeline_01");
+
+            Assert(data.SaveVersion == 31, "Act2SaveData is Save V31");
+            Assert(data.UnlockedCityDistricts.Count == 1, "City district unlocks persisted");
+            Assert(data.FactionInfluenceScores["faction_iron_vanguard"] == 75, "Faction influence score persisted");
+            Assert(data.ClearedExplorationVaults.Contains("vault_ridgeline_01"), "Cleared vault persisted");
         }
     }
 }
