@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.43.0] - 2026-07-26
+
+### Added — Post-Game Framework, Super Bosses & Endgame Exploration (Prompt 43)
+*   **PostGameManager**: Central `IInitializable` orchestrator registered in `ServiceLocator`. Coordinates Super Boss Framework, 100% Completion System Manager, Post-Game Quest Chain, and Save V43 integration.
+*   **SuperBossFramework**: Reusable endgame boss engine managing 3 optional super bosses (`boss_chronos_titan` 18,000 HP, `boss_astral_leviathan` 22,000 HP, `boss_sol_prime_avatar` 25,000 HP), difficulty scaling (Normal, Heroic, Mythic), leaderboards, and trophy drops (`IInitializable` registered in `ServiceLocator`).
+*   **CompletionSystemManager**: World progress calculation engine computing regional completion percentages across 6 world sectors and overall world completion percentage (`IInitializable` registered in `ServiceLocator`).
+*   **PostGameQuestChain**: 4 main investigative quests (`q_postgame_investigating_astral_rifts` → `q_postgame_chronos_titan_defeat` → `q_postgame_astral_leviathan_defeat` → `q_postgame_sol_prime_confrontation`) registered into `QuestDatabase`.
+*   **PostGameSaveData & Save V43**: Post-game exploration progress, defeated super bosses list, 100% completion percentages per region, and Post-Game quest states persisted under `SaveVersion = 43`.
+*   **PostGameSystemTests**: 5 unit test cases validating manager initialization, super boss stats & defeats, 100% completion tracking, quests, and Save V43. Integrated into `MasterAuditTestRunner`.
+*   **Documentation**: Created `POST_GAME.md`, `SUPER_BOSSES.md`, `ENDGAME_EXPLORATION.md`, `COMPLETION_SYSTEM.md`, and `MASTER_PROGRESS.md` with complete AI Asset Production reports.
+
+## [0.42.0] - 2026-07-26
+
+### Added — Chapter 15, Ending, Epilogue & Campaign Completion (Prompt 42)
+*   **Chapter15Manager**: Central `IInitializable` orchestrator registered in `ServiceLocator`. Coordinates Ending Sequence Manager, Credits System Manager, Campaign Completion Tracker, Chapter 15 Quest Chain, and Save V42 integration.
+*   **EndingSequenceManager**: Ending resolution controller supporting 3 story ending choices (Restoration of Sol, Ethereal Harmony, Primal Dawn), post-boss dialogue, character epilogue conclusions, and world restoration (`WorldState_DawnOfSol`).
+*   **CreditsSystemManager**: Reusable scrollable credits engine supporting localized contributor categories, skip/pause controls, credits music integration (`music_credits_theme`), and credits replay (`IInitializable` registered in `ServiceLocator`).
+*   **CampaignCompletionTracker**: Statistics and completion engine tracking UTC completion timestamp, total play time, completion percentage, total quests completed, total bosses defeated, and awarded completion title (`Champion of Sol`).
+*   **Chapter15QuestChain**: 4 main quests (`q_chapter15_sun_spire_restoration` → `q_chapter15_settlement_victories` → `q_chapter15_epilogue_celebration` → `q_chapter15_post_campaign_horizon`) registered into `QuestDatabase`.
+*   **Chapter15SaveData & Save V42**: Campaign completion flag (`IsCampaignCompleted = true`), completion timestamp, total play statistics, awarded title (`Champion of Sol`), credits viewed flag, and Chapter 15 quest states persisted under `SaveVersion = 42`.
+*   **Chapter15SystemTests**: 6 unit test cases validating manager initialization, ending sequence choices, credits scrolling, completion tracking, quests, and Save V42. Integrated into `MasterAuditTestRunner`.
+*   **Documentation**: Created `CHAPTER_15.md`, `ENDING.md`, `EPILOGUE.md`, `CREDITS_SYSTEM.md`, and `CAMPAIGN_COMPLETION.md` with complete AI Asset Production reports.
+
+## [0.41.0] - 2026-07-26
+
+### Added — Chapter 14, Final Boss Encounter & Multi-Phase Finale (Prompt 41)
+*   **Chapter14Manager**: Central `IInitializable` orchestrator registered in `ServiceLocator`. Coordinates Final Boss Definition (Arch-Sorcerer Malakor), Final Boss AI Engine, Final Boss Arena Manager, Chapter 14 Quest Chain, and Save V41 integration.
+*   **FinalBossDefinition**: 4-phase encounter definition for Arch-Sorcerer Malakor totaling 12,000 HP (Phase 1: High Warden Malakor 3,000 HP, Phase 2: Corrupted Warden 3,000 HP, Phase 3: Void Avatar Malakor 3,000 HP, Phase 4: Unbound Void Core 3,000 HP Enrage).
+*   **FinalBossAIEngine**: Adaptive state machine managing automatic phase transitions, attack cooldowns, target tracking, positioning awareness, and anti-exploit distance safeguards (`IInitializable` registered in `ServiceLocator`).
+*   **FinalBossArenaManager**: Dynamic Throne Room arena controller managing solar beam flares, gravity distortion fields, platform destruction, and visual lighting transitions (`IInitializable` registered in `ServiceLocator`).
+*   **Chapter14QuestChain**: 4 main quests (`q_chapter14_entering_throne_room` → `q_chapter14_malakor_phase1_defeat` → `q_chapter14_malakor_phase2_defeat` → `q_chapter14_malakor_final_defeat`) registered into `QuestDatabase`.
+*   **Chapter14SaveData & Save V41**: Boss phase completion, Malakor defeat flag, highest phase reached, acquired boss trophies, and Chapter 14 quest states persisted under `SaveVersion = 41`.
+*   **Chapter14SystemTests**: 6 unit test cases validating manager initialization, 4-phase stats, boss AI phase shifts, arena hazard triggers, quests, and Save V41. Integrated into `MasterAuditTestRunner`.
+*   **Documentation**: Created `CHAPTER_14.md`, `FINAL_BOSS.md`, `BOSS_AI.md`, and `FINAL_ARENA.md` with complete AI Asset Production reports.
+
 ## [0.40.1] - 2026-07-26
 
 ### Added — Complete Prompts 0–40 System Audit & Technical Validation

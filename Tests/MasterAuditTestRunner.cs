@@ -133,8 +133,20 @@ namespace HeroOfEternia.Tests
                 Chapter12SystemTests.RunAll();
                 totalSuites++;
 
-                Logger.Info("[29/30] Running Chapter13SystemTests...");
+                Logger.Info("[29/31] Running Chapter13SystemTests...");
                 Chapter13SystemTests.RunAll();
+                totalSuites++;
+
+                Logger.Info("[30/32] Running Chapter14SystemTests...");
+                Chapter14SystemTests.RunAll();
+                totalSuites++;
+
+                Logger.Info("[31/33] Running Chapter15SystemTests...");
+                Chapter15SystemTests.RunAll();
+                totalSuites++;
+
+                Logger.Info("[32/33] Running PostGameSystemTests...");
+                PostGameSystemTests.RunAll();
                 totalSuites++;
 
                 Logger.Info("===============================================================");

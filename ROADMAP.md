@@ -47,7 +47,10 @@ gantt
     Phase 27: Chapter 12 Alliance Campaign (P39)     :done, p26, 2026-07-26, 1d
     Phase 28: Chapter 13 Final Dungeon (P40)         :done, p27, 2026-07-26, 1d
     Phase 29: Prompts 0–40 System Audit              :done, p28, 2026-07-26, 1d
-    Phase 30: Final Boss Encounter (P41-P70)         :active, p29, after p28, 20d
+    Phase 30: Final Boss Encounter (P41)             :done, p29, 2026-07-26, 1d
+    Phase 31: Campaign Ending & Epilogue (P42)       :done, p30, 2026-07-26, 1d
+    Phase 32: Post-Game Framework (P43)              :done, p31, 2026-07-26, 1d
+    Phase 33: New Game Plus Framework (P44-P70)      :active, p32, after p31, 20d
 ```
 
 ---
